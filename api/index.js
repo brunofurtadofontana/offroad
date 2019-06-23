@@ -13,7 +13,7 @@ var knex = require('knex')({
       host : '127.0.0.1',
       user : 'root',
       password : '',
-      database : 'offroad'
+      database : 'offroad2'
     }
   });
 
@@ -27,23 +27,22 @@ server.listen(8080, function () {
   console.log('%s listening at %s', server.name, server.url);
 });
 
-server.get('/api',  (req, res, next) => {
-    res.json({
-        message:'Bem vindo a API'
-    });
-    //res.send('api funcionando');
-    
-  });
-//Rotas REST
-/* 
-server.get('/',  (req, res, next) => {
 
-    knex('rest').then((dados ) => {
+//Rotas REST
+
+server.get('/api',  (req, res, next) => {
+    //knex('promoter').then((dados ) => {
+     //       res.send(dados);
+     //   }, next)
+    knex('promoter')
+    .join('enderecousuario','promoter_idUsuario','=','idUsuario')
+    .select()
+    .then((dados ) => {
             res.send(dados);
     }, next)
     
   });
-
+/* 
   server.get('/endereco',  (req, res, next) => {//Retorna todos os usuarios e seus endereços
 
    knex('rest')

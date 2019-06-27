@@ -2,14 +2,14 @@
       require("conn.php");
         $log = $_POST['login'];
         $pass = $_POST['senha'];
-        $res = mysqli_query($con,"SELECT users_email FROM users WHERE users_email='$log'")or die(mysql_error());
+        $res = mysqli_query($con,"SELECT usuEmail FROM usuario WHERE usuEmail='$log'")or die(mysqli_error());
         $show = mysqli_fetch_assoc($res);
-        $returnLogin = $show['users_email'];
+        $returnLogin = $show['usuEmail'];
 
         if($returnLogin == $_POST['login']){
-          $res = mysqli_query($con,"SELECT users_pass FROM users WHERE users_pass='$pass'")or die(mysql_error());
+          $res = mysqli_query($con,"SELECT usuSenha FROM usuario WHERE usuSenha ='$pass'")or die(mysqli_error());
           $show = mysqli_fetch_assoc($res);
-          $returnpass = $show['users_pass'];
+          $returnpass = $show['usuSenha'];
           if ($returnpass == $_POST['senha']) {
               session_start();
               $_SESSION["LOGIN_USUARIO"]=$log;

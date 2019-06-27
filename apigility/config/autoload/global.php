@@ -7,6 +7,7 @@ return [
         'adapters' => [
             'dummy' => [],
             'db' => [],
+            'offroad2' => [],
         ],
     ],
 ];

@@ -5,7 +5,7 @@
 
 
 	
-$con = mysqli_connect("localhost","root","","sgm");
+$con = mysqli_connect("localhost","root","","offroadv1");
 
 // Check connection
 if (mysqli_connect_errno())

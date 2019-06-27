@@ -30,14 +30,43 @@ server.listen(8080, function () {
 
 //Rotas REST
 
-server.get('/api',  (req, res, next) => {
+server.get('/api/promoter_all',  (req, res, next) => { // Retorna os promoters, eventos e seus endereços
     //knex('promoter').then((dados ) => {
      //       res.send(dados);
      //   }, next)
     knex('promoter')
-    .join('enderecousuario','promoter_idUsuario','=','idUsuario')
+    .join('enderecousuario','enderecousuario.promoter_idUsuario','=','idUsuario')
+    .join('evento','evento.promoter_idUsuario','=','idUsuario')
     .select()
     .then((dados ) => {
+      if(!dados)return res.send(new errors.BadRequestError('Nada foi encontrado!!'))
+            res.send(dados);
+    }, next)
+    
+    
+  });
+  server.get('/api/evento/:id',  (req, res, next) => {
+    
+    const {id} = req.params;
+
+    knex('evento')
+    .where('idEventos',id)
+    .first()
+    .then((dados ) => {
+        if(!dados)return res.send(new errors.BadRequestError('Nada foi encontrado!!'))
+            res.send(dados);
+    }, next)
+    
+  });
+  server.get('/api/evento_endereco',  (req, res, next) => { //Retorna os eventos e seus endereços
+    //knex('promoter').then((dados ) => {
+     //       res.send(dados);
+     //   }, next)
+    knex('evento')
+    .join('endereco','Evento_idEventos','=','idEventos')
+    .select()
+    .then((dados ) => {
+      if(!dados)return res.send(new errors.BadRequestError('Nada foi encontrado!!'))
             res.send(dados);
     }, next)
     

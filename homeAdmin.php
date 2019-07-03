@@ -1,3 +1,13 @@
+<?php
+  session_start();
+  include("config/verifica.php"); //Verifica a sessão esta ativa
+  include("config/conn.php"); //Importa conexão com banco de dados
+  $name = $_SESSION['LOGIN_USUARIO'];
+  $res = mysqli_query($con,"SELECT idUsuario, usuNome from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
+  $showID = mysqli_fetch_assoc($res);
+  $id = $showID['idUsuario']; //Pega o id do usuario logado
+  $nome = $showID['usuNome'];
+?>
 <!DOCTYPE html>
 
 <html lang="en" class="default-style">
@@ -586,30 +596,6 @@
             </ul>
           </li>
 
-          <li class="sidenav-item">
-            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-logo-buffer"></i>
-              <div>Complete UI</div>
-            </a>
-
-            <ul class="sidenav-menu">
-              <li class="sidenav-item">
-                <a target="_blank" href="complete-ui_base.html" class="sidenav-link">
-                  <div>Base</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a target="_blank" href="complete-ui_plugins.html" class="sidenav-link">
-                  <div>Plugins</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a target="_blank" href="complete-ui_charts.html" class="sidenav-link">
-                  <div>Charts</div>
-                </a>
-              </li>
-            </ul>
-          </li>
-
         </ul>
       </div>
       <!-- / Layout sidenav -->
@@ -776,18 +762,16 @@
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
                   <span class="d-inline-flex flex-lg-row-reverse align-items-center align-middle">
                     <img src="assets/img/avatars/1.png" alt class="d-block ui-w-30 rounded-circle">
-                    <span class="px-1 mr-lg-2 ml-2 ml-lg-0">Mike Greene</span>
+                    <span class="px-1 mr-lg-2 ml-2 ml-lg-0"><?php echo $nome ?></span>
                   </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                  <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-person text-lightest"></i> &nbsp; My profile</a>
-                  <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-mail text-lightest"></i> &nbsp; Messages</a>
-                  <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-md-settings text-lightest"></i> &nbsp; Account settings</a>
+                  <a href="pages/perfil.php" class="dropdown-item"><i class="ion ion-ios-person text-lightest"></i> &nbsp; Meu Perfil</a>
+                  <a href="pages/editperfil.php" class="dropdown-item"><i class="ion ion-md-settings text-lightest"></i> &nbsp; Configurações</a>
                   <div class="dropdown-divider"></div>
-                  <a href="javascript:void(0)" class="dropdown-item"><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Log Out</a>
+                  <a href="config/logoff.php" class="dropdown-item"><i class="ion ion-ios-log-out text-danger"></i> &nbsp; Sair</a>
                 </div>
               </div>
-            </div>
           </div>
         </nav>
         <!-- / Layout navbar -->

@@ -564,29 +564,6 @@
             </ul>
           </li>
 
-          <li class="sidenav-item">
-            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-logo-buffer"></i>
-              <div>Complete UI</div>
-            </a>
-
-            <ul class="sidenav-menu">
-              <li class="sidenav-item">
-                <a target="_blank" href="complete-ui_base.html" class="sidenav-link">
-                  <div>Base</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a target="_blank" href="complete-ui_plugins.html" class="sidenav-link">
-                  <div>Plugins</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a target="_blank" href="complete-ui_charts.html" class="sidenav-link">
-                  <div>Charts</div>
-                </a>
-              </li>
-            </ul>
-          </li>
 
         </ul>
       </div>

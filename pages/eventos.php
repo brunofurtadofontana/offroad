@@ -4,7 +4,9 @@
   include("../config/conn.php"); //Importa conexão com banco de dados
   $name = $_SESSION['LOGIN_USUARIO'];
   $res = mysqli_query($con,"SELECT idUsuario, usuNome from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
+  $even = mysqli_query($con,"SELECT idEventos, evenNome from evento WHERE idUsuario = '$name' ");
   $showID = mysqli_fetch_assoc($res);
+  $showEven = mysqli_fetch_assoc($even);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   $nome = $showID['usuNome'];
 ?>
@@ -373,15 +375,21 @@
           </div>
         </nav>
         <!-- / Layout navbar -->
-
         <!-- Layout content -->
         <div class="layout-content">
-
-          <!-- Content -->
-          <div class="container-fluid flex-grow-1 container-p-y">
-
-
-
+        <!-- Content -->
+        <div class="container-fluid flex-grow-1 container-p-y">
+          <!--painel de eventos-->
+        <div class="row">  
+            <div class="col-md-6 col-xl-4">
+                <a href="#"><div class="card card-hover bg-primary text-white mb-3">
+                  <div class="card-body">
+                    <h4 class="card-title">Trilha Teste</h4>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                  </div>
+                </div></a>
+            </div>
+        </div>
         </div>
         <!-- Layout content -->
 

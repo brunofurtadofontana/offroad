@@ -3,5 +3,5 @@
 session_start();
 unset($_SESSION["LOGIN_USUARIO"]);
 session_destroy();
-header("Location:../index.php?error=4");
+header("Location:../logme.php?error=4");
 ?>

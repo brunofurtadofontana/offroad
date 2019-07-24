@@ -23,11 +23,11 @@
                   }
                   
               }else{
-                header('Location:../index.php?error=1');
+                header('Location:../logme.php?error=1');
               } 
         }
         else{
-          header('Location:../index.php?error=2');
+          header('Location:../logme.php?error=2');
         }
 
       

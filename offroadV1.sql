@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `offroadv1`.`Evento` (
   `evenData` DATE NULL,
   `evenHoraInicial` TIME NULL,
   `evenHoraFinal` TIME NULL,
-  `evenDescr` VARCHAR(45) NULL,
+  `evenDescr` VARCHAR(255) NULL,
   `evenTipoTrilha` VARCHAR(45) NULL,
   `evenVlrInscri` FLOAT NULL,
   `evenStatusDel` VARCHAR(45) NULL,

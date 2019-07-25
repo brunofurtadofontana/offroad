@@ -3,11 +3,11 @@
   include("../config/verifica.php"); //Verifica a sessão esta ativa
   include("../config/conn.php"); //Importa conexão com banco de dados
   $name = $_SESSION['LOGIN_USUARIO'];
+
   $res = mysqli_query($con,"SELECT idUsuario, usuNome from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
-  $even = mysqli_query($con,"SELECT idEventos, evenNome from evento WHERE idUsuario = '$name' ");
   $showID = mysqli_fetch_assoc($res);
-  $showEven = mysqli_fetch_assoc($even);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
+  
   $nome = $showID['usuNome'];
 ?>
 <!DOCTYPE html>
@@ -380,24 +380,74 @@
         <!-- Content -->
         <div class="container-fluid flex-grow-1 container-p-y">
           <!--painel de eventos-->
-        <div class="row">  
+        
+        <div class="row"> 
+        <?php
+          $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr from evento WHERE promoter_idUsuario = '$id' AND evenData >= DATE_FORMAT(NOW(), '%Y-%m-%d');");
+          while($showEven = mysqli_fetch_assoc($even)):
+          $idEven = $showEven['idEventos'];
+          $evenNome = $showEven['evenNome'];
+          $evenDescr = $showEven['evenDescr'];
+        ?> 
             <div class="col-md-6 col-xl-4">
                 <a href="#"><div class="card card-hover bg-primary text-white mb-3">
                   <div class="card-body">
-                    <h4 class="card-title">Trilha Teste</h4>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <h4 class="card-title"><?php echo $evenNome; ?></h4>
+                    <p class="card-text"><?php echo $evenDescr; ?></p>
                   </div>
                 </div></a>
             </div>
+          <?php endwhile; ?>
+          <div class="col-md-6 col-xl-4">                                 
+            <button style="width: 100%;  height: 90%"  type="button" class="btn btn-xs btn-outline-primary" data-toggle="modal" data-target="#modals-default">
+              <span class="ion ion-md-add"></span> Adicionar
+            </button>
+              <!--<h4 style="text-align: center;">+</h4>-->                 
+          </div>
         </div>
         </div>
+                <div class="modal fade" id="modals-default">
+                  <div class="modal-dialog modal-lg">
+                    <form class="modal-content" method="post" action="../config/tratados.php?opc=8">
+                      <div class="modal-header">
+                        <h5 class="modal-title">
+                          Cadastro de Eventos
+                          <br>
+                        <small class="text-muted"></small>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Nome do Evento</label>
+                            <input type="text" class="form-control" placeholder="Nome">
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Descrição do Evento</label>      
+                            <textarea id="autosize-demo" rows="3" class="form-control" placeholder="Descrição..."></textarea> 
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Data do Evento</label>
+                            <input type="text" class="form-control" placeholder="Name on card">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
         <!-- Layout content -->
-
       </div>
       <!-- / Layout container -->
-
     </div>
-
     <!-- Overlay -->
     <div class="layout-overlay layout-sidenav-toggle"></div>
   </div>

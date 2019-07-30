@@ -302,19 +302,48 @@
         <div class="form-group">
           <label class="form-label">Almoços</label>
           <select class="form-control">
-            <option>Escolha uma opção</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option value="0">Escolha uma opção</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
           </select>
         </div>
       
+        <hr class="mx-n4 mx-lg-n5 my-4">
+        <?php 
+            include("config/conn.php");
+            $idGET = $_GET['id'];
+            $res = mysqli_query($con,"select *from evento where idEventos = $idGET ")or die(mysqli_error($con));
+            $mostrar = mysqli_fetch_assoc($res);
+            $valor = $mostrar['evenVlrInscri'];
+            $title = $mostrar['evenNome'];
+            $data = $mostrar['evenData'];
+            $data = str_replace("/", "-", $data);
+            
+           
+        ?>
+        <h6 class="pt-2 mb-4">Valor da trilha</h6>
+          <div class="row">
+              <div class="col-md-6 mb-4">
+                <a class="d-block border-primary rounded ui-bordered text-primary p-3" href="#">
+                  <span><?php echo $title; ?> -
+                    <strong>
+                        R$ <?php echo $valor ?>,00
+                    </strong>
+                  </span>
+                  <br>
+                  <small class="text-muted">Data do evento: <?php echo date('d-m-Y', strtotime($data)); ?></small>
+                </a>
+              </div>
+              
+            </div>
+     
 
       </div>
       <!-- / Shipping -->
-
+      
       <!-- Payment -->
       <div id="shop-checkout-wizard-2" class="animated fadeIn">
         <div class="mx-auto" style="max-width: 400px;">
@@ -324,6 +353,7 @@
                 <span class="ion ion-md-card text-big mx-3"></span>
               </a>
             </li>
+            
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center h-100 py-1" data-toggle="tab" href="#payment-methods-paypal">
                 
@@ -370,7 +400,7 @@
       <div id="shop-checkout-wizard-3" class="animated fadeIn">
         <!-- Shopping cart table -->
         <h6 class="text-light small font-weight-normal">
-          <span class="ion ion-md-cart"></span> &nbsp; Shopping Cart
+          <span class="ion ion-md-cart"></span> &nbsp; Dados de compra
         </h6>
         <div class="table-responsive">
           <table class="table table-bordered m-0" style="min-width:550px;">
@@ -379,56 +409,45 @@
               <tr>
                 <td class="p-4">
                   <div class="media align-items-center">
-                    <img src="assets/img/uikit/nike-1.jpg" class="d-block ui-w-40 ui-bordered mr-4" alt>
+                    <?php 
+                        //PEGAR IMAGEM DO EVENTO PELO ID
+
+                    $resIMG = mysqli_query($con,"select eveImgNome from evento JOIN evento_img where idEventos = $idGET ")or die(mysqli_error($con));
+                    $mostrar = mysqli_fetch_assoc($resIMG);
+                    $img = $mostrar['eveImgNome'];
+
+                    ?>
+
+
+                    <img src="uploads/<?php echo $img; ?>" class="d-block ui-w-40 ui-bordered mr-4" alt>
                     <div class="media-body">
-                      <a href="#" class="d-block text-body">Nike Men Black Liteforce III Sneakers</a>
+                      <a href="#" class="d-block text-body"><?php echo $title ?></a>
                       <small>
-                        <span class="text-muted">Color:</span>
-                        <span class="ui-product-color ui-product-color-sm align-text-bottom" style="background:#e81e2c;"></span> &nbsp;
-                        <span class="text-muted">Size: </span> EU 37 &nbsp;
-                        <span class="text-muted">Ships from: </span> China
+                        <span class="text-muted">Data: <?php echo date('d-m-Y', strtotime($data)); ?> </span>
+                        
+                        
                       </small>
                     </div>
                   </div>
                 </td>
                 <!-- Set column width -->
-                <td class="align-middle p-4" style="width: 66px;">x2</td>
+                <td class="align-middle p-4" style="width: 66px;">x1</td>
                 <!-- Set column width -->
-                <td class="text-right font-weight-semibold align-middle p-4" style="width: 100px;">$115.10</td>
+                <td class="text-right font-weight-semibold align-middle p-4" style="width: 100px;">R$<?php echo $valor; ?>,00</td>
               </tr>
 
               <tr>
                 <td class="p-4">
                   <div class="media align-items-center">
-                    <img src="assets/img/uikit/s7edge-1.jpg" class="d-block ui-w-40 ui-bordered mr-4" alt>
+                    <img src="uploads/refeicao.png" class="d-block ui-w-40 ui-bordered mr-4" alt>
                     <div class="media-body">
-                      <a href="#" class="d-block text-body">Samsung Galaxy S7 Edge</a>
-                      <small>
-                        <span class="text-muted">Color:</span>
-                        <span class="ui-product-color ui-product-color-sm align-text-bottom" style="background:#000;"></span> &nbsp;
-                        <span class="text-muted">Storage: </span> 32GB &nbsp;
-                        <span class="text-muted">Warranty: </span> Standard - 1 year &nbsp;
-                        <span class="text-muted">Ships from: </span> China
-                      </small>
+                      <a href="#" class="d-block text-body">Refeição</a>
+                      <small><span class="text-muted">Almoço</span></small>
                     </div>
                   </div>
                 </td>
-                <td class="align-middle p-4">x1</td>
-                <td class="text-right font-weight-semibold align-middle p-4">$1049.00</td>
-              </tr>
-
-              <tr>
-                <td class="p-4">
-                  <div class="media align-items-center">
-                    <img src="assets/img/uikit/sunglasses.jpg" class="d-block ui-w-40 ui-bordered mr-4" alt>
-                    <div class="media-body">
-                      <a href="#" class="d-block text-body">WALKING 400 BLUE CAT3</a>
-                      <small><span class="text-muted">Ships from: </span> Germany</small>
-                    </div>
-                  </div>
-                </td>
-                <td class="align-middle p-4">x1</td>
-                <td class="text-right font-weight-semibold align-middle p-4">$20.55</td>
+                <td class="align-middle p-4">x2</td>
+                <td class="text-right font-weight-semibold align-middle p-4">R$20,00</td>
               </tr>
 
             </tbody>
@@ -437,67 +456,20 @@
         <!-- / Shopping cart table -->
 
         <h6 class="text-light small font-weight-normal mt-5">
-          <span class="ion ion-md-card"></span> &nbsp; Payment Method
+          <span class="ion ion-md-card"></span> &nbsp; Forma de pagamento
         </h6>
         <div class="d-flex justify-content-start align-items-center rounded ui-bordered p-3">
           <img src="assets/img/payment/Visa-light.png" class="ui-payment-small mr-1" alt> XXXX-XXXX-XXXX-1234
         </div>
 
-        <h6 class="text-light small font-weight-normal mt-5">
-          <span class="ion ion-md-home"></span> &nbsp; Shipping Info
-        </h6>
-        <div class="ui-bordered p-3">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <div class="text-muted small">Name</div>
-              John Doe
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="text-muted small">Phone</div>
-              123-456-7891
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="text-muted small">Email</div>
-              jdoe@email.com
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="text-muted small">Country</div>
-              USA
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="text-muted small">State / Region</div>
-              California
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="text-muted small">City</div>
-              San Francisco
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="text-muted small">ZIP Code</div>
-              94108
-            </div>
-            <div class="col-12">
-              <div class="text-muted small">Address</div>
-              950 Mason St, San Francisco, CA 94108, USA
-            </div>
-          </div>
-        </div>
-
-        <h6 class="text-light small font-weight-normal mt-5">
-          <span class="ion ion-md-globe"></span> &nbsp; Shipping Method
-        </h6>
-        <div class="rounded ui-bordered p-3">
-          <span>Seller's Shipping Method - <strong>Free</strong> </span>
-          <br>
-          <small class="text-muted">Estimated Delivery Time: 5-15 days</small>
-        </div>
+        
 
         <hr class="mt-5 mb-4">
 
         <div class="text-right">
-          <div class="text-muted">Total price</div>
+          <div class="text-muted">Valor Total</div>
           <div class="text-large">
-            <strong>$1164.65</strong>
+            <strong>R$80,00</strong>
           </div>
         </div>
       </div>

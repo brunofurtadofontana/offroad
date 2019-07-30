@@ -261,6 +261,7 @@
                   //$totalIt = mysqli_num_row($resEv);
                   $count = 0;
                   while($show = mysqli_fetch_assoc($resEv)){
+                    $id = $show['idEventos'];
               ?>                     
                       <div class="col-sm-6 col-xl-4">
                         <div class="card mb-4">
@@ -277,7 +278,7 @@
                             </a>
                           </div>
                           <div class="card-body">
-                            <h5 class="mb-3"><a href="javascript:void(0)" class="text-body"><?php echo $show['evenNome'] ?></a></h5>
+                            <h5 class="mb-3"><a href="checkout.php?id=<?php echo $id ?>" class="text-body"><?php echo $show['evenNome'] ?></a></h5>
                             <p class="text-muted mb-3"><?php echo $show['evenDescr'] ?></p>
                             <div class="media">
                               <div class="media-body">

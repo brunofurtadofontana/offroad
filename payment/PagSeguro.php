@@ -3,7 +3,7 @@ public function iniciaPagamentoAction() { //gera o código de sessão obrigatór
 
 		//$id = (string) $this->params ()->fromRoute( 'confirma', null );
 
-		$data['token'] =''; //token teste SANDBOX
+		$data['token'] ='27ea4813-a751-4b17-87f1-225b634bff967a21328647ab83c464f009ba1e7d271f0cba-48f1-4960-98b6-1bcfdcf891dc'; //token teste SANDBOX
 
 				//$_SERVER['REMOTE_ADDR']
 		$emailPagseguro = "";
@@ -18,8 +18,8 @@ public function iniciaPagamentoAction() { //gera o código de sessão obrigatór
 
 		curl_setopt($curl, CURLOPT_URL, $url . "?email=" . $emailPagseguro);
 		curl_setopt($curl, CURLOPT_POST, true);
-		curl_setopt( $curl,CURLOPT_HTTPHEADER, $headers );
-		curl_setopt( $curl,CURLOPT_RETURNTRANSFER, true );
+		curl_setopt($curl,CURLOPT_HTTPHEADER, $headers );
+		curl_setopt($curl,CURLOPT_RETURNTRANSFER, true );
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 		//curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);

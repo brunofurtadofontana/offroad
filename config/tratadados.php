@@ -180,9 +180,42 @@
 					header("Location:../home.php?error=1");
 				}
 			break;
-		case 8://Cadastrar computador
+		case 8://Cadastrar evento
 			# code...
-			
+			$evenNome = htmlspecialchars(trim(strtoupper($_POST['nomeEven'])));
+			$evenDesc = htmlspecialchars(trim(strtoupper($_POST['descEven'])));
+			$evenTipoTrilha = htmlspecialchars(trim(strtoupper($_POST['tipoTrilha'])));
+			$evenData = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
+			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
+			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
+			$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['vlrTrilha'])));
+			//$id = $_GET['id'];
+			$qr = mysqli_query($con,"INSERT INTO evento(evenNome,
+														evenDescr,
+														evenTipoTrilha,
+														evenData,
+														evenHoraInicial,
+														evenHoraFinal,
+														evenVlrInscri,
+														promoter_idUsuario) 
+												VALUES ('$evenNome',
+														'$evenDesc',
+														'$evenTipoTrilha',
+														'$evenData',
+														'$evenHoraInicio',
+														'$evenHoraFim',
+														'$evenVlrTrilha',
+														'$id')")or die(mysqli_error($con));
+			if (!$qr) {
+				header("Location:../pages/eventos.php?error=2");
+			}else{
+				
+
+				
+                  header("Location:../pages/eventos.php?error=1");
+
+			}
+			break;
 			break;
 		case 9://Cadastrar computador
 			# code...

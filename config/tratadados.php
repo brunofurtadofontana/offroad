@@ -189,33 +189,53 @@
 			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
 			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
 			$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['vlrTrilha'])));
-			//$id = $_GET['id'];
-			$qr = mysqli_query($con,"INSERT INTO evento(evenNome,
-														evenDescr,
-														evenTipoTrilha,
-														evenData,
-														evenHoraInicial,
-														evenHoraFinal,
-														evenVlrInscri,
-														promoter_idUsuario) 
-												VALUES ('$evenNome',
-														'$evenDesc',
-														'$evenTipoTrilha',
-														'$evenData',
-														'$evenHoraInicio',
-														'$evenHoraFim',
-														'$evenVlrTrilha',
-														'$id')")or die(mysqli_error($con));
-			if (!$qr) {
-				header("Location:../pages/eventos.php?error=2");
+			$evenRua = htmlspecialchars(trim(strtoupper($_POST['rua'])));
+			$evenBairro = htmlspecialchars(trim(strtoupper($_POST['bairro'])));
+			$evenCidade = htmlspecialchars(trim(strtoupper($_POST['cidade'])));
+			$evenEstado = htmlspecialchars(trim(strtoupper($_POST['estado'])));
+			//$id = $_GET['id'];			
+			  $atual = new DateTime();
+  			  $atual = strtotime(date("Y-m-d"));
+  			  $dataUser= strtotime($evenData);
+			if ($dataUser < $atual){
+				header("Location:../pages/eventos.php?error=3");				
 			}else{
-				
-
-				
-                  header("Location:../pages/eventos.php?error=1");
-
+				$qr = mysqli_query($con,"INSERT INTO evento(evenNome,
+															evenDescr,
+															evenTipoTrilha,
+															evenData,
+															evenHoraInicial,
+															evenHoraFinal,
+															evenVlrInscri,
+															promoter_idUsuario) 
+													VALUES ('$evenNome',
+															'$evenDesc',
+															'$evenTipoTrilha',
+															'$evenData',
+															'$evenHoraInicio',
+															'$evenHoraFim',
+															'$evenVlrTrilha',
+															'$id')")or die(mysqli_error($con));
+				$even = mysqli_query($con,"SELECT MAX(idEventos)as max from evento");
+			    $showEven = mysqli_fetch_assoc($even);
+			    $idEven = $showEven['max'];
+				$qrEnde = mysqli_query($con,"INSERT INTO endereco(eveRua,
+																  eveBairro,
+																  eveCidade,
+																  eveEstado,
+																  Evento_idEventos	
+																  ) 
+													VALUES ('$evenRua',
+															'$evenBairro',
+															'$evenCidade',
+															'$evenEstado',
+															'$idEven')")or die(mysqli_error($con));
+				if (!$qr) {
+					header("Location:../pages/eventos.php?error=2");
+				}else{
+	                  header("Location:../pages/eventos.php?error=1");
+				}
 			}
-			break;
 			break;
 		case 9://Cadastrar computador
 			# code...

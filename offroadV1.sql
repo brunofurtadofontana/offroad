@@ -55,6 +55,8 @@ CREATE TABLE IF NOT EXISTS `offroadv1`.`Endereco` (
   `idEndereco` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `eveRua` VARCHAR(45) NULL,
   `eveBairro` VARCHAR(45) NULL,
+  `eveCidade` VARCHAR(45) NULL,
+  `eveEstado` VARCHAR(45) NULL,
   `eveLatitude` DOUBLE(10,6) NULL,
   `eveLongitude` DOUBLE(10,6) NULL,
   `Evento_idEventos` INT(11) NOT NULL,

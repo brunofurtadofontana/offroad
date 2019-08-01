@@ -79,7 +79,6 @@
 
   <!-- Core scripts -->
   <script src="assets/vendor/js/pace.js"></script>
-  <script src="assets/vendor/libs/datatables/datatables.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
    
 
@@ -443,7 +442,7 @@
             <table class="datatables-demo table table-striped table-bordered">
               <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>#ID</th>
                     <th>Nome Evento</th>
                     <th>Descrição</th>
                     <th>Data do Evento</th>
@@ -476,13 +475,13 @@
                     $eveTipo = $showEven['evenTipoTrilha'];
                   ?> 
                 <tr class="odd gradeX">
-                    <td>#<?php echo $showEven['idEventos']; ?> </td>
+                    <td><?php echo $showEven['idEventos']; ?> </td>
                     <td><?php echo $evenNome;?> </td>
                     <td><?php echo $evenDescr;?> </td>
-                    <td><?php echo date('d-m-Y', strtotime($evenData)); ?> </td>
-                    <td><?php echo $eveHoraInicio;?> </td>
-                    <td><?php echo $eveHoraFim;?> </td>
-                    <td><?php echo $eveVlr;?> </td>
+                    <td><?php echo date('d/m/Y', strtotime($evenData)); ?> </td>
+                    <td><?php echo date('H:i', strtotime($eveHoraInicio));?> </td>
+                    <td><?php echo date('H:i', strtotime($eveHoraFim));?> </td>
+                    <td><?php echo 'R$' . number_format($eveVlr, 2, ',', '.');?> </td>
                     <td><?php echo $eveTipo;?> </td>
                     <td><?php echo $eveCidade;?> </td>
                     <td><?php echo $eveEstado;?> </td>
@@ -491,11 +490,7 @@
               </tbody>
             </table>
           </div>
-          <script>
-            $(function() {
-              $('.datatables-demo').dataTable();
-            });
-          </script>
+        </div>
 <!--           <div class="card-body">
                 <nav>
                   <ul class="pagination">
@@ -628,13 +623,14 @@
   <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
   <script src="assets/vendor/libs/moment/moment.js"></script>
   <script src="assets/vendor/libs/minicolors/minicolors.js"></script>
-  <script src="assets/vendor/libs/toastr/toastr.js"></script>
   <script src="assets/vendor/libs/growl/growl.js"></script>
+  <script src="assets/js/tables_datatables.js"></script>
 
 
   <!-- Demo -->
   <script src="assets/js/demo.js"></script>
   <script src="assets/js/ui_notifications.js"></script>
+  <script src="assets/js/tables_datatables.js"></script>
 
 
 </body>

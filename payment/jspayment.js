@@ -72,4 +72,37 @@ function getTokenCard()
         }
     });
 }
+
+//Exibe a quantidade e valores das parcelas
+function getParcelas(Bandeira){
+    PagSeguroDirectPayment.getInstallments({
+        amount: Amount,
+        maxInstallmentNoInterest: 2,
+        brand: Bandeira,
+        success: function(response)
+        {
+            $.each(response.installments,function(i,obj){
+                $.each(obj,function(i2,obj2){
+                    var NumberValue=obj2.installmentAmount;
+                    var Number= "R$ "+ NumberValue.toFixed(2).replace(".",",");
+                    var NumberParcelas= NumberValue.toFixed(2);
+                    $('#QtdParcelas').show().append("<option value='"+obj2.quantity+"' label='"+NumberParcelas+"'>"+obj2.quantity+" parcelas de "+Number+"</option>");
+                });
+            });
+        }
+    });
+}
+
+//Pegar o valor da parcela
+$("#QtdParcelas").on('change',function(){
+    var ValueSelected=document.getElementById('QtdParcelas');
+    $("#ValorParcelas").val(ValueSelected.options[ValueSelected.selectedIndex].label);
+});
+
+$('#BotaoComprar').on('click',function(event){
+		event.preventDefault();
+		PagSeguroDirectPayment.onSenderHashReady(function(response){
+		   $('#HashCard').val(response.senderHash);
+		});
+});
 iniciarSessao();

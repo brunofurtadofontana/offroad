@@ -16,9 +16,15 @@
 	
 </head>
 <body>
-<form action="">
+<form action="controllerPedido.php" name="Form1" id="Form1" method="post">
     <input type="text" id="NumeroCartao" name="NumeroCartao"/>
     <input type="text" id="TokenCard" name="TokenCard">
+    <input type="text" id="HashCard" name="HashCard">
+    <select name="QtdParcelas" id="QtdParcelas">
+        <option value="">Selecione</option>
+    </select>
+    <input type="text" id="ValorParcelas" name="ValorParcelas">
+    <input type="submit" name="comprar" value="Comprar" id="BotaoComprar">
 </form>
 <div class="BandeiraCartao"></div>
 

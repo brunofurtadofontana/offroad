@@ -16,7 +16,7 @@
 	
 </head>
 <body>
-<form action="controllerPedido.php" name="Form1" id="Form1" method="post">
+<form  name="Form1" id="Form1" method="post" action="controllerPedido.php">
     <input type="text" id="NumeroCartao" name="NumeroCartao"/>
     <input type="text" id="TokenCard" name="TokenCard">
     <input type="text" id="HashCard" name="HashCard">
@@ -24,7 +24,7 @@
         <option value="">Selecione</option>
     </select>
     <input type="text" id="ValorParcelas" name="ValorParcelas">
-    <input type="submit" name="comprar" value="Comprar" id="BotaoComprar">
+    <input type="submit" name="Comprar" value="Comprar" id="BotaoComprar">
 </form>
 <div class="BandeiraCartao"></div>
 

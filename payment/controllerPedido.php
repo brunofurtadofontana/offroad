@@ -4,8 +4,8 @@ include("Config.php");
 
 $TokenCard=$_POST['TokenCard'];
 $HashCard=$_POST['HashCard'];
-//$QtdParcelas=filter_input(INPUT_POST,'QtdParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
-//$ValorParcelas=filter_input(INPUT_POST,'ValorParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
+$QtdParcelas=filter_input(INPUT_POST,'QtdParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
+$ValorParcelas=filter_input(INPUT_POST,'ValorParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
 
 $Data["email"]=EMAIL_PAGSEGURO;
 $Data["token"]=TOKEN_SANDBOX;
@@ -15,7 +15,7 @@ $Data["receiverEmail"]=EMAIL_PAGSEGURO;
 $Data["currency"]="BRL";
 $Data["itemId1"] = 1;
 $Data["itemDescription1"] = 'Website';
-$Data["itemAmount1"] = '500.00';
+$Data["itemAmount1"] = '100.00';
 $Data["itemQuantity1"] = 1;
 $Data["notificationURL="]="https://www.meusite.com.br/notificacao.php";
 $Data["reference"]="83783783737";
@@ -23,7 +23,7 @@ $Data["senderName"]='José Comprador';
 $Data["senderCPF"]='22111944785';
 $Data["senderAreaCode"]='37';
 $Data["senderPhone"]='99999999';
-$Data["senderEmail"]="c51994292615446022931@sandbox.pagseguro.com.br";
+$Data["senderEmail"]="fulano@sandbox.pagseguro.com.br";
 $Data["senderHash"]=$HashCard;
 $Data["shippingType"]="1";
 $Data["shippingAddressStreet"]='Av. Brig. Faria Lima';
@@ -67,6 +67,7 @@ $Retorno=curl_exec($Curl);
 curl_close($Curl);
 
 $Xml=simplexml_load_string($Retorno);
-var_dump($Xml);
+echo json_encode($Xml);
+//var_dump($Xml);
 
  ?>

@@ -1,4 +1,5 @@
 var Root="http://"+document.location.hostname+"/";
+var Amount = 100.00;
 
 function iniciarSessao(){
 
@@ -18,13 +19,13 @@ function iniciarSessao(){
 function listaMeiosPagamentos(){ //lista os meios de pagamentos liberados
 
 	PagSeguroDirectPayment.getPaymentMethods({
-        amount: 500.00,
+        amount: Amount,
         success: function(data) {
             $.each(data.paymentMethods.CREDIT_CARD.options, function(i, obj){
                 $('.CartaoCredito').append("<div><img src=https://stc.pagseguro.uol.com.br/"+obj.images.SMALL.path+">"+obj.name+"</div>");
             });
             $.each(data.paymentMethods.BOLETO.options, function(i, obj){
-               // $('.CartaoCredito').append("<div><img src=https://stc.pagseguro.uol.com.br/"+obj.images.SMALL.path+">"+obj.name+"</div>");
+               //$('.CartaoCredito').append("<div><img src=https://stc.pagseguro.uol.com.br/"+obj.images.SMALL.path+">"+obj.name+"</div>");
                $('.Boleto').append("<div><img src=https://stc.pagseguro.uol.com.br/"+obj.images.SMALL.path+">"+obj.name+"</div>");
             });
             
@@ -48,6 +49,7 @@ $('#NumeroCartao').on('keyup',function(){
             success: function(response) {
                 var BandeiraImg=response.brand.name;
                 $('.BandeiraCartao').html("<img src=https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/42x20/"+BandeiraImg+".png>")
+            	getParcelas(BandeiraImg);
             },
             error: function (response) {
                 alert('Cartão não reconhecido');
@@ -103,6 +105,9 @@ $('#BotaoComprar').on('click',function(event){
 		event.preventDefault();
 		PagSeguroDirectPayment.onSenderHashReady(function(response){
 		   $('#HashCard').val(response.senderHash);
+		    if(response.status=='success'){
+        		$("#Form1").trigger('submit');
+			}
 		});
 });
 iniciarSessao();

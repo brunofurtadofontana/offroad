@@ -9,6 +9,8 @@
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   
   $nome = $showID['usuNome'];
+
+  
 ?>
 <!DOCTYPE html>
 
@@ -44,12 +46,8 @@
   <link rel="stylesheet" href="assets/vendor/css/rtl/colors.css" class="theme-settings-colors-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/uikit.css">
   <link rel="stylesheet" href="assets/css/demo.css"> 
-  
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!-- Core stylesheets -->
-   
 
   <!-- Load polyfills -->
   <script src="assets/vendor/js/polyfills.js"></script>
@@ -57,7 +55,6 @@
 
   <script src="assets/vendor/js/material-ripple.js"></script>
   <script src="assets/vendor/js/layout-helpers.js"></script>
-
 
   <!-- Theme settings -->
   <!-- This file MUST be included after core stylesheets and layout-helpers.js in the <head> section -->
@@ -70,21 +67,29 @@
     });
   </script>
 
+  <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro").style.display = "none";
+        }, 3000);
+        function hide(){
+            document.getElementById("erro").style.display = "none";
+  }
+  </script>
+
+
   <!-- Core scripts -->
   <script src="assets/vendor/js/pace.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+   
 
 
  
 <!-- Libs -->
   <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
-  <link rel="stylesheet" href="assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css">
-  <link rel="stylesheet" href="assets/vendor/libs/flatpickr/flatpickr.css">
-  <link rel="stylesheet" href="assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css">
-  <link rel="stylesheet" href="assets/vendor/libs/bootstrap-material-datetimepicker/bootstrap-material-datetimepicker.css">
-  <link rel="stylesheet" href="assets/vendor/libs/timepicker/timepicker.css">
   <link rel="stylesheet" href="assets/vendor/libs/minicolors/minicolors.css">
   <link rel="stylesheet" href="assets/vendor/libs/toastr/toastr.css">
+  <link rel="stylesheet" href="assets/vendor/libs/datatables/datatables.css">
+
 </head>
 
 <body>
@@ -396,7 +401,7 @@
         <!-- Layout content -->
         <div class="layout-content">
         <!-- Content -->
-        <div class="container-fluid flex-grow-1 container-p-y">
+      <div class="container-fluid flex-grow-1 container-p-y">
 
         <!--painel de eventos-->
         <?php 
@@ -404,13 +409,21 @@
           $errou = $_GET['error'];
           switch ($errou) {
             case 1:
-              echo "<div class='alert alert-success' role='alert'>
-                        A simple success alert—check it out!
+              echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
+                      <button type='button' class='close' onclick='hide()'>&times;</button>
+                      Evento criado com sucesso!
                     </div>";
               break;
             case 2:
-              echo "<div class='alert alert-danger alert-dismissible fade show'>
+              echo "<div id='erro' class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
                     Erro ao cadastrar evento!
+                  </div>";
+              break;
+            case 3:
+              echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    O evento não pode acontecer em uma data anterior a atual!
                   </div>";
               break;
             default:
@@ -418,33 +431,95 @@
               break;
           }
       ?>
-        
         <div class="row"> 
-
-        <?php
-          $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr from evento WHERE promoter_idUsuario = '$id' AND evenData >= DATE_FORMAT(NOW(), '%Y-%m-%d');");
-          while($showEven = mysqli_fetch_assoc($even)):
-          $idEven = $showEven['idEventos'];
-          $evenNome = $showEven['evenNome'];
-          $evenDescr = $showEven['evenDescr'];
-        ?> 
-            <div class="col-md-6 col-xl-4">
-                <a href="#"><div class="card card-hover bg-primary text-white mb-3">
-                  <div class="card-body">
-                    <h4 class="card-title"><?php echo $evenNome; ?></h4>
-                    <p class="card-text"><?php echo $evenDescr; ?></p>
-                  </div>
-                </div></a>
-            </div>
-          <?php endwhile; ?>
-          <div class="col-md-6 col-xl-4">                                 
-            <button style="width: 100%;  height: 90%"  type="button" class="btn btn-xs btn-outline-primary" data-toggle="modal" data-target="#modals-default">
-              <span class="ion ion-md-add"></span> Adicionar
-            </button>
-              <!--<h4 style="text-align: center;">+</h4>-->                 
+        <!-- fim do botão -->
+          
+        <div class="table-responsive">
+          <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+            <div>Eventos</div>
+              <button type="button" class="btn btn-primary rounded-pill d-block" data-toggle="modal" data-target="#modals-default"><span class="ion ion-md-add"></span>&nbsp; Add Evento</button>
+            </h4>
+            <table class="datatables-demo table table-striped table-bordered">
+              <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Nome Evento</th>
+                    <th>Descrição</th>
+                    <th>Data do Evento</th>
+                    <th>Hora Inicial</th>
+                    <th>Hora Fim</th>
+                    <th>Valor R$</th>
+                    <th>Tipo</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                    $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr,evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenData from evento WHERE promoter_idUsuario = '$id' AND evenData >= DATE_FORMAT(NOW(), '%Y-%m-%d');")or die(mysqli_error($con));
+                    while($showEven = mysqli_fetch_assoc($even)):
+                    $idEven = $showEven['idEventos'];
+                    $evenNome = $showEven['evenNome'];
+                    $evenDescr = $showEven['evenDescr'];
+                    $evenData = $showEven['evenData'];
+                    $endereco =mysqli_query($con,"SELECT eveRua, eveBairro, eveCidade, eveEstado from endereco WHERE Evento_idEventos = '$idEven';");
+                    $ende = mysqli_fetch_assoc($endereco);
+                    $eveRua = $ende['eveRua'];
+                    $eveBairro = $ende['eveBairro'];
+                    $eveCidade = $ende['eveCidade'];
+                    $eveEstado = $ende['eveEstado'];
+                    $eveHoraInicio = $showEven['evenHoraInicial'];
+                    $eveHoraFim = $showEven['evenHoraFinal'];
+                    $eveVlr = $showEven['evenVlrInscri'];
+                    $eveTipo = $showEven['evenTipoTrilha'];
+                  ?> 
+                <tr class="odd gradeX">
+                    <td><?php echo $showEven['idEventos']; ?> </td>
+                    <td><?php echo $evenNome;?> </td>
+                    <td><?php echo $evenDescr;?> </td>
+                    <td><?php echo date('d/m/Y', strtotime($evenData)); ?> </td>
+                    <td><?php echo date('H:i', strtotime($eveHoraInicio));?> </td>
+                    <td><?php echo date('H:i', strtotime($eveHoraFim));?> </td>
+                    <td><?php echo 'R$' . number_format($eveVlr, 2, ',', '.');?> </td>
+                    <td><?php echo $eveTipo;?> </td>
+                    <td><?php echo $eveCidade;?> </td>
+                    <td><?php echo $eveEstado;?> </td>
+                </tr>
+                <?php endwhile; ?>
+              </tbody>
+            </table>
           </div>
         </div>
+<!--           <div class="card-body">
+                <nav>
+                  <ul class="pagination">
+                    <li class="page-item disabled">
+                      <a class="page-link" href="javascript:void(0)">«</a>
+                    </li>
+                    <li class="page-item active">
+                      <a class="page-link" href="javascript:void(0)">1</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0)">2</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0)">3</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0)">4</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0)">5</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript:void(0)">»</a>
+                    </li>
+                  </ul>
+                </nav>
+            </div> -->
         </div>
+      </div>
                 <div class="modal fade" id="modals-default">
                   <div class="modal-dialog modal-lg">
                   <!--MODAL PARA CADASTRO EVENTO-->
@@ -500,6 +575,24 @@
                             <input value="" name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
                           </div>
                         </div>
+                       <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Rua</label>
+                            <input value="" name="rua" required="" type="text" class="form-control" placeholder="Rua">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Bairro</label>
+                            <input value="" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Cidade</label>
+                            <input value="" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Estado</label>
+                            <input value="" name="estado" required="" type="text" class="form-control" placeholder="Estado">
+                          </div>
+                       </div>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -529,17 +622,16 @@
  <!-- Libs -->
   <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
   <script src="assets/vendor/libs/moment/moment.js"></script>
-  <script src="assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-  
-  <script src="assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
-  <script src="assets/vendor/libs/bootstrap-material-datetimepicker/bootstrap-material-datetimepicker.js"></script>
-  
   <script src="assets/vendor/libs/minicolors/minicolors.js"></script>
-  <script src="assets/vendor/libs/toastr/toastr.js"></script>
+  <script src="assets/vendor/libs/growl/growl.js"></script>
+  <script src="assets/js/tables_datatables.js"></script>
+
 
   <!-- Demo -->
   <script src="assets/js/demo.js"></script>
-  <script src="assets/js/forms_pickers.js"></script>
+  <script src="assets/js/ui_notifications.js"></script>
+  <script src="assets/js/tables_datatables.js"></script>
+
 
 </body>
 

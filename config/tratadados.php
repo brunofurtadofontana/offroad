@@ -2,6 +2,7 @@
 	require("conn.php");
 	$opc = $_GET['opc'];
 	$id = $_GET['id'];
+	$idEven = $_GET['idEvento'];
 	
 
 	switch ($opc) {
@@ -65,43 +66,49 @@
 					header("Location:../home.php?error=1");
 				}
 			break;
-		case 2://Editar computador
-			$idCP = $_GET['idCP'];
-			$processador = htmlspecialchars(trim(strtoupper($_POST['processador'])));
-			$memoriaram = htmlspecialchars(trim(strtoupper($_POST['memram'])));
-			$storage = htmlspecialchars(trim(strtoupper($_POST['storage'])));
-			$placamae = htmlspecialchars(trim(strtoupper($_POST['placamae'])));
-			$fonte = htmlspecialchars(trim(strtoupper($_POST['fonte'])));
-			$leitor = htmlspecialchars(trim(strtoupper($_POST['leitor'])));
-			$finalidade = htmlspecialchars(trim(strtoupper($_POST['finalidade'])));
-			$value = strtoupper(implode(',',$_POST['componentes']));
-			$so = htmlspecialchars(trim(strtoupper($_POST['so'])));
-			$situacao = htmlspecialchars(trim(strtoupper($_POST['situacao'])));
-			$obs = htmlspecialchars(trim(strtoupper($_POST['obs'])));
+		case 2://Editar Evento
+			$evenNome = htmlspecialchars(trim(strtoupper($_POST['nomeEven'])));
+			$evenDesc = htmlspecialchars(trim(strtoupper($_POST['descEven'])));
+			$evenTipoTrilha = htmlspecialchars(trim(strtoupper($_POST['tipoTrilha'])));
+			$evenData = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
+			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
+			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
+			$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['vlrTrilha'])));
+			$evenRua = htmlspecialchars(trim(strtoupper($_POST['rua'])));
+			$evenBairro = htmlspecialchars(trim(strtoupper($_POST['bairro'])));
+			$evenCidade = htmlspecialchars(trim(strtoupper($_POST['cidade'])));
+			$evenEstado = htmlspecialchars(trim(strtoupper($_POST['estado'])));
 
 
 			//echo $processador."<br>".$memoriaram."<br>".$storage."<br>".$placamae."<br>".$fonte."<br>".$leitor."<br>".$finalidade."<br>".$so."<br>".$situacao."<br>".$obs;
-			
-				$qr = mysqli_query($con,"UPDATE computador SET  comp_proc = '$processador',
-																comp_mem = '$memoriaram',
-																comp_hd = '$storage',
-																comp_mobo ='$placamae',
-																comp_fonte ='$fonte',
-																comp_leitor = '$leitor',
-																comp_finalidade = '$finalidade',
-																comp_so = '$so',
-																comp_situacao = '$situacao',
-																comp_obs = '$obs' 
-																WHERE comp_id = $idCP ")or die(mysqli_error($con));	
+	
+			$qr = mysqli_query($con,"UPDATE evento SET  evenNome = '$evenNome',
+															evenDescr = '$evenDesc',
+															evenTipoTrilha = '$evenTipoTrilha',
+															evenData ='$evenData',
+															evenHoraInicial ='$evenHoraInicio',
+															evenHoraFinal = '$evenHoraFim' 
+																WHERE idEventos = $idEven ")or die(mysqli_error($con));	
 
 				if($qr){
-					$qrcomp = mysqli_query($con,"UPDATE componentes SET cp_nome = '$value' WHERE computador_comp_id = $id ")or die(mysqli_error($con));
-				
+					$qrcomp = mysqli_query($con,"UPDATE endereco SET eveRua = '$evenRua' ,
+																	 eveBairro = '$evenBairro',
+																	 eveCidade = '$evenCidade',
+																	 eveEstado = '$evenEstado'
+																 WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));				
 				}
-				if(!mysqli_error()){
-					header("Location:../excluirPC.php?error=0");
+				$valorBD = mysqli_query($con,"SELECT evenVlrInscri from evento WHERE idEventos = '$idEven' ");
+				$vBD = mysqli_fetch_assoc($valorBD);
+				$vlrBD = $vBD['evenVlrInscri'];
+				if ($vlrBD != $evenVlrTrilha ) {
+
+				header("Location:../pages/eventos.php?error=6");
 				}else{
-					header("Location:../excluirPC.php?error=1");
+					if(!mysqli_error()){
+						header("Location:../pages/eventos.php?error=4");
+					}else{
+						header("Location:../pages/eventos.php?error=5");
+					}
 				}
 			break;
 		case 3://Deletar computador
@@ -237,8 +244,11 @@
 				}
 			}
 			break;
-		case 9://Cadastrar computador
-			# code...
+		case 9://Autoriza mudança de valor
+				
+				$evenJust = htmlspecialchars(trim(strtoupper($_POST['evenJustifica'])));
+				$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['evenVlrAtualizado1'])));
+
 			break;
 		case 10://Cadastrar computador
 			# code...

@@ -1,3 +1,18 @@
+<?php
+  session_start();
+  include("../config/verifica.php"); //Verifica a sessão esta ativa
+  include("../config/conn.php"); //Importa conexão com banco de dados
+  $name = $_SESSION['LOGIN_USUARIO'];
+
+  $res = mysqli_query($con,"SELECT idUsuario, usuNome from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
+  $showID = mysqli_fetch_assoc($res);
+  $id = $showID['idUsuario']; //Pega o id do usuario logado
+  
+  $nome = $showID['usuNome'];
+  $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr,evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenData from evento WHERE promoter_idUsuario = '$id' AND evenData >= DATE_FORMAT(NOW(), '%Y-%m-%d');")or die(mysqli_error($con));
+
+  
+?>
 <!DOCTYPE html>
 
 <html lang="en" class="default-style">
@@ -28,6 +43,12 @@
   <link rel="stylesheet" href="assets/vendor/css/rtl/uikit.css">
   <link rel="stylesheet" href="assets/css/demo.css">
 
+      <script>
+    $(function() {
+      $('.datatables-demo').dataTable();
+    });
+</script>
+
   <!-- Load polyfills -->
   <script src="assets/vendor/js/polyfills.js"></script>
   <script>document['documentMode']===10&&document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=Intl.~locale.en"><\/script>')</script>
@@ -44,6 +65,8 @@
       themesPath: 'assets/vendor/css/rtl/'
     });
   </script>
+
+
 
   <!-- Core scripts -->
   <script src="assets/vendor/js/pace.js"></script>
@@ -71,7 +94,7 @@
           <span class="app-brand-logo demo bg-primary">
             <svg viewBox="0 0 148 80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="a" x1="46.49" x2="62.46" y1="53.39" y2="48.2" gradientUnits="userSpaceOnUse"><stop stop-opacity=".25" offset="0"></stop><stop stop-opacity=".1" offset=".3"></stop><stop stop-opacity="0" offset=".9"></stop></linearGradient><linearGradient id="e" x1="76.9" x2="92.64" y1="26.38" y2="31.49" xlink:href="#a"></linearGradient><linearGradient id="d" x1="107.12" x2="122.74" y1="53.41" y2="48.33" xlink:href="#a"></linearGradient></defs><path style="fill: #fff;" transform="translate(-.1)" d="M121.36,0,104.42,45.08,88.71,3.28A5.09,5.09,0,0,0,83.93,0H64.27A5.09,5.09,0,0,0,59.5,3.28L43.79,45.08,26.85,0H.1L29.43,76.74A5.09,5.09,0,0,0,34.19,80H53.39a5.09,5.09,0,0,0,4.77-3.26L74.1,35l16,41.74A5.09,5.09,0,0,0,94.82,80h18.95a5.09,5.09,0,0,0,4.76-3.24L148.1,0Z"></path><path transform="translate(-.1)" d="M52.19,22.73l-8.4,22.35L56.51,78.94a5,5,0,0,0,1.64-2.19l7.34-19.2Z" fill="url(#a)"></path><path transform="translate(-.1)" d="M95.73,22l-7-18.69a5,5,0,0,0-1.64-2.21L74.1,35l8.33,21.79Z" fill="url(#e)"></path><path transform="translate(-.1)" d="M112.73,23l-8.31,22.12,12.66,33.7a5,5,0,0,0,1.45-2l7.3-18.93Z" fill="url(#d)"></path></svg>
           </span>
-          <a href="index.html" class="app-brand-text demo sidenav-text font-weight-normal ml-2">Appwork</a>
+          <a href="index.html" class="app-brand-text demo sidenav-text font-weight-normal ml-2">APP Trilha</a>
           <a href="javascript:void(0)" class="layout-sidenav-toggle sidenav-link text-large ml-auto">
             <i class="ion ion-md-menu align-middle"></i>
           </a>
@@ -1213,30 +1236,82 @@
               <span class="text-muted font-weight-light">Tables /</span> DataTables
             </h4>
 
-            <div class="table-responsive">
-              <table class="datatables-demo table table-striped table-bordered">
-                <thead>
-                  <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="odd gradeX">
-                    <td>Trident</td>
-                    <td>Internet Explorer 4.0</td>
-                    <td>Win 95+</td>
-                    <td class="center"> 4</td>
-                    <td class="center">X</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <br>
-            <br>
+            <div class="card">
+  <div class="card-datatable table-responsive">
+    <div class="card">
+  <h6 class="card-header">
+    DataTable within card
+  </h6>
+  <div class="card-datatable table-responsive">
+    <table class="datatables-demo table table-striped table-bordered">
+              <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Nome Evento</th>
+                    <th>Descrição</th>
+                    <th>Data do Evento</th>
+                    <th>Hora Inicial</th>
+                    <th>Hora Fim</th>
+                    <th>Valor R$</th>
+                    <th>Tipo</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                    while($showEven = mysqli_fetch_assoc($even)):
+                    $idEven = $showEven['idEventos'];
+                    $evenNome = $showEven['evenNome'];
+                    $evenDescr = $showEven['evenDescr'];
+                    $evenData = $showEven['evenData'];
+                    $endereco =mysqli_query($con,"SELECT eveRua, eveBairro, eveCidade, eveEstado from endereco WHERE Evento_idEventos = '$idEven';");
+                    $ende = mysqli_fetch_assoc($endereco);
+                    $eveRua = $ende['eveRua'];
+                    $eveBairro = $ende['eveBairro'];
+                    $eveCidade = $ende['eveCidade'];
+                    $eveEstado = $ende['eveEstado'];
+                    $eveHoraInicio = $showEven['evenHoraInicial'];
+                    $eveHoraFim = $showEven['evenHoraFinal'];
+                    $eveVlr = $showEven['evenVlrInscri'];
+                    $eveTipo = $showEven['evenTipoTrilha'];
+                  ?> 
+                <tr class="odd gradeX">
+                    <td><?php echo $showEven['idEventos']; ?> </td>
+                    <td><?php echo $evenNome;?> </td>
+                    <td><?php echo $evenDescr;?> </td>
+                    <td><?php echo date('d/m/Y', strtotime($evenData)); ?> </td>
+                    <td><?php echo date('H:i', strtotime($eveHoraInicio));?> </td>
+                    <td><?php echo date('H:i', strtotime($eveHoraFim));?> </td>
+                    <td><?php echo 'R$' . number_format($eveVlr, 2, ',', '.');?> </td>
+                    <td><?php echo $eveTipo;?> </td>
+                    <td><?php echo $eveCidade;?> </td>
+                    <td><?php echo $eveEstado;?> </td>
+                </tr>
+                <?php endwhile; ?>
+              </tbody>
+            </table>
+  </div>
+</div>
+
+<!-- Javascript -->
+<script>
+  $(function() {
+    $('.datatables-demo').dataTable();
+  });
+</script>
+<!-- / Javascript -->
+  </div>
+</div>
+
+<!-- Javascript -->
+<script>
+  $(function() {
+    $('.datatables-demo').dataTable();
+  });
+</script>
+<!-- / Javascript -->
             </div>
           </div>
           <!-- / Content -->

@@ -9,6 +9,7 @@
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   
   $nome = $showID['usuNome'];
+  $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr, evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenData from evento WHERE promoter_idUsuario = '$id' AND evenData >= DATE_FORMAT(NOW(), '%Y-%m-%d');")or die(mysqli_error($con));
 
   
 ?>
@@ -23,10 +24,7 @@
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-
-
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
  
 
@@ -36,10 +34,7 @@
   <link rel="stylesheet" href="assets/vendor/fonts/linearicons.css">
   <link rel="stylesheet" href="assets/vendor/fonts/open-iconic.css">
   <link rel="stylesheet" href="assets/vendor/fonts/pe-icon-7-stroke.css">
-  
-  
-
-
+  <!-- Core stylesheets --> 
   <link rel="stylesheet" href="assets/vendor/css/rtl/bootstrap.css" class="theme-settings-bootstrap-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/appwork.css" class="theme-settings-appwork-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/theme-corporate.css" class="theme-settings-theme-css">
@@ -47,9 +42,10 @@
   <link rel="stylesheet" href="assets/vendor/css/rtl/uikit.css">
   <link rel="stylesheet" href="assets/css/demo.css"> 
 
-  <!-- Core stylesheets -->
-
   <!-- Load polyfills -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="assets/vendor/libs/datatables/datatables.css">
+  <script src="assets/vendor/libs/datatables/datatables.js"></script>
   <script src="assets/vendor/js/polyfills.js"></script>
   <script>document['documentMode']===10&&document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=Intl.~locale.en"><\/script>')</script>
 
@@ -59,6 +55,9 @@
   <!-- Theme settings -->
   <!-- This file MUST be included after core stylesheets and layout-helpers.js in the <head> section -->
   <script src="assets/vendor/js/theme-settings.js"></script>
+
+  <!-- Core scripts -->
+  <script src="assets/vendor/js/pace.js"></script>
 
   <script>
     window.themeSettings = new ThemeSettings({
@@ -75,20 +74,21 @@
             document.getElementById("erro").style.display = "none";
   }
   </script>
-
-
-  <!-- Core scripts -->
-  <script src="assets/vendor/js/pace.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-   
-
-
+  <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro6").style.display = "none";
+        }, 10000);
+        function hide(){
+            document.getElementById("erro6").style.display = "none";
+  }
+  </script>
  
 <!-- Libs -->
   <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
   <link rel="stylesheet" href="assets/vendor/libs/minicolors/minicolors.css">
   <link rel="stylesheet" href="assets/vendor/libs/toastr/toastr.css">
-  <link rel="stylesheet" href="assets/vendor/libs/datatables/datatables.css">
+  <link rel="stylesheet" href="assets/vendor/libs/sweetalert2/sweetalert2.css">
+
 
 </head>
 
@@ -105,8 +105,10 @@
 
         <!-- Brand demo (see assets/css/demo/demo.css) -->
         <div class="app-brand demo">
-
-          <a href="index.html" class="app-brand-text demo sidenav-text font-weight-normal ml-2">OffRoad Admin</a>
+          <span class="app-brand-logo demo bg-primary">
+            <svg viewBox="0 0 148 80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="a" x1="46.49" x2="62.46" y1="53.39" y2="48.2" gradientUnits="userSpaceOnUse"><stop stop-opacity=".25" offset="0"></stop><stop stop-opacity=".1" offset=".3"></stop><stop stop-opacity="0" offset=".9"></stop></linearGradient><linearGradient id="e" x1="76.9" x2="92.64" y1="26.38" y2="31.49" xlink:href="#a"></linearGradient><linearGradient id="d" x1="107.12" x2="122.74" y1="53.41" y2="48.33" xlink:href="#a"></linearGradient></defs><path style="fill: #fff;" transform="translate(-.1)" d="M121.36,0,104.42,45.08,88.71,3.28A5.09,5.09,0,0,0,83.93,0H64.27A5.09,5.09,0,0,0,59.5,3.28L43.79,45.08,26.85,0H.1L29.43,76.74A5.09,5.09,0,0,0,34.19,80H53.39a5.09,5.09,0,0,0,4.77-3.26L74.1,35l16,41.74A5.09,5.09,0,0,0,94.82,80h18.95a5.09,5.09,0,0,0,4.76-3.24L148.1,0Z"></path><path transform="translate(-.1)" d="M52.19,22.73l-8.4,22.35L56.51,78.94a5,5,0,0,0,1.64-2.19l7.34-19.2Z" fill="url(#a)"></path><path transform="translate(-.1)" d="M95.73,22l-7-18.69a5,5,0,0,0-1.64-2.21L74.1,35l8.33,21.79Z" fill="url(#e)"></path><path transform="translate(-.1)" d="M112.73,23l-8.31,22.12,12.66,33.7a5,5,0,0,0,1.45-2l7.3-18.93Z" fill="url(#d)"></path></svg>
+          </span>
+          <a href="index.html" class="app-brand-text demo sidenav-text font-weight-normal ml-2">APP Trilha</a>
           <a href="javascript:void(0)" class="layout-sidenav-toggle sidenav-link text-large ml-auto">
             <i class="ion ion-md-menu align-middle"></i>
           </a>
@@ -399,7 +401,7 @@
         </nav>
         <!-- / Layout navbar -->
         <!-- Layout content -->
-        <div class="layout-content">
+    <div class="layout-content">
         <!-- Content -->
       <div class="container-fluid flex-grow-1 container-p-y">
 
@@ -426,100 +428,259 @@
                     O evento não pode acontecer em uma data anterior a atual!
                   </div>";
               break;
+            case 4:
+              echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Dados salvos com sucesso!
+                  </div>";
+              break;
+            case 5:
+              echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Erro ao editar os dados!
+                  </div>";
+            break;
+            case 6:
+              echo "<a href='' data-toggle='modal' data-target='#myModalvlr'><div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Valor da inscrição não pode ser alterado! Clique Aqui...
+                  </div></a>";
             default:
               # code...
               break;
           }
       ?>
-        <div class="row"> 
-        <!-- fim do botão -->
-          
-        <div class="table-responsive">
-          <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
-            <div>Eventos</div>
-              <button type="button" class="btn btn-primary rounded-pill d-block" data-toggle="modal" data-target="#modals-default"><span class="ion ion-md-add"></span>&nbsp; Add Evento</button>
-            </h4>
-            <table class="datatables-demo table table-striped table-bordered">
-              <thead>
-                <tr>
-                    <th>#ID</th>
-                    <th>Nome Evento</th>
-                    <th>Descrição</th>
-                    <th>Data do Evento</th>
-                    <th>Hora Inicial</th>
-                    <th>Hora Fim</th>
-                    <th>Valor R$</th>
-                    <th>Tipo</th>
-                    <th>Cidade</th>
-                    <th>Estado</th>
-                    <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                    $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr,evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenData from evento WHERE promoter_idUsuario = '$id' AND evenData >= DATE_FORMAT(NOW(), '%Y-%m-%d');")or die(mysqli_error($con));
-                    while($showEven = mysqli_fetch_assoc($even)):
-                    $idEven = $showEven['idEventos'];
-                    $evenNome = $showEven['evenNome'];
-                    $evenDescr = $showEven['evenDescr'];
-                    $evenData = $showEven['evenData'];
-                    $endereco =mysqli_query($con,"SELECT eveRua, eveBairro, eveCidade, eveEstado from endereco WHERE Evento_idEventos = '$idEven';");
-                    $ende = mysqli_fetch_assoc($endereco);
-                    $eveRua = $ende['eveRua'];
-                    $eveBairro = $ende['eveBairro'];
-                    $eveCidade = $ende['eveCidade'];
-                    $eveEstado = $ende['eveEstado'];
-                    $eveHoraInicio = $showEven['evenHoraInicial'];
-                    $eveHoraFim = $showEven['evenHoraFinal'];
-                    $eveVlr = $showEven['evenVlrInscri'];
-                    $eveTipo = $showEven['evenTipoTrilha'];
-                  ?> 
-                <tr class="odd gradeX">
-                    <td><?php echo $showEven['idEventos']; ?> </td>
-                    <td><?php echo $evenNome;?> </td>
-                    <td><?php echo $evenDescr;?> </td>
-                    <td><?php echo date('d/m/Y', strtotime($evenData)); ?> </td>
-                    <td><?php echo date('H:i', strtotime($eveHoraInicio));?> </td>
-                    <td><?php echo date('H:i', strtotime($eveHoraFim));?> </td>
-                    <td><?php echo 'R$' . number_format($eveVlr, 2, ',', '.');?> </td>
-                    <td><?php echo $eveTipo;?> </td>
-                    <td><?php echo $eveCidade;?> </td>
-                    <td><?php echo $eveEstado;?> </td>
-                </tr>
-                <?php endwhile; ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-<!--           <div class="card-body">
-                <nav>
-                  <ul class="pagination">
-                    <li class="page-item disabled">
-                      <a class="page-link" href="javascript:void(0)">«</a>
-                    </li>
-                    <li class="page-item active">
-                      <a class="page-link" href="javascript:void(0)">1</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="javascript:void(0)">2</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="javascript:void(0)">3</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="javascript:void(0)">4</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="javascript:void(0)">5</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="javascript:void(0)">»</a>
-                    </li>
-                  </ul>
-                </nav>
-            </div> -->
-        </div>
-      </div>
+
+        <!-- inicio da tabela e botão -->
+        <!-- Layout content -->
+        <div class="layout-content">
+          <!-- Content -->
+          <div class="container-fluid flex-grow-1 container-p-y">
+            <h2 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-0 mb-6">
+                Eventos
+                <button type="button" class="btn btn-primary rounded-pill d-block" data-toggle="modal" data-target="#modals-default"><span class="ion ion-md-add"></span>&nbsp; Add Evento</button>
+            </h2>             
+                <div class="table-responsive">
+                  <table class="datatables-demo table table-striped table-bordered">
+                    <thead>
+                      <tr>
+                        <th>#ID</th>
+                        <th>Nome Evento</th>
+                        <th>Descrição</th>
+                        <th>Data do Evento</th>
+                        <th>Hora Inicial</th>
+                        <th>Hora Fim</th>
+                        <th>Valor R$</th>
+                        <th>Tipo</th>
+                        <th>Cidade</th>
+                        <th>Estado</th>
+                        <th class="center">Ações</th>
+                      </tr>
+                    </thead>
+                      <tbody>
+                        <?php
+                            while($showEven = mysqli_fetch_assoc($even)):
+                            $idEven = $showEven['idEventos'];
+                            $evenNome = $showEven['evenNome'];
+                            $evenDescr = $showEven['evenDescr'];
+                            $evenData = $showEven['evenData'];
+                            $endereco =mysqli_query($con,"SELECT eveRua, eveBairro, eveCidade, eveEstado from endereco WHERE Evento_idEventos = '$idEven';");
+                            $ende = mysqli_fetch_assoc($endereco);
+                            $eveRua = $ende['eveRua'];
+                            $eveBairro = $ende['eveBairro'];
+                            $eveCidade = $ende['eveCidade'];
+                            $eveEstado = $ende['eveEstado'];
+                            $eveHoraInicio = $showEven['evenHoraInicial'];
+                            $eveHoraFim = $showEven['evenHoraFinal'];
+                            $eveVlr = $showEven['evenVlrInscri'];
+                            $eveTipo = $showEven['evenTipoTrilha'];
+                          ?> 
+                        <tr class="odd gradeX">
+                            <td><?php echo $showEven['idEventos']; ?> </td>
+                            <td><?php echo $evenNome;?> </td>
+                            <td><?php echo $evenDescr;?> </td>
+                            <td><?php echo date('d/m/Y', strtotime($evenData)); ?> </td>
+                            <td><?php echo date('H:i', strtotime($eveHoraInicio));?> </td>
+                            <td><?php echo date('H:i', strtotime($eveHoraFim));?> </td>
+                            <td><?php echo 'R$' . number_format($eveVlr, 2, ',', '.');?> </td>
+                            <td><?php echo $eveTipo;?> </td>
+                            <td><?php echo $eveCidade;?> </td>
+                            <td><?php echo $eveEstado;?> </td>
+                            <td>
+                                <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>" data-toggle="modal" data-target="#myModal<?php echo $idEven; ?>" title="Editar">
+                                <i class="lnr lnr-pencil"> </i>
+                              </a>
+                              <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>"  data-toggle="modal" data-target="#myModalDelete<?php echo $idEven; ?>" title="Excluir">
+                                <i class="lnr lnr-trash"> </i>
+                              </a>
+                              <!-- AQUI INICIA O MODAL DE EXCLUSÃO -->
+                              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
+                                <div class="modal-dialog modal-lg">
+                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">
+                                        Editar Evento
+                                        <br>
+                                      <small class="text-muted"></small>
+                                      </h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="form-row">
+                                      </div>
+                                      <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Justifique a exclusão do evento</label>      
+                                          <textarea placeholder="Digite o texto aqui..." name="descEven" id="autosize-demo" rows="10" class="form-control"></textarea> 
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                      <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>
+                                  </form>
+                                  <!--FIM DO FORM-->
+                                </div>
+                              </div>
+
+                              <!-- FIM DO MODAL DE EXCLUIR -->
+
+                              <!-- Inicio do modal de Editar -->
+                              <div class="modal" id="myModal<?php if($idEven==$idEven)echo $idEven;?>">
+                                <div class="modal-dialog modal-lg">
+                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">
+                                        Editar Evento
+                                        <br>
+                                      <small class="text-muted"></small>
+                                      </h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Nome do Evento</label>
+                                          <input value="<?php echo $evenNome; ?>" name="nomeEven" type="text" class="form-control" placeholder="Nome">
+                                        </div>
+                                      </div>
+                                      <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Descrição do Evento</label>      
+                                          <textarea name="descEven" id="autosize-demo" rows="2" class="form-control"><?php echo $evenDescr;?></textarea> 
+                                        </div>
+                                      </div>
+                                      <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Tipo da Trilha</label>
+                                          <div class="input-group">
+                                            <select name="tipoTrilha" class="custom-select flex-grow-1">
+                                              <option <?=($eveTipo == 'Selecione...')? 'selected' : '';?>>Selecione...</option>
+                                              <option value="inteira" <?=($eveTipo == 'inteira')? 'selected' : '';?>>Trilha Completa</option>
+                                              <option value="meia" <?=($eveTipo == 'meia')? 'selected' : '';?>>Meia Trilha</option>
+                                            </select>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Data do Evento</label>
+                                          <input value="<?php echo $evenData; ?>" name="dataEvento" required="" type="date" class="form-control" id="flatpickr-full">
+                                        </div>
+                                        <div class="form-group col">
+                                          <label class="form-label">Horário de Inicio</label>
+                                          <input value="<?php echo $eveHoraInicio; ?>" name="horaInicio" required="" type="time" class="form-control" id="flatpickr-time">
+                                        </div>
+                                        <div class="form-group col">
+                                          <label class="form-label">Horário de Fim</label>
+                                          <input value="<?php echo $eveHoraFim; ?>" name="horaFim" required="" type="time" class="form-control" id="flatpickr-time">
+                                        </div>
+                                        <div class="form-group col">
+                                          <label class="form-label">Valor da Trilha</label>
+                                          <input value="<?php echo $eveVlr; ?>"  name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
+                                        </div>
+                                      </div>
+                                     <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Rua</label>
+                                          <input value="<?php echo $eveRua; ?>" name="rua" required="" type="text" class="form-control" placeholder="Rua">
+                                        </div>
+                                        <div class="form-group col">
+                                          <label class="form-label">Bairro</label>
+                                          <input value="<?php echo $eveBairro; ?>" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
+                                        </div>
+                                        <div class="form-group col">
+                                          <label class="form-label">Cidade</label>
+                                          <input value="<?php echo $eveCidade; ?>" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
+                                        </div>
+                                        <div class="form-group col">
+                                          <label class="form-label">Estado</label>
+                                          <input value="<?php echo $eveEstado; ?>" name="estado" required="" type="text" class="form-control" placeholder="Estado">
+                                        </div>
+                                     </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                      <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>
+                                  </form>
+                                  <!--FIM DO FORM-->
+                                </div>
+                              </div>
+                              <!-- Fim do Modal editar -->
+                              <!-- modal para mudar valor da inscrição -->
+                              <div class="modal" id="myModalvlr">
+                                <div class="modal-dialog modal-lg">
+                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">
+                                        Justificativa
+                                        <br>
+                                      <small class="text-muted"></small>
+                                      </h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <div class="form-row">
+                                      </div>
+                                      <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Justifique a mudança de valor</label>      
+                                          <textarea placeholder="Digite o texto aqui..." name="descEven" id="autosize-demo" rows="10" class="form-control"></textarea> 
+                                        </div>
+                                      </div>
+                                      <div class="form-row">
+                                        <div class="form-group col">
+                                          <label class="form-label">Qual o novo valor?</label>
+                                          <input value=""  name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                      <button type="submit" class="btn btn-primary">Salvar</button>
+                                    </div>
+                                  </form>
+                                  <!--FIM DO FORM-->
+                                </div>
+                              </div>
+                              <!-- fim do modal valor da inscrição -->
+                            </td>
+                        </tr>
+                        <?php endwhile; ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                  <!-- Javascript -->
+                  <script>
+                    $(function() {
+                      $('.datatables-demo').dataTable();
+                    });
+                  </script>
+                  <!-- / Javascript -->
+              </div>
                 <div class="modal fade" id="modals-default">
                   <div class="modal-dialog modal-lg">
                   <!--MODAL PARA CADASTRO EVENTO-->
@@ -625,6 +786,7 @@
   <script src="assets/vendor/libs/minicolors/minicolors.js"></script>
   <script src="assets/vendor/libs/growl/growl.js"></script>
   <script src="assets/js/tables_datatables.js"></script>
+  <script src="assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
 
 
   <!-- Demo -->

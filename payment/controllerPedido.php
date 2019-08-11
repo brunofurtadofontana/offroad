@@ -17,7 +17,7 @@ $Data["itemId1"] = 1;
 $Data["itemDescription1"] = 'Website';
 $Data["itemAmount1"] = '100.00';
 $Data["itemQuantity1"] = 1;
-$Data["notificationURL="]="https://www.meusite.com.br/notificacao.php";
+$Data["notificationURL="]="https://www.localhost/offroad/offroad/notificacao.php";
 $Data["reference"]="83783783737";
 $Data["senderName"]='José Comprador';
 $Data["senderCPF"]='22111944785';

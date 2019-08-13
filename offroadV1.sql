@@ -72,23 +72,43 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `offroadv1`.`Acessorios`
+-- Table `offroadv1`.`Item_Trilha`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `offroadv1`.`Acessorios` (
-  `idAcessorios` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `aceCamisa` VARCHAR(45) NULL,
-  `aceAdesivo` VARCHAR(45) NULL,
-  `aceBebida` VARCHAR(45) NULL,
+CREATE TABLE IF NOT EXISTS `offroadv1`.`Item_Trilha` (
+  `idItem_Trilha` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `iteAdesivo` INT(11) NULL,
+  `iteBebida` INT(11) NULL,
+  `iteAlmoco` INT(11) NULL,
   `Evento_idEventos` INT(11) NOT NULL,
-  PRIMARY KEY (`idAcessorios`, `Evento_idEventos`),
-  INDEX `fk_Acessorios_Evento1_idx` (`Evento_idEventos` ASC) ,
-  CONSTRAINT `fk_Acessorios_Evento1`
+  PRIMARY KEY (`idItem_Trilha`, `Evento_idEventos`),
+  INDEX `fk_Item_Trilha_Evento1_idx` (`Evento_idEventos` ASC) ,
+  CONSTRAINT `fk_Item_Trilha_Evento1`
     FOREIGN KEY (`Evento_idEventos`)
     REFERENCES `offroadv1`.`Evento` (`idEventos`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `offroadv1`.`Camisa`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `offroadv1`.`Camisa` (
+  `idCamisa` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `camTamP` INT(11) NULL,
+  `camTamM` INT(11) NULL,
+  `camTamG` INT(11) NULL,
+  `camTamGG` INT(11) NULL,
+  `camTamEg` INT(11) NULL,
+
+  `Evento_idEventos` INT(11) NOT NULL,
+  PRIMARY KEY (`idCamisa`, `Evento_idEventos`),
+  INDEX `fk_Camisa_Evento1_idx` (`Evento_idEventos` ASC) ,
+  CONSTRAINT `fk_Camisa_Evento1`
+    FOREIGN KEY (`Evento_idEventos`)
+    REFERENCES `offroadv1`.`Evento` (`idEventos`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `offroadv1`.`Pagamento`

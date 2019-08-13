@@ -18,7 +18,7 @@
 <html lang="pt-br" class="default-style">
 
 <head>
-  <title>Inicial</title>
+  <title>Cadastrar Evento</title>
 
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
@@ -88,6 +88,7 @@
   <link rel="stylesheet" href="assets/vendor/libs/minicolors/minicolors.css">
   <link rel="stylesheet" href="assets/vendor/libs/toastr/toastr.css">
   <link rel="stylesheet" href="assets/vendor/libs/sweetalert2/sweetalert2.css">
+  <link rel="stylesheet" href="assets/vendor/libs/flow-js/flow.css">
 
 
 </head>
@@ -450,251 +451,318 @@
               break;
           }
       ?>
+      <div class="flow-error alert alert-danger">
+          Your browser, unfortunately, is not supported by Flow.js. The library requires support for <a href="http://www.w3.org/TR/FileAPI/">the HTML5 File API</a> along with <a href="http://www.w3.org/TR/FileAPI/#normalization-of-params">file slicing</a>.
+        </div>
 
-        <!-- inicio da tabela e botão -->
-        <!-- Layout content -->
-        <div class="layout-content">
-          <!-- Content -->
-          <div class="container-fluid flex-grow-1 container-p-y">
-            <h2 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-0 mb-6">
-                Eventos
-                <a href="cadastraEvento.php"><button type="button" class="btn btn-primary rounded-pill d-block"><span class="ion ion-md-add"></span>&nbsp; Add Evento</button></a>
-            </h2>             
-                <div class="table-responsive">
-                  <table class="datatables-demo table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>#ID</th>
-                        <th>Nome Evento</th>
-                        <th>Descrição</th>
-                        <th>Data do Evento</th>
-                        <th>Hora Inicial</th>
-                        <th>Hora Fim</th>
-                        <th>Valor R$</th>
-                        <th>Tipo</th>
-                        <th>Cidade</th>
-                        <th>Estado</th>
-                        <th class="center">Ações</th>
-                      </tr>
-                    </thead>
-                      <tbody>
-                        <?php
-                            while($showEven = mysqli_fetch_assoc($even)):
-                            $idEven = $showEven['idEventos'];
-                            $evenNome = $showEven['evenNome'];
-                            $evenDescr = $showEven['evenDescr'];
-                            $evenData = $showEven['evenData'];
-                            $endereco =mysqli_query($con,"SELECT eveRua, eveBairro, eveCidade, eveEstado from endereco WHERE Evento_idEventos = '$idEven';");
-                            $ende = mysqli_fetch_assoc($endereco);
-                            $eveRua = $ende['eveRua'];
-                            $eveBairro = $ende['eveBairro'];
-                            $eveCidade = $ende['eveCidade'];
-                            $eveEstado = $ende['eveEstado'];
-                            $eveHoraInicio = $showEven['evenHoraInicial'];
-                            $eveHoraFim = $showEven['evenHoraFinal'];
-                            $eveVlr = $showEven['evenVlrInscri'];
-                            $eveTipo = $showEven['evenTipoTrilha'];
-                          ?> 
-                        <tr class="odd gradeX">
-                            <td><?php echo $showEven['idEventos']; ?> </td>
-                            <td><?php echo $evenNome;?> </td>
-                            <td><?php echo $evenDescr;?> </td>
-                            <td><?php echo date('d/m/Y', strtotime($evenData)); ?> </td>
-                            <td><?php echo date('H:i', strtotime($eveHoraInicio));?> </td>
-                            <td><?php echo date('H:i', strtotime($eveHoraFim));?> </td>
-                            <td><?php echo 'R$' . number_format($eveVlr, 2, ',', '.');?> </td>
-                            <td><?php echo $eveTipo;?> </td>
-                            <td><?php echo $eveCidade;?> </td>
-                            <td><?php echo $eveEstado;?> </td>
-                            <td>
-                              <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>" data-toggle="modal" data-target="#myModal<?php echo $idEven; ?>" title="Editar">
-                              <i class="lnr lnr-pencil"> </i>
-                              </a>
-                              <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>"  data-toggle="modal" data-target="#myModalDelete<?php echo $idEven; ?>" title="Excluir">
-                                <i class="lnr lnr-trash"> </i>
-                              </a>
-                              <!-- AQUI INICIA O MODAL DE EXCLUSÃO -->
-                              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
-                                <div class="modal-dialog modal-lg">
-                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">
-                                        Excluir Evento #<?php echo $idEven; ?>
-                                        <br>
-                                      <small class="text-muted"></small>
-                                      </h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="form-row">
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Justifique a exclusão do evento</label>      
-                                          <textarea placeholder="Digite o texto aqui..." name="descEven" id="autosize-demo" rows="10" class="form-control"></textarea> 
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
-                                    </div>
-                                  </form>
-                                  <!--FIM DO FORM-->
-                                </div>
-                              </div>
-                              <!-- FIM DO MODAL DE EXCLUIR -->
-                              <!-- Inicio do modal de Editar -->
-                              <div class="modal" id="myModal<?php if($idEven==$idEven)echo $idEven;?>">
-                                <div class="modal-dialog modal-lg">
-                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">
-                                        Editar Evento #<?php echo $idEven; ?>
-                                        <br>
-                                      <small class="text-muted"></small>
-                                      </h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Nome do Evento</label>
-                                          <input value="<?php echo $evenNome; ?>" name="nomeEven" type="text" class="form-control" placeholder="Nome">
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Descrição do Evento</label>      
-                                          <textarea name="descEven" id="autosize-demo" rows="2" class="form-control"><?php echo $evenDescr;?></textarea> 
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Tipo da Trilha</label>
-                                          <div class="input-group">
-                                          <select name="tipoTrilha" class="custom-select flex-grow-1">
-                                              <option <?php if($eveTipo == 'Selecione...') echo "Selecione..."; 'selected';?>>Selecione...</option>
-                                              <option value="inteira" <?php if($eveTipo == 'inteira') echo "Trilha Inteira";'selected';?>>Trilha Completa</option>
-                                              <option value="meia" <?php if($eveTipo == 'meia') echo "Meia Trilha"; 'selected';?>>Meia Trilha</option>
-                                          </select>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Data do Evento</label>
-                                          <input value="<?php echo $evenData; ?>" name="dataEvento" required="" type="date" class="form-control" id="flatpickr-full">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Horário de Inicio</label>
-                                          <input value="<?php echo $eveHoraInicio; ?>" name="horaInicio" required="" type="time" class="form-control" id="flatpickr-time">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Horário de Fim</label>
-                                          <input value="<?php echo $eveHoraFim; ?>" name="horaFim" required="" type="time" class="form-control" id="flatpickr-time">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Valor da Trilha</label>
-                                          <input value="<?php echo $eveVlr; ?>"  name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
-                                        </div>
-                                      </div>
-                                     <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Rua</label>
-                                          <input value="<?php echo $eveRua; ?>" name="rua" required="" type="text" class="form-control" placeholder="Rua">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Bairro</label>
-                                          <input value="<?php echo $eveBairro; ?>" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Cidade</label>
-                                          <input value="<?php echo $eveCidade; ?>" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Estado</label>
-                                          <input value="<?php echo $eveEstado; ?>" name="estado" required="" type="text" class="form-control" placeholder="Estado">
-                                        </div>
-                                     </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
-                                    </div>
-                                  </form>
-                                  <!--FIM DO FORM-->
-                                </div>
-                              </div>
-                              <!-- Fim do Modal editar -->
-                              <!-- modal para mudar valor da inscrição -->
-                              <div class="modal" id="myModalvlr">
-                                <div class="modal-dialog modal-lg">
-                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">
-                                        Justificativa Editar Valor Evento #<?php echo $idEven; ?>
-                                        <br>
-                                      <small class="text-muted"></small>
-                                      </h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="form-row">
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Justifique a mudança de valor</label>      
-                                          <textarea placeholder="Digite o texto aqui..." name="descEven" id="autosize-demo" rows="10" class="form-control"></textarea> 
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Qual o novo valor?</label>
-                                          <input value=""  name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
-                                    </div>
-                                  </form>
-                                  <!--FIM DO FORM-->
-                                </div>
-                              </div>
-                              <!-- fim do modal valor da inscrição -->
-                            </td>
-                        </tr>
-                        <?php endwhile; ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                  <!-- Javascript -->
-                  <script>
-                    $(function() {
-                      $('.datatables-demo').dataTable({
-                        "language": {
-                        "lengthMenu": "Exibir _MENU_ Registros por páginas",
-                        "zeroRecords": "Nada encontrado - Desculpe",
-                        "info": "Mostrando página _PAGE_ of _PAGES_",
-                        "infoEmpty": "Nenhum registro encontrado",
-                        "infoFiltered": "(filtered from _MAX_ total records)",
-                        "search": "Procurar:",
-                           "paginate":{
-                            "first":      "Primeiro",
-                            "last":       "Último",
-                            "next":       "Próximo",
-                            "previous":   "Anterior"
-                          },
-                        }
-                      });
+        <div class="flow-drop py-5 px-3" ondragenter="$(this).addClass('flow-dragover')" ondragend="$(this).removeClass('flow-dragover')" ondrop="$(this).removeClass('flow-dragover')">
+          <h4>Drop files here to upload or</h4>
+          <button type="button" class="flow-browse btn btn-secondary">Select from your computer</button>
+          <button type="button" class="flow-browse-image btn btn-secondary">Select images</button>
+          <button type="button" class="flow-browse-folder btn btn-secondary">Select folder</button>
+        </div>
 
-                    });
-                  </script>
-                  <!-- / Javascript -->
-              </div>
+        <div class="flow-progress media d-none mt-4">
+          <div class="mr-3">
+            <button type="button" onclick="r.upload(); return(false);" class="progress-resume-link btn icon-btn btn-primary"><i class="ion ion-md-play"></i></button>
+            <button type="button" onclick="r.pause(); return(false);" class="progress-pause-link btn icon-btn btn-warning"><i class="ion ion-md-pause"></i></button>
+            <button type="button" onclick="r.cancel(); return(false);" class="progress-cancel-link btn icon-btn btn-danger"><i class="ion ion-md-close"></i></button>
+          </div>
+          <div class="media-body align-self-center">
+            <div class="progress-container progress">
+              <div class="progress-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <ul class="flow-list list-group d-none mt-4"></ul>
+
+        <!-- Javascript -->
+        <script>
+          $(function() {
+            var r = new Flow({
+              target: 'http://posttestserver.com/post.php',
+              permanentErrors: [500, 501],
+              maxChunkRetries: 1,
+              chunkRetryInterval: 5000,
+              simultaneousUploads: 1
+            });
+
+            // Flow.js isn't supported, fall back on a different method
+            if (!r.support) {
+              $('.flow-error').show();
+              return ;
+            }
+
+            // Show a place for dropping/selecting files
+            $('.flow-drop').show();
+            r.assignDrop($('.flow-drop')[0]);
+            r.assignBrowse($('.flow-browse')[0]);
+            r.assignBrowse($('.flow-browse-folder')[0], true);
+            r.assignBrowse($('.flow-browse-image')[0], false, false, {accept: 'image/*'});
+
+            // Handle file add event
+            r.on('fileAdded', function(file){
+              // Show progress bar
+              $('.flow-progress, .flow-list').removeClass('d-none');
+
+              // Add the file to the list
+              $('.flow-list').append(
+                '<li class="flow-file list-group-item flow-file-'+file.uniqueIdentifier+'">' +
+                  '<div class="flow-progress media">' +
+                    '<div class="media-body">' +
+                      '<div><strong class="flow-file-name"></strong> - <em class="flow-file-progress"><span class="text-muted">Waiting...</span></em></div>' +
+                      '<div><small class="flow-file-size text-muted"></small></div>' +
+                    '</div>' +
+                    '<div class="align-self-center ml-3">' +
+                      '<button type="button" class="flow-file-download btn btn-sm icon-btn btn-outline-primary"><i class="ion ion-md-download"></i></button>' +
+                      '<button type="button" class="flow-file-pause btn btn-sm icon-btn btn-outline-warning"><i class="ion ion-md-pause"></i></button> ' +
+                      '<button type="button" class="flow-file-resume btn btn-sm icon-btn btn-outline-success"><i class="ion ion-md-play"></i></button> ' +
+                      '<button type="button" class="flow-file-cancel btn btn-sm icon-btn btn-outline-danger"><i class="ion ion-md-close"></i></button>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>'
+              );
+              var $self = $('.flow-file-'+file.uniqueIdentifier);
+              $self.find('.flow-file-name').text(file.name);
+              $self.find('.flow-file-size').text(readablizeBytes(file.size));
+              $self.find('.flow-file-download').attr('href', '/download/' + file.uniqueIdentifier).hide();
+              $self.find('.flow-file-pause').on('click', function () {
+                file.pause();
+                $self.find('.flow-file-pause').hide();
+                $self.find('.flow-file-resume').show();
+              });
+              $self.find('.flow-file-resume').on('click', function () {
+                file.resume();
+                $self.find('.flow-file-pause').show();
+                $self.find('.flow-file-resume').hide();
+              }).hide();
+              $self.find('.flow-file-cancel').on('click', function () {
+                file.cancel();
+                $self.remove();
+              });
+            });
+            r.on('filesSubmitted', function(file) {
+              r.upload();
+            });
+            r.on('complete', function(){
+              // Hide pause/resume when the upload has completed
+              $('.flow-progress .progress-resume-link, .flow-progress .progress-pause-link').hide();
+            });
+            r.on('fileSuccess', function(file,message){
+              var $self = $('.flow-file-'+file.uniqueIdentifier);
+              // Reflect that the file upload has completed
+              $self.find('.flow-file-progress').text('(completed)');
+              $self.find('.flow-file-pause, .flow-file-resume').remove();
+              $self.find('.flow-file-download').attr('href', '/download/' + file.uniqueIdentifier).show();
+            });
+            r.on('fileError', function(file, message){
+              // Reflect that the file upload has resulted in error
+              $('.flow-file-'+file.uniqueIdentifier+' .flow-file-progress')
+                .addClass('text-danger')
+                .text('(file could not be uploaded: ' + message + ')');
+            });
+            r.on('fileProgress', function(file){
+              // if (!file.averageSpeed || file.averageSpeed.indexOf('undefined') !== -1) { return; }
+              console.log(file.averageSpeed)
+
+              // Handle progress for both the file and the overall upload
+              $('.flow-file-'+file.uniqueIdentifier+' .flow-file-progress')
+                .html(Math.floor(file.progress()*100) + '% '
+                  + readablizeBytes(file.averageSpeed) + '/s '
+                  + secondsToStr(file.timeRemaining()) + ' remaining') ;
+              $('.flow-progress .progress-bar').css({width:Math.floor(r.progress()*100) + '%'});
+            });
+            r.on('uploadStart', function(){
+              // Show pause, hide resume
+              $('.flow-progress .progress-resume-link').hide();
+              $('.flow-progress .progress-pause-link').show();
+            });
+            r.on('catchAll', function() {
+              console.log.apply(console, arguments);
+            });
+            window.r = {
+              pause: function () {
+                r.pause();
+                // Show resume, hide pause
+                $('.flow-file-resume').show();
+                $('.flow-file-pause').hide();
+                $('.flow-progress .progress-resume-link').show();
+                $('.flow-progress .progress-pause-link').hide();
+              },
+              cancel: function() {
+                r.cancel();
+                $('.flow-progress .progress-resume-link').hide();
+                $('.flow-progress .progress-pause-link').hide();
+                $('.flow-progress .progress-bar').css({width: '0%'});
+                $('.flow-file').remove();
+              },
+              upload: function() {
+                $('.flow-file-pause').show();
+                $('.flow-file-resume').hide();
+                r.resume();
+              },
+              flow: r
+            };
+
+            function readablizeBytes(bytes) {
+              if (!bytes) { return '0 kB'; }
+
+              var s = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'];
+              var e = Math.floor(Math.log(bytes) / Math.log(1024));
+              return (bytes / Math.pow(1024, e)).toFixed(2) + " " + s[e];
+            }
+            function secondsToStr (temp) {
+              function numberEnding (number) {
+                return (number > 1) ? 's' : '';
+              }
+              var years = Math.floor(temp / 31536000);
+              if (years) {
+                return years + ' year' + numberEnding(years);
+              }
+              var days = Math.floor((temp %= 31536000) / 86400);
+              if (days) {
+                return days + ' day' + numberEnding(days);
+              }
+              var hours = Math.floor((temp %= 86400) / 3600);
+              if (hours) {
+                return hours + ' hour' + numberEnding(hours);
+              }
+              var minutes = Math.floor((temp %= 3600) / 60);
+              if (minutes) {
+                return minutes + ' minute' + numberEnding(minutes);
+              }
+              var seconds = temp % 60;
+              return seconds + ' second' + numberEnding(seconds);
+            }
+          });
+        </script>
+        <!-- / Javascript -->
+                  <!--CADASTRO EVENTO-->
+                    <form class="modal-content" method="post" action="../config/tratadados.php?opc=8&id=<?php echo $id ?>" autocomplete="on">
+                      <div class="modal-header">
+                        <h5 class="modal-title">
+                          Cadastro de Eventos
+                          <br>
+                        <small class="text-muted"></small>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Nome do Evento</label>
+                            <input value="" name="nomeEven" type="text" required="" class="form-control" placeholder="Nome">
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Descrição do Evento</label>      
+                            <textarea value="" name="descEven" required="" id="autosize-demo" rows="3" class="form-control" placeholder="Descrição..."></textarea> 
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Tipo da Trilha</label>
+                            <div class="input-group">
+                              <select name="tipoTrilha" class="custom-select flex-grow-1">
+                                <option>Selecione...</option>
+                                <option value="inteira">Trilha Completa</option>
+                                <option value="meia">Meia Trilha</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-row"> 
+                          <div class="form-group col">
+                            <label class="form-label">Adesivo</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                  <label class="custom-control custom-checkbox px-2 m-0">
+                                    <input value="Adesivo" type="checkbox" class="custom-control-input">
+                                    <span  class="custom-control-label"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <input name="adeQtd" value="" placeholder="Quantidade..." type="text" class="form-control">
+                            </div>                   
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Almoço</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                  <label class="custom-control custom-checkbox px-2 m-0">
+                                    <input name="eveAlmo" value="Almoco"  type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <input name="almoQtd" value="" placeholder="Quantidade..." type="text" class="form-control">
+                            </div>                   
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Bebida</label>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                  <label class="custom-control custom-checkbox px-2 m-0">
+                                    <input value="Bebida" type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label"></span>
+                                  </label>
+                                </div>
+                              </div>
+                              <input name="bebiQtd" value="" placeholder="Quantidade..." type="text" class="form-control">
+                            </div>                   
+                          </div>
+                        <!-- DEFINE CAMISAS -->
+                          
+                        <!-- FIM DEFINE CAMISA -->
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Data do Evento</label>
+                            <input value="" name="dataEvento" required="" type="date" class="form-control" id="flatpickr-full">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Horário de Inicio</label>
+                            <input value="" name="horaInicio" required="" type="time" class="form-control" id="flatpickr-time">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Horário de Fim</label>
+                            <input value="" name="horaFim" required="" type="time" class="form-control" id="flatpickr-time">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Valor da Trilha</label>
+                            <input value="" name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
+                          </div>
+                        </div>
+                       <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Rua</label>
+                            <input value="" name="rua" required="" type="text" class="form-control" placeholder="Rua">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Bairro</label>
+                            <input value="" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Cidade</label>
+                            <input value="" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
+                          </div>
+                          <div class="form-group col">
+                            <label class="form-label">Estado</label>
+                            <input value="" name="estado" required="" type="text" class="form-control" placeholder="Estado">
+                          </div>
+                       </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                      </div>
+                    </form>
+                    <!--FIM DO FORM-->
         <!-- Layout content -->
       </div>
       <!-- / Layout container -->
@@ -719,6 +787,7 @@
   <script src="assets/vendor/libs/growl/growl.js"></script>
   <script src="assets/js/tables_datatables.js"></script>
   <script src="assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+  <script src="assets/vendor/libs/flow-js/flow.js"></script>
 
 
   <!-- Demo -->

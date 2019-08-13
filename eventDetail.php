@@ -249,7 +249,7 @@ $idEvento = $_GET['id'];
                     <tr>
                       <td class="border-0 text-muted align-middle">Data:</td>
                       <td class="border-0 text-big">
-                        <a href="#" class="badge badge-outline-primary font-weight-normal py-1"><?php echo $data; ?></a>
+                        <a href="#" class="badge badge-outline-primary font-weight-normal py-1"><?php echo date('d-m-Y', strtotime($data)); ?></a>
                       </td>
                     </tr>
                     <tr>
@@ -267,7 +267,7 @@ $idEvento = $_GET['id'];
                     </tr>
                     
                     <tr>
-                      <td class="border-0 text-muted align-middle align-middle">Quantity:</td>
+                      <td class="border-0 text-muted align-middle align-middle">Quantidade:</td>
                       <td class="border-0">
                         <div class="input-group input-group-sm" style="width: 90px">
                           <span class="input-group-prepend">
@@ -291,7 +291,7 @@ $idEvento = $_GET['id'];
                   </tbody>
                 </table>
 
-                <a href="checkout.php?id=2" class="btn btn-primary btn-lg">Comprar</a> &nbsp;
+                <a href="checkout.php?idEvento=<?php echo $idEvento; ?>" class="btn btn-primary btn-lg">Comprar</a> &nbsp;
               </div>
 
             </div>

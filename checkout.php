@@ -49,6 +49,8 @@
   </script>
 
   <!-- Core scripts -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js"></script>
   <script src="assets/vendor/js/pace.js"></script>
 
   <!-- Page -->
@@ -314,7 +316,7 @@
         <hr class="mx-n4 mx-lg-n5 my-4">
         <?php 
             include("config/conn.php");
-            $idGET = $_GET['id'];
+            $idGET = $_GET['idEvento'];
             $res = mysqli_query($con,"select *from evento where idEventos = $idGET ")or die(mysqli_error($con));
             $mostrar = mysqli_fetch_assoc($res);
             $valor = $mostrar['evenVlrInscri'];
@@ -356,41 +358,61 @@
             
             <li class="nav-item">
               <a class="nav-link d-flex align-items-center h-100 py-1" data-toggle="tab" href="#payment-methods-paypal">
-                
+                <i class="ion ion-md-barcode"></i>
+                <!-- <img src="assets/img/payment/PayPal-light.png" class="ui-payment-small" alt> -->
               </a>
             </li>
           </ul>
           <div class="tab-content">
             <div class="tab-pane fade show ui-bordered p-4 active" id="payment-methods-cc">
+              <form  name="Form1" id="Form1" method="post" action="payment/controllerPedido.php">
 
               <div class="form-group">
                 <label class="d-flex justify-content-between align-items-end">
                   <span class="form-label mb-0">Número do cartão</span>
-                  <img src="assets/img/payment/Visa-light.png" class="ui-payment-small" alt>
-                  <img src="assets/img/payment/MasterCard-light.png" class="ui-payment-small" alt>
+                  <!-- <img src="assets/img/payment/Visa-light.png" class="ui-payment-small" alt> -->
+                  <div class="BandeiraCartao"></div>
                 </label>
-                <input type="text" class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX">
+                <input type="text" id="NumeroCartao" name="NumeroCartao"  class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX">
+                <input type="hidden" id="TokenCard" name="TokenCard">
+                <input type="hidden" id="HashCard" name="HashCard">
+                <input type="hidden" id="ValorParcelas" name="ValorParcelas">
+                <input type="hidden" id="Valor" name="Valor" value="<?php echo $valor; ?>.00">
               </div>
-
+              <div class="form-group">
+                <select class="form-control" name="QtdParcelas" id="QtdParcelas">
+                    <option value="">Selecione</option>
+                </select>
+              </div>
               <div class="form-group">
                 <label class="form-label">Nome impresso no cartão</label>
-                <input type="text" class="form-control" placeholder="Nome no cartão">
+                <input type="text" class="form-control" placeholder="Nome no cartão" required>
               </div>
 
               <div class="form-row">
                 <div class="col">
                   <label class="form-label">Data Validade</label>
-                  <input type="text" class="form-control" placeholder="MM/AA">
+                  <input type="text" class="form-control" placeholder="MM/AA" required>
                 </div>
                 <div class="col">
                   <label class="form-label">CVC (código de segurança)</label>
-                  <input type="text" class="form-control" placeholder="XXX">
+                  <input type="text" class="form-control" placeholder="XXX" maxlength="3" required>
                 </div>
               </div>
-
+              <input type="submit" class="form-control" name="Comprar" value="Comprar" id="BotaoComprar">
+            </form>
             </div>
            
+              <div class="tab-pane fade ui-bordered p-4" id="payment-methods-paypal">
 
+              <button type="button" class="btn btn-lg btn-primary btn-block">
+                Gerar
+                <strong>
+                  <em>Boleto</em>
+                </strong>
+              </button>
+
+            </div>
           </div>
         </div>
       </div>
@@ -555,4 +577,5 @@
 
   <!-- Page -->
   <script src="assets/js/shop.js"></script>
+  <script src="payment/jspayment.js"></script>
 </html>

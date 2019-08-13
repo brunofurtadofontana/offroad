@@ -1,5 +1,13 @@
 var Root="http://"+document.location.hostname+"/";
-var Amount = 100.00;
+
+var Amount = 200.00;
+// // function getValor(){
+// // 	var Amount = document.getElementById('Valor').value;
+// // }
+
+// $('#Valor').on('keyup',function(){
+// 	var Amount=$(this).val();
+// });
 
 function iniciarSessao(){
 
@@ -14,6 +22,7 @@ function iniciarSessao(){
 			listaMeiosPagamentos();
 		}
 	});
+
 }
 
 function listaMeiosPagamentos(){ //lista os meios de pagamentos liberados
@@ -50,10 +59,12 @@ $('#NumeroCartao').on('keyup',function(){
                 var BandeiraImg=response.brand.name;
                 $('.BandeiraCartao').html("<img src=https://stc.pagseguro.uol.com.br/public/img/payment-methods-flags/42x20/"+BandeiraImg+".png>")
             	getParcelas(BandeiraImg);
+            	//$('#Valor').val(Amount);
             },
             error: function (response) {
                 alert('Cartão não reconhecido');
                 $('.BandeiraCartao').empty();
+
             }
         });
     }

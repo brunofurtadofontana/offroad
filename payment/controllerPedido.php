@@ -4,6 +4,8 @@ include("Config.php");
 
 $TokenCard=$_POST['TokenCard'];
 $HashCard=$_POST['HashCard'];
+//$Valor=$_POST['Valor'];
+//$Valor=filter_input(INPUT_POST,'Valor',FILTER_SANITIZE_SPECIAL_CHARS);
 $QtdParcelas=filter_input(INPUT_POST,'QtdParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
 $ValorParcelas=filter_input(INPUT_POST,'ValorParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -15,7 +17,7 @@ $Data["receiverEmail"]=EMAIL_PAGSEGURO;
 $Data["currency"]="BRL";
 $Data["itemId1"] = 1;
 $Data["itemDescription1"] = 'Website';
-$Data["itemAmount1"] = '100.00';
+$Data["itemAmount1"] = '200.00';
 $Data["itemQuantity1"] = 1;
 $Data["notificationURL="]="https://www.localhost/offroad/offroad/notificacao.php";
 $Data["reference"]="83783783737";

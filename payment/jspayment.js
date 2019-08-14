@@ -1,9 +1,9 @@
 var Root="http://"+document.location.hostname+"/";
 
-var Amount = 200.00;
-// // function getValor(){
-// // 	var Amount = document.getElementById('Valor').value;
-// // }
+var Amount = valor;
+// function getValor(valor){
+// 	var Amount = document.getElementById('Valor').value;
+// }
 
 // $('#Valor').on('keyup',function(){
 // 	var Amount=$(this).val();
@@ -24,6 +24,9 @@ function iniciarSessao(){
 	});
 
 }
+$('#CVV').on('blur',function(){
+    getTokenCard();
+});
 
 function listaMeiosPagamentos(){ //lista os meios de pagamentos liberados
 
@@ -40,9 +43,6 @@ function listaMeiosPagamentos(){ //lista os meios de pagamentos liberados
             
 
             
-        },
-        complete: function(data) {
-        	getTokenCard();
         }
     });
 }
@@ -71,14 +71,29 @@ $('#NumeroCartao').on('keyup',function(){
 });
 
 //Obter o token do cartão de crédito
+// function getTokenCard()
+// {
+//     PagSeguroDirectPayment.createCardToken({
+//         cardNumber: '4111111111111111',
+//         brand: 'visa',
+//         cvv: '123',
+//         expirationMonth: '12',
+//         expirationYear: '2030',
+//         success: function(response)
+//         {
+//            $('#TokenCard').val(response.card.token);
+//         }
+//     });
+// }
+
 function getTokenCard()
 {
     PagSeguroDirectPayment.createCardToken({
-        cardNumber: '4111111111111111',
-        brand: 'visa',
-        cvv: '123',
-        expirationMonth: '12',
-        expirationYear: '2030',
+        cardNumber: $('#NumeroCartao').val(),
+        brand: $('#BandeiraCartao').val(),
+        cvv: $('#CVV').val(),
+        expirationMonth: $('#mesVal').val(),
+        expirationYear: $('#anoVal').val(),
         success: function(response)
         {
            $('#TokenCard').val(response.card.token);

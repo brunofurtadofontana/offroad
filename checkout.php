@@ -373,11 +373,14 @@
                   <!-- <img src="assets/img/payment/Visa-light.png" class="ui-payment-small" alt> -->
                   <div class="BandeiraCartao"></div>
                 </label>
-                <input type="text" id="NumeroCartao" name="NumeroCartao"  class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX">
+                <input type="text" id="NumeroCartao" name="NumeroCartao"  class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="16">
                 <input type="hidden" id="TokenCard" name="TokenCard">
                 <input type="hidden" id="HashCard" name="HashCard">
                 <input type="hidden" id="ValorParcelas" name="ValorParcelas">
-                <input type="hidden" id="Valor" name="Valor" value="<?php echo $valor; ?>.00">
+                <script type="text/javascript">
+                  var valor = <?php echo $valor; ?>;
+                </script>
+                <input type="hidden" id="Valor" name="Valor"  value="<?php echo $valor; ?>.00">
               </div>
               <div class="form-group">
                 <select class="form-control" name="QtdParcelas" id="QtdParcelas">
@@ -386,32 +389,38 @@
               </div>
               <div class="form-group">
                 <label class="form-label">Nome impresso no cartão</label>
-                <input type="text" class="form-control" placeholder="Nome no cartão" required>
+                <input type="text" class="form-control" placeholder="Nome no cartão" name="NomeCartao" required>
               </div>
 
               <div class="form-row">
                 <div class="col">
                   <label class="form-label">Data Validade</label>
-                  <input type="text" class="form-control" placeholder="MM/AA" required>
+                  <input type="text" class="form-control" placeholder="MM" id="mesVal" name="mesVal" maxlength="2"required>
                 </div>
                 <div class="col">
+                  <label class="form-label">Data Validade</label>
+                  <input type="text" class="form-control" placeholder="AAAA" id="anoVal" name="anoVal" maxlength="4"required>
+                </div>
+              </div>
+              <div class="form-row">
+                  <div class="col">
                   <label class="form-label">CVC (código de segurança)</label>
-                  <input type="text" class="form-control" placeholder="XXX" maxlength="3" required>
+                  <input type="text" class="form-control" id="CVV" name="CVV" placeholder="XXX" maxlength="3" required>
                 </div>
               </div>
               <input type="submit" class="form-control" name="Comprar" value="Comprar" id="BotaoComprar">
             </form>
             </div>
-           
+              
               <div class="tab-pane fade ui-bordered p-4" id="payment-methods-paypal">
-
-              <button type="button" class="btn btn-lg btn-primary btn-block">
-                Gerar
-                <strong>
-                  <em>Boleto</em>
-                </strong>
-              </button>
-
+                <form name="Form1" id="Form1" action="payment/controllerPedidoBoleto.php" method="post">
+                  <small class="btn-warning">OBS: Pagamento em boleto pode sofrer alteração no valor.</small>
+                  <input type="hidden" id="TokenCard" name="TokenCard">
+                  <input type="hidden" id="HashCard" name="HashCard">
+                  <input type="hidden" id="Valor" name="Valor"  value="<?php echo $valor; ?>.00">
+                  <input type="submit" class="btn btn-lg btn-primary btn-block" value="Gerar Boleto">
+                  
+                </form>
             </div>
           </div>
         </div>

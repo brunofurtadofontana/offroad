@@ -1,5 +1,6 @@
 <?php
   session_start();
+  //$compra = $_GET['compra'];
   include("config/verifica.php"); //Verifica a sessão esta ativa
   include("config/conn.php"); //Importa conexão com banco de dados
   $name = $_SESSION['LOGIN_USUARIO'];

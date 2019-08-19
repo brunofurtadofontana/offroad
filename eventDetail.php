@@ -291,7 +291,7 @@ $idEvento = $_GET['id'];
                   </tbody>
                 </table>
 
-                <a href="checkout.php?idEvento=<?php echo $idEvento; ?>" class="btn btn-primary btn-lg">Comprar</a> &nbsp;
+                <a href="checkout.php?idEvento=<?php echo $idEvento; ?>&compra=1" class="btn btn-primary btn-lg">Comprar</a> &nbsp;
               </div>
 
             </div>

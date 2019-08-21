@@ -13,7 +13,7 @@ var knex = require('knex')({
       host : '127.0.0.1',
       user : 'root',
       password : '',
-      database : 'offroad2'
+      database : 'offroadv1'
     }
   });
 
@@ -30,13 +30,13 @@ server.listen(8080, function () {
 
 //Rotas REST
 
-server.get('/api/promoter_all',  (req, res, next) => { // Retorna os promoters, eventos e seus endereços
+server.get('/api/users',  (req, res, next) => { // Retorna os promoters, eventos e seus endereços
     //knex('promoter').then((dados ) => {
      //       res.send(dados);
      //   }, next)
-    knex('promoter')
-    .join('enderecousuario','enderecousuario.promoter_idUsuario','=','idUsuario')
-    .join('evento','evento.promoter_idUsuario','=','idUsuario')
+    knex('usuario')
+    //.join('enderecousuario','enderecousuario.promoter_idUsuario','=','idUsuario')
+    //.join('evento','evento.promoter_idUsuario','=','idUsuario')
     .select()
     .then((dados ) => {
       if(!dados)return res.send(new errors.BadRequestError('Nada foi encontrado!!'))

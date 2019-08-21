@@ -1,0 +1,7 @@
+npm install -g nodemon
+npm install restify-errors
+npm i --save knex mysql
+npm install restify
+npm init
+
+nodemon start

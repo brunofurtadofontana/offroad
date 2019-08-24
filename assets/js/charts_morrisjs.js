@@ -27,12 +27,8 @@ $(function() {
   new Morris.Bar({
     element: 'morrisjs-bars',
     data: [
-      { device: 'iPhone',     geekbench: 58 },
-      { device: 'iPhone 3G',  geekbench: 39 },
-      { device: 'iPhone 3GS', geekbench: 83 },
-      { device: 'iPhone 4',   geekbench: 50 },
-      { device: 'iPhone 4S',  geekbench: 92 },
-      { device: 'iPhone 5',   geekbench: 32 }
+      { device: 'Quantidade',     geekbench: 58 },
+      { device: 'Horas',   geekbench: 32 }
     ],
     xkey: 'device',
     ykeys: ['geekbench'],
@@ -60,8 +56,8 @@ $(function() {
       { period: '2012 Q2', iphone: 41, ipad: 66, itouch: 84 }
     ],
     xkey: 'period',
-    ykeys: ['iphone', 'ipad', 'itouch'],
-    labels: ['iPhone', 'iPad', 'iPod Touch'],
+    ykeys: ['Quantidade', 'Horas'],
+    labels: ['Quantidade', 'Horas'],
     hideHover: 'auto',
     lineColors: ['#673AB7', '#0288D1', '#9E9E9E'],
     fillOpacity: 0.1,

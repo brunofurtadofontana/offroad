@@ -192,7 +192,7 @@
 			$evenNome = htmlspecialchars(trim(strtoupper($_POST['nomeEven'])));
 			$evenDesc = htmlspecialchars(trim(strtoupper($_POST['descEven'])));
 			$evenTipoTrilha = htmlspecialchars(trim(strtoupper($_POST['tipoTrilha'])));
-			$evenData = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
+			$evenDataInicial = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
 			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
 			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
 			$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['vlrTrilha'])));
@@ -202,35 +202,41 @@
 			$evenEstado = htmlspecialchars(trim(strtoupper($_POST['estado'])));
 			$adeQtd = htmlspecialchars(trim(strtoupper($_POST['almoQtd'])));
 			$almoQtd = htmlspecialchars(trim(strtoupper($_POST['adeQtd'])));
-			$camQtd = htmlspecialchars(trim(strtoupper($_POST['camQtd'])));
 			$bebiQtd = htmlspecialchars(trim(strtoupper($_POST['bebiQtd'])));
-			//$id = $_GET['id'];			
-			  $atual = new DateTime();
-  			  $atual = strtotime(date("Y-m-d"));
-  			  $dataUser= strtotime($evenData);
-			if ($dataUser < $atual){
-				header("Location:../pages/eventos.php?error=3");				
-			}else{
-				$qr = mysqli_query($con,"INSERT INTO evento(evenNome,
+			$camP = htmlspecialchars(trim(strtoupper($_POST['camisaP'])));
+			$camM = htmlspecialchars(trim(strtoupper($_POST['camisaM'])));
+			$camG = htmlspecialchars(trim(strtoupper($_POST['camisaG'])));
+			$camGG = htmlspecialchars(trim(strtoupper($_POST['camisaGG'])));
+			$camEG = htmlspecialchars(trim(strtoupper($_POST['camisaEG'])));
+			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
+			//$id = $_GET['id'];
+			$valorAlmoFor =  str_replace(",",".",$valorAlmo);
+			$valorTrilha =  str_replace(",",".",$evenVlrTrilha);
+
+	
+				//header("Location:../pages/cadastraEvento.php?error=3");				
+			$qr = mysqli_query($con,"INSERT INTO evento(evenNome,
 															evenDescr,
 															evenTipoTrilha,
-															evenData,
+															evenDataInicial,
 															evenHoraInicial,
 															evenHoraFinal,
 															evenVlrInscri,
+															evenVlrAlmoco,
 															promoter_idUsuario) 
 													VALUES ('$evenNome',
 															'$evenDesc',
 															'$evenTipoTrilha',
-															'$evenData',
+															'$evenDataInicial',
 															'$evenHoraInicio',
 															'$evenHoraFim',
-															'$evenVlrTrilha',
+															'$valorTrilha',
+															'$valorAlmoFor',
 															'$id')")or die(mysqli_error($con));
 				$even = mysqli_query($con,"SELECT MAX(idEventos)as max from evento");
 			    $showEven = mysqli_fetch_assoc($even);
 			    $idEven = $showEven['max'];
-				$qrEnde = mysqli_query($con,"INSERT INTO (eveRua,
+				$qrEnde = mysqli_query($con,"INSERT INTO endereco (eveRua,
 																  eveBairro,
 																  eveCidade,
 																  eveEstado,
@@ -241,23 +247,33 @@
 															'$evenCidade',
 															'$evenEstado',
 															'$idEven')")or die(mysqli_error($con));
-				$qrAcessorio = mysqli_query($con,"INSERT INTO endereco(eveRua,
-																  eveBairro,
-																  eveCidade,
-																  eveEstado,
+				$qrAcessorio = mysqli_query($con,"INSERT INTO item_trilha(iteAdesivo,
+																  iteBebida,
+																  iteAlmoco,
 																  Evento_idEventos	
 																  ) 
-													VALUES ('$evenRua',
-															'$evenBairro',
-															'$evenCidade',
-															'$evenEstado',
+													VALUES ('$adeQtd',
+															'$bebiQtd',
+															'$almoQtd',
+															'$idEven')")or die(mysqli_error($con));
+				$qrCamisa = mysqli_query($con,"INSERT INTO camisa(camTamP,
+																  camTamM,
+																  camTamG,
+																  camTamGG,
+																  camTamEG,
+																  Evento_idEventos	
+																  ) 
+													VALUES ('$camP',
+															'$camM',
+															'$camG',
+															'$camGG',
+															'$camEG',
 															'$idEven')")or die(mysqli_error($con));
 				if (!$qr) {
 					header("Location:../pages/eventos.php?error=2");
 				}else{
 	                  header("Location:../pages/eventos.php?error=1");
 				}
-			}
 			break;
 		case 9://Autoriza mudança de valor
 				

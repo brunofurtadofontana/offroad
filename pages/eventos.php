@@ -9,16 +9,32 @@
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   
   $nome = $showID['usuNome'];
-  $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr, evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenData from evento WHERE promoter_idUsuario = '$id' AND evenData >= DATE_FORMAT(NOW(), '%Y-%m-%d');")or die(mysqli_error($con));
-
-  
+  $even = mysqli_query($con,"SELECT * FROM evento ORDER BY promoter_idUsuario = '$id' DESC")or die(mysqli_error($con));
+  $idEven1 = mysqli_fetch_assoc($even);
+  $idEven = $idEven1['idEventos'];
+  $qr_endereco = mysqli_query($con,"SELECT * FROM endereco WHERE idEndereco = '$idEven'")or die(mysqli_error($con)); 
+  $ende = mysqli_fetch_assoc($qr_endereco);
+  $evenDataInicial = $idEven1['evenDataInicial']; 
+  $evenHoraInicial =$idEven1['evenHoraInicial'];
+  $evenHoraFinal =$idEven1['evenHoraFinal'];
+  $evenTipoTrilha =$idEven1['evenTipoTrilha'];
+  $evenNome =$idEven1['evenNome'];
+  $evenDescr =$idEven1['evenDescr'];
+  $evenVlrInscri =$idEven1['evenVlrInscri'];
+  $evenVlrAlmoco =$idEven1['evenVlrAlmoco'];
+  $eveRua = $ende['eveRua'];
+  $eveBairro = $ende['eveBairro'];
+  $eveCidade = $ende['eveCidade'];
+  $eveEstado = $ende['eveEstado'];
+  $eveLatitude = $ende['eveLatitude'];
+  $eveLongitude = $ende['eveLongitude'];
 ?>
 <!DOCTYPE html>
 
 <html lang="pt-br" class="default-style">
 
 <head>
-  <title>Inicial</title>
+  <title>Eventos</title>
 
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
@@ -138,11 +154,11 @@
                   <div>Eventos</div>
                 </a>
               </li>
-              <li class="sidenav-item">
+              <!-- <li class="sidenav-item">
                 <a href="encerrados.php" class="sidenav-link">
                   <div>Eventos Encerrados</div>
                 </a>
-              </li>
+              </li> -->
               <li class="sidenav-item">
                 <a href="financeiro.php" class="sidenav-link">
                   <div>Finaceiro</div>
@@ -445,75 +461,95 @@
                     <button type='button' class='close' onclick='hide()'>&times;</button>
                     Valor da inscrição não pode ser alterado! Clique Aqui...
                   </div></a>";
+            break;
             default:
               # code...
               break;
           }
       ?>
-
-        <!-- inicio da tabela e botão -->
-        <!-- Layout content -->
+      <!-- Layout content -->
         <div class="layout-content">
           <!-- Content -->
-          <div class="container-fluid flex-grow-1 container-p-y">
-            <h2 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-0 mb-6">
-                Eventos
-                <a href="cadastraEvento.php"><button type="button" class="btn btn-primary rounded-pill d-block"><span class="ion ion-md-add"></span>&nbsp; Add Evento</button></a>
-            </h2>             
-                <div class="table-responsive">
-                  <table class="datatables-demo table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>#ID</th>
-                        <th>Nome Evento</th>
-                        <th>Descrição</th>
-                        <th>Data do Evento</th>
-                        <th>Hora Inicial</th>
-                        <th>Hora Fim</th>
-                        <th>Valor R$</th>
-                        <th>Tipo</th>
-                        <th>Cidade</th>
-                        <th>Estado</th>
-                        <th class="center">Ações</th>
-                      </tr>
-                    </thead>
-                      <tbody>
-                        <?php
-                            while($showEven = mysqli_fetch_assoc($even)):
+            <h4 class="d-flex flex-wrap justify-content-between align-items-center w-100 font-weight-bold pt-2 mb-4">          
+              <div class="col-12 col-md-3 px-0 pb-2">
+                <a href="cadastraEvento.php"><button type="button" class="btn btn-primary rounded-pill d-block"><span class="ion ion-md-add"></span>&nbsp; Add Evento</button></a>               
+              </div>     
+              <div class="col-12 col-md-3 px-0 pb-2">
+                <input type="text" class="form-control" placeholder="Search...">
+              </div>
+            </h4>        
+            <div class="row">
+              <?php
+                  $qr_even = mysqli_query($con,"SELECT * FROM evento ORDER BY idEventos DESC")or die(mysqli_error($con));
+                          while($showEven = mysqli_fetch_assoc($qr_even)):
                             $idEven = $showEven['idEventos'];
                             $evenNome = $showEven['evenNome'];
-                            $evenDescr = $showEven['evenDescr'];
-                            $evenData = $showEven['evenData'];
-                            $endereco =mysqli_query($con,"SELECT eveRua, eveBairro, eveCidade, eveEstado from endereco WHERE Evento_idEventos = '$idEven';");
-                            $ende = mysqli_fetch_assoc($endereco);
-                            $eveRua = $ende['eveRua'];
-                            $eveBairro = $ende['eveBairro'];
-                            $eveCidade = $ende['eveCidade'];
-                            $eveEstado = $ende['eveEstado'];
-                            $eveHoraInicio = $showEven['evenHoraInicial'];
+                            $eveAlmo = $showEven['evenVlrAlmoco'];
+                            $data = $showEven['evenDataInicial'];
+                            $eveHoraIni = $showEven['evenHoraInicial'];
                             $eveHoraFim = $showEven['evenHoraFinal'];
                             $eveVlr = $showEven['evenVlrInscri'];
-                            $eveTipo = $showEven['evenTipoTrilha'];
-                          ?> 
-                        <tr class="odd gradeX">
-                            <td><?php echo $showEven['idEventos']; ?> </td>
-                            <td><?php echo $evenNome;?> </td>
-                            <td><?php echo $evenDescr;?> </td>
-                            <td><?php echo date('d/m/Y', strtotime($evenData)); ?> </td>
-                            <td><?php echo date('H:i', strtotime($eveHoraInicio));?> </td>
-                            <td><?php echo date('H:i', strtotime($eveHoraFim));?> </td>
-                            <td><?php echo 'R$' . number_format($eveVlr, 2, ',', '.');?> </td>
-                            <td><?php echo $eveTipo;?> </td>
-                            <td><?php echo $eveCidade;?> </td>
-                            <td><?php echo $eveEstado;?> </td>
-                            <td>
-                              <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>" data-toggle="modal" data-target="#myModal<?php echo $idEven; ?>" title="Editar">
+                            $eveTipo = $showEven['evenTipoTrilha'];                       
+              ?> 
+              <div class="col-sm-6 col-xl-4">
+                <div class="card mb-4">
+                  <div class="w-100">
+                    <a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="card-img-top d-block ui-rect-60 ui-bg-cover" style="background-image: url('assets/img/bg/1.jpg');">
+                      <div class="d-flex justify-content-between align-items-end ui-rect-content p-3">
+                        <div class="flex-shrink-1">
+                          <?php 
+                               $dtEntrega=date("Y-m-d",strtotime("$data")); 
+                               $today = date("Y-m-d"); 
+                                                             
+                               if($dtEntrega>=$today){ 
+                                 echo "<span class='text-big'><span class='badge badge-success'>Aberta</span></span>";
+                          
+                                }else{
+                          
+                                echo "<span class='text-big'><span class='badge badge-danger'>Finalizada</span></span>";                         
+                                } 
+                          ?>
+                          <?php
+                            if ($eveTipo == 'INTEIRA') {
+                              echo "<span class='text-big'><span class='badge badge-success'>Trilha Inteira</span></span>";
+                            }else{
+                              echo "<span class='text-big'><span class='badge badge-warning'>Meia Trilha</span></span>";
+                            } 
+                          ?>
+                          
+                        </div>
+                        <div class="text-big">
+                          
+                          <div class="badge badge-dark font-weight-bold"><?php $soma = $eveVlr + $eveAlmo; echo 'R$' . number_format($soma, 2, ',', '.'); ?></div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="mb-3"><a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="text-body"><?php echo $evenNome; ?> #<?php echo $idEven; ?></a></h5>
+                    <!-- <p class="text-muted mb-3"><?php //echo $evenDescr; ?></p> -->
+                    
+                    <div class="media">
+                      <div class="media-body">
+                        <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>" data-toggle="modal" data-target="#myModal<?php echo $idEven; ?>" title="Editar">
                               <i class="lnr lnr-pencil"> </i>
                               </a>
                               <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>"  data-toggle="modal" data-target="#myModalDelete<?php echo $idEven; ?>" title="Excluir">
                                 <i class="lnr lnr-trash"> </i>
                               </a>
-                              <!-- AQUI INICIA O MODAL DE EXCLUSÃO -->
+                              <a href="../pages/detalheEvento.php?id=<?php echo $idEven;  ?>"  title="Detalhes">
+                                <i class="lnr lnr-plus-circle"> </i>
+                              </a>
+                      </div>
+                      <div class="text-muted small">
+                        <i class="ion ion-md-time text-primary"></i>
+                        <span><?php echo date('d/m/Y', strtotime($data));?> das <?php echo date("H:i", strtotime($eveHoraIni));?> até <?php echo date("H:i", strtotime($eveHoraFim)); ?></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- AQUI INICIA O MODAL DE EXCLUSÃO -->
                               <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
                                 <div class="modal-dialog modal-lg">
                                   <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
@@ -544,161 +580,39 @@
                                 </div>
                               </div>
                               <!-- FIM DO MODAL DE EXCLUIR -->
-                              <!-- Inicio do modal de Editar -->
-                              <div class="modal" id="myModal<?php if($idEven==$idEven)echo $idEven;?>">
-                                <div class="modal-dialog modal-lg">
-                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">
-                                        Editar Evento #<?php echo $idEven; ?>
-                                        <br>
-                                      <small class="text-muted"></small>
-                                      </h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Nome do Evento</label>
-                                          <input value="<?php echo $evenNome; ?>" name="nomeEven" type="text" class="form-control" placeholder="Nome">
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Descrição do Evento</label>      
-                                          <textarea name="descEven" id="autosize-demo" rows="2" class="form-control"><?php echo $evenDescr;?></textarea> 
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Tipo da Trilha</label>
-                                          <div class="input-group">
-                                          <select name="tipoTrilha" class="custom-select flex-grow-1">
-                                              <option <?php if($eveTipo == 'Selecione...') echo "Selecione..."; 'selected';?>>Selecione...</option>
-                                              <option value="inteira" <?php if($eveTipo == 'inteira') echo "Trilha Inteira";'selected';?>>Trilha Completa</option>
-                                              <option value="meia" <?php if($eveTipo == 'meia') echo "Meia Trilha"; 'selected';?>>Meia Trilha</option>
-                                          </select>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Data do Evento</label>
-                                          <input value="<?php echo $evenData; ?>" name="dataEvento" required="" type="date" class="form-control" id="flatpickr-full">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Horário de Inicio</label>
-                                          <input value="<?php echo $eveHoraInicio; ?>" name="horaInicio" required="" type="time" class="form-control" id="flatpickr-time">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Horário de Fim</label>
-                                          <input value="<?php echo $eveHoraFim; ?>" name="horaFim" required="" type="time" class="form-control" id="flatpickr-time">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Valor da Trilha</label>
-                                          <input value="<?php echo $eveVlr; ?>"  name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
-                                        </div>
-                                      </div>
-                                     <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Rua</label>
-                                          <input value="<?php echo $eveRua; ?>" name="rua" required="" type="text" class="form-control" placeholder="Rua">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Bairro</label>
-                                          <input value="<?php echo $eveBairro; ?>" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Cidade</label>
-                                          <input value="<?php echo $eveCidade; ?>" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
-                                        </div>
-                                        <div class="form-group col">
-                                          <label class="form-label">Estado</label>
-                                          <input value="<?php echo $eveEstado; ?>" name="estado" required="" type="text" class="form-control" placeholder="Estado">
-                                        </div>
-                                     </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
-                                    </div>
-                                  </form>
-                                  <!--FIM DO FORM-->
-                                </div>
-                              </div>
-                              <!-- Fim do Modal editar -->
-                              <!-- modal para mudar valor da inscrição -->
-                              <div class="modal" id="myModalvlr">
-                                <div class="modal-dialog modal-lg">
-                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">
-                                        Justificativa Editar Valor Evento #<?php echo $idEven; ?>
-                                        <br>
-                                      <small class="text-muted"></small>
-                                      </h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="form-row">
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Justifique a mudança de valor</label>      
-                                          <textarea placeholder="Digite o texto aqui..." name="descEven" id="autosize-demo" rows="10" class="form-control"></textarea> 
-                                        </div>
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Qual o novo valor?</label>
-                                          <input value=""  name="vlrTrilha" required="" type="text" class="form-control" placeholder="R$0,00">
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
-                                    </div>
-                                  </form>
-                                  <!--FIM DO FORM-->
-                                </div>
-                              </div>
-                              <!-- fim do modal valor da inscrição -->
-                            </td>
-                        </tr>
-                        <?php endwhile; ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                  <!-- Javascript -->
-                  <script>
-                    $(function() {
-                      $('.datatables-demo').dataTable({
-                        "language": {
-                        "lengthMenu": "Exibir _MENU_ Registros por páginas",
-                        "zeroRecords": "Nada encontrado - Desculpe",
-                        "info": "Mostrando página _PAGE_ of _PAGES_",
-                        "infoEmpty": "Nenhum registro encontrado",
-                        "infoFiltered": "(filtered from _MAX_ total records)",
-                        "search": "Procurar:",
-                           "paginate":{
-                            "first":      "Primeiro",
-                            "last":       "Último",
-                            "next":       "Próximo",
-                            "previous":   "Anterior"
-                          },
-                        }
-                      });
+              <?php endwhile; ?>
+            </div>
+            <hr class="border-light mt-2 mb-4">
 
-                    });
-                  </script>
-                  <!-- / Javascript -->
-              </div>
-        <!-- Layout content -->
-      </div>
-      <!-- / Layout container -->
-    </div>
+            <nav>
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="javascript:void(0)">«</a>
+                </li>
+                <li class="page-item active">
+                  <a class="page-link" href="javascript:void(0)">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">2</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">3</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">4</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">5</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">»</a>
+                </li>
+              </ul>
+            </nav>
+
+          </div>
+          <!-- / Content -->
+        
     <!-- Overlay -->
     <div class="layout-overlay layout-sidenav-toggle"></div>
   </div>

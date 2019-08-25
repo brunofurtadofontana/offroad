@@ -3,24 +3,54 @@
   include("../config/verifica.php"); //Verifica a sessão esta ativa
   include("../config/conn.php"); //Importa conexão com banco de dados
   $name = $_SESSION['LOGIN_USUARIO'];
+  $idEventos = $_GET['id'];
 
   $res = mysqli_query($con,"SELECT idUsuario, usuNome from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
   $showID = mysqli_fetch_assoc($res);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   $nome = $showID['usuNome'];
 
-  $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr, evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenDataInicial from evento WHERE promoter_idUsuario = '$id';")or die(mysqli_error($con));
+  $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr, evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenVlrAlmoco, evenDataInicial from evento WHERE idEventos = '$idEventos';")or die(mysqli_error($con));
+  $qr_endereco = mysqli_query($con,"SELECT * FROM endereco WHERE idEndereco = '$idEventos'")or die(mysqli_error($con));
   $idEven1 = mysqli_fetch_assoc($even);
+  $ende = mysqli_fetch_assoc($qr_endereco);
   $idEven = $idEven1['idEventos'];
-  
+  $evenDataInicial = $idEven1['evenDataInicial']; 
+  $evenHoraInicial =$idEven1['evenHoraInicial'];
+  $evenHoraFinal =$idEven1['evenHoraFinal'];
+  $evenTipoTrilha =$idEven1['evenTipoTrilha'];
+  $evenNome =$idEven1['evenNome'];
+  $evenDescr =$idEven1['evenDescr'];
+  $evenVlrInscri =$idEven1['evenVlrInscri'];
+  $evenVlrAlmoco =$idEven1['evenVlrAlmoco'];
+  $eveRua = $ende['eveRua'];
+  $eveBairro = $ende['eveBairro'];
+  $eveCidade = $ende['eveCidade'];
+  $eveEstado = $ende['eveEstado'];
+  $eveLatitude = $ende['eveLatitude'];
+  $eveLongitude = $ende['eveLongitude'];
+
+  $qr_camisa = mysqli_query($con,"SELECT * from camisa WHERE Evento_idEventos = '$idEventos';")or die(mysqli_error($con));
+  $showCam = mysqli_fetch_assoc($qr_camisa);
+  $camP = $showCam['camTamP'];
+  $camM = $showCam['camTamM'];
+  $camG = $showCam['camTamG'];
+  $camGG = $showCam['camTamGG'];
+  $camEG = $showCam['camTamEg'];
+
+  $qr_item= mysqli_query($con,"SELECT * from item_trilha WHERE Evento_idEventos = '$idEventos';")or die(mysqli_error($con));
+  $showIte =  mysqli_fetch_assoc($qr_item);
+  $iteAde = $showIte['iteAdesivo'];
+  $iteBeb = $showIte['iteBebida'];
+  $iteAlmo = $showIte['iteAlmoco'];
+
 ?>
 <!DOCTYPE html>
 
 <html lang="pt-br" class="default-style">
 
 <head>
-  <title>Cadastrar Evento</title>
-
+  <title>Detalhes Evento</title>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
   <meta name="description" content="">
@@ -83,101 +113,6 @@
             document.getElementById("erro6").style.display = "none";
   }
   </script>
-
-  <script>
-function onlynumber(evt) {
-   var theEvent = evt || window.event;
-   var key = theEvent.keyCode || theEvent.which;
-   key = String.fromCharCode( key );
-   //var regex = /^[0-9.,]+$/;
-   var regex = /^[0-9.]+$/;
-   if( !regex.test(key) ) {
-      theEvent.returnValue = false;
-      if(theEvent.preventDefault) theEvent.preventDefault();
-   }
-}
-function dinheiro(cur,len)
-{
-   n='__0123456789';
-   d=cur.value;
-   l=d.length;
-   r='';
-   if (l > 0)
-   {
-    z=d.substr(0,l-1);
-    s='';
-    a=2;
-    for (i=0; i < l; i++)
-    {
-        c=d.charAt(i);
-        if (n.indexOf(c) > a)
-        {
-            a=1;
-            s+=c;
-        };
-    };
-    l=s.length;
-    t=len-1;
-    if (l > t)
-    {
-        l=t;
-        s=s.substr(0,t);
-    };
-    if (l > 2)
-    {
-        r=s.substr(0,l-2)+','+s.substr(l-2,2);
-    }
-    else
-    {
-        if (l == 2)
-        {
-           r='0,'+s;
-        }
-        else
-        {
-            if (l == 1)
-            {
-                r='0,0'+s;
-            };
-        };
-    };
-    if (r == '')
-    {
-        r='0,00';
-    }
-    else
-    {
-        l=r.length;
-        if (l > 6)
-        {
-            j=l%3;
-            w=r.substr(0,j);
-            wa=r.substr(j,l-j-6);
-            wb=r.substr(l-6,6);
-            if (j > 0)
-            {
-                w+='.';
-            };
-            k=(l-j)/3-2;
-            for (i=0; i < k; i++)
-            {
-                w+=wa.substr(i*3,3)+'.';
-            };
-            r=w+wb;
-        };
-    };
-   };
-   if (r.length <= len)
-   {
-    cur.value=r;
-   }
-   else
-   {
-    cur.value=z;
-   };
-   return 'ok';
-};
-</script>
  
 <!-- Libs -->
   <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
@@ -549,252 +484,159 @@ function dinheiro(cur,len)
                 break;
             }
         ?>
-        <!--CADASTRO EVENTO-->
-            <div class="card mb-4">
-              <h6 class="card-header">
-                Cadastro de Evento
-              </h6>
+
+        <!-- Detalhes Começa Aqui -->
+            <h4 class="font-weight-bold py-3 mb-4">
+              Evento <span class="text-muted">#<?php echo $idEventos; ?></span>
+            </h4>
+
+            <div class="card">
+
+              <!-- Status -->
               <div class="card-body">
-                <!-- Inserir imagem -->
-                <div>
-                  <form action="/upload" class="dropzone needsclick" id="dropzone-demo">
-                    <div class="dz-message needsclick">
-                      Insira aqui a imagem do seu evento
-                      <span class="note needsclick"></span>
-                    </div>
-                    <div class="fallback">
-                      <input name="file" type="file" multiple>
-                    </div>
-                  </form>
-                </div>
-                <!-- Javascript -->
-                <script>
-                  $(function() {
-                    $('#dropzone-demo').dropzone({
-                      parallelUploads: 2,
-                      maxFilesize:     50000,
-                      filesizeBase:    1000,
-                      addRemoveLinks:  true,
-                    });
-
-                    // Mock the file upload progress (only for the demo)
-                    //
-                    Dropzone.prototype.uploadFiles = function(files) {
-                      var minSteps         = 6;
-                      var maxSteps         = 60;
-                      var timeBetweenSteps = 100;
-                      var bytesPerStep     = 100000;
-                      var isUploadSuccess  = Math.round(Math.random());
-
-                      var self = this;
-
-                      for (var i = 0; i < files.length; i++) {
-
-                        var file = files[i];
-                        var totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
-
-                        for (var step = 0; step < totalSteps; step++) {
-                          var duration = timeBetweenSteps * (step + 1);
-
-                          setTimeout(function(file, totalSteps, step) {
-                            return function() {
-                              file.upload = {
-                                progress: 100 * (step + 1) / totalSteps,
-                                total: file.size,
-                                bytesSent: (step + 1) * file.size / totalSteps
-                              };
-
-                              self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
-                              if (file.upload.progress == 100) {
-
-                                if (isUploadSuccess) {
-                                  file.status =  Dropzone.SUCCESS;
-                                  self.emit('success', file, 'success', null);
-                                } else {
-                                  file.status =  Dropzone.ERROR;
-                                  self.emit('error', file, 'Some upload error', null);
-                                }
-
-                                self.emit('complete', file);
-                                self.processQueue();
-                              }
-                            };
-                          }(file, totalSteps, step), duration);
-                        }
-                      }
-                    };
-                  });
-                </script>
-                <!-- / Javascript -->
-                <!-- Fim inserir imagem -->
-                <br>
-                <form method="post" action="../config/tratadados.php?opc=8&id=<?php echo $id ?>" autocomplete="on">
-                  <div class="form-group">
-                    <label class="form-label">Nome do Evento</label>
-                    <input value="" name="nomeEven" type="text" required="" class="form-control" placeholder="Nome">
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Descrição do Evento</label>      
-                    <textarea value="" name="descEven" required="" id="autosize-demo" rows="3" class="form-control" placeholder="Descrição..."></textarea> 
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Tipo da Trilha</label>
-                      <div class="input-group">
-                        <select name="tipoTrilha" class="custom-select flex-grow-1">
-                          <option>Selecione...</option>
-                          <option value="inteira">Trilha Completa</option>
-                          <option value="meia">Meia Trilha</option>
-                        </select>
-                      </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group col">
-                        <label class="form-label">Adesivo</label>
-                            <div class="input-group">
-                      <input name="adeQtd" value="" placeholder="Qtd..." onkeypress="return onlynumber();" type="text" class="form-control">
-                      </div>  
-                    </div>
-                    <div class="form-group col">
-                      <label class="form-label">Almoço</label>
-                        <div class="input-group">
-                          <input name="almoQtd" value="" onkeypress="return onlynumber();" placeholder="Qtd..." type="text" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group col">
-                      <label class="form-label">Bebida</label>
-                        <div class="input-group">
-                          <input name="bebiQtd" value=""  onkeypress="return onlynumber();" placeholder="Qtd..." type="text" class="form-control">
-                        </div> 
-                    </div>
-                  </div>
-                  <div class="form-row">
-                      <div class="form-group col">
-                        <label class="form-label">Quantidade Camisa P</label>
-                        <input value="" name="camisaP" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
-                      </div>
-                      <div class="form-group col">
-                        <label class="form-label">Quantidade Camisa M</label>
-                        <input value="" name="camisaM" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
-                      </div>
-                      <div class="form-group col">
-                        <label class="form-label">Quantidade Camisa G</label>
-                        <input value="" name="camisaG" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
-                      </div>
-                      <div class="form-group col">
-                        <label class="form-label">Quantidade Camisa GG</label>
-                        <input value="" name="camisaGG" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
-                      </div>
-                      <div class="form-group col">
-                        <label class="form-label">Quantidade Camisa EG</label>
-                        <input value="" name="camisaEG" onkeypress="return onlynumber();" type="text" class="form-control" placeholder="Qtd...">
-                      </div>
-                    </div>
-                  <div class="form-group">
-                    <div class="form-row">
-                      <div class="form-group col">
-                        <label class="form-label">Data do Evento</label>
-                        <input value="" name="dataEvento" required="" type="text" class="form-control" id="flatpickr-full">
-                      </div>
-                      <div class="form-group col">
-                        <label class="form-label">Horário de Inicio</label>
-                        <input value="" name="horaInicio" type="text" class="form-control" id="flatpickr-time">
-                      </div>
-                      <div class="form-group col">
-                        <label class="form-label">Horário de Fim</label>
-                        <input value="" name="horaFim" required="" type="text" class="form-control" id="flatpickr-time2">
-                      </div>
-                      <div class="form-group col">
-                        <label class="form-label">Valor da Trilha</label>
-                        <input value="" name="vlrTrilha" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
-                      </div>
-                        <div class="form-group col">
-                            <label class="form-label">Valor do Almoço</label>
-                            <input value="" name="vlrAlmo" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
-                        </div>
-                    </div>
-                  </div>                  
-                    <div class="form-row">
-                        <div class="form-group col">
-                          <label class="form-label">Rua</label>
-                          <input value="" name="rua" required="" type="text" class="form-control" placeholder="Rua">
-                        </div>
-                        <div class="form-group col">
-                          <label class="form-label">Bairro</label>
-                          <input value="" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
-                        </div>
-                        <div class="form-group col">
-                          <label class="form-label">Cidade</label>
-                          <input value="" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
-                        </div>
-                        <div class="form-group col">
-                          <label class="form-label">Estado</label>
-                          <input value="" name="estado" required="" type="text" class="form-control" placeholder="Estado">
-                        </div>
-                      </div>
-                  <button type="submit" class="btn btn-primary">Salvar</button>
-                </form>
-                <!-- FINAL DO CADASTRO -->
-                <!-- Javascript dos inputs-->
-                  <script>
-                    $(function() {
-                      // Date
-                      $('#flatpickr-date').flatpickr({
-                        altInput: true
-                      });
-
-                      // Time
-                      $('#flatpickr-time').flatpickr({
-                        enableTime: true,
-                        noCalendar: true,
-                        altInput: true
-                      });
-                      // Time
-                      $('#flatpickr-time2').flatpickr({
-                        enableTime: true,
-                        noCalendar: true,
-                        altInput: true
-                      });
-
-                      // Datetime
-                      $('#flatpickr-datetime').flatpickr({
-                        enableTime: true,
-                        altInput: true
-                      });
-
-                      // Full
-                      $('#flatpickr-full').flatpickr({
-                        weekNumbers: true,
-                        minDate: 'today',
-                        // dateFormat: 'd-m-y'
-                        altInput: true,
-                        altFormat: "F j, Y",
-                        dateFormat: "Y-m-d",
-
-                      });
-                        flatpickr ( " .flatpickr " , {
-                            locale :  ' pt '
-                        });
-
-                      // Range
-                      $('#flatpickr-range').flatpickr({
-                        mode: 'range',
-                        altInput: true
-                      });
-                      flatpickr(myElement, {
-                          "locale": "pt"  // locale for this instance only
-                      });
-
-                      // Inline
-                      $('#flatpickr-inline').flatpickr({
-                        inline: true,
-                        altInput: true,
-                        allowInput: false
-                      });
-                    });
-                  </script>
-                  <!-- / Javascript -->
+                <strong class="mr-2">Status:</strong>
+                <?php 
+                     $dtEntrega=date("Y-m-d",strtotime("$evenDataInicial")); 
+                     $today = date("Y-m-d"); 
+                     
+                     if($dtEntrega>=$today){ 
+                       echo "<span class='text-big'><span class='badge badge-success'>Aberto</span></span>";
+                
+                      }else{
+                
+                      echo "<span class='text-big'><span class='badge badge-danger'>Encerrado</span></span>";
+                
+                      } 
+                ?>                
+                <span class="text-muted small ml-1"><?php echo date('d/m/Y', strtotime($evenDataInicial)); ?></span>
               </div>
-            </div>
+              <hr class="m-0">
+              <!-- / Status -->
+              <!-- Info -->
+              <div class="card-body pb-1">
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <div class="text-muted small">Data</div><?php echo date('d/m/Y', strtotime($evenDataInicial));?> das <?php echo date("H:i", strtotime($evenHoraInicial));?> até <?php echo date("H:i", strtotime($evenHoraFinal)); ?>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="text-muted small">Tipo de Trilha</div>
+                  <?php
+                    if ($evenTipoTrilha == 'INTEIRA') {
+                      echo "<span class='text-big'><span class='badge badge-success'>Inteira</span></span>";
+                    }else{
+                      echo "<span class='text-big'><span class='badge badge-warning'>Meia Trilha</span></span>";
+                    }
+                    
+                  ?>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="text-muted small"> Inscritos</div>
+                    50
+                  </div>
+                </div>
+              </div>
+              <hr class="m-0">
+              <!-- / Info -->
+
+              <!-- Billing -->
+              <div class="card-body">
+                <h6 class="small font-weight-semibold">
+                  Informações do Evento
+                </h6>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <div class="text-muted small">Nome do Evento</div>
+                    <?php echo $evenNome; ?>
+                  </div>
+                  <div class="col-12">
+                    <div class="text-muted small">Descrição do Evento</div>
+                    <?php echo $evenDescr; ?>
+                  </div>
+                </div>
+              </div>
+              <hr class="m-0">
+              <!-- / Billing -->
+
+              <!-- Shipping -->
+              <div class="card-body">
+                
+                <div class="row">
+                  <div class="col-md-2 mb-3">
+                    <div class="text-muted small">Quantiade de Camisa P</div>
+                    <?php echo $camP; ?>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <div class="text-muted small">Quantiade de Camisa M</div>
+                    <?php echo $camM; ?>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <div class="text-muted small">Quantiade de Camisa G</div>
+                    <?php echo $camG; ?>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <div class="text-muted small">Quantiade de Camisa GG</div>
+                    <?php echo $camGG; ?>
+                  </div>
+                  <div class="col-md-2 mb-3">
+                    <div class="text-muted small">Quantiade de Camisa EG</div>
+                    <?php echo $camEG; ?>
+                  </div>
+                  <div class="col-md-4 mb-4">
+                    <div class="text-muted small">Quantiade de Adesivos</div>
+                    <?php echo $iteAde; ?>
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <div class="text-muted small">Quantiade de Bebidas</div>
+                    <?php echo $iteBeb; ?>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="text-muted small">Quantiade de Almoço</div>
+                    <?php echo $iteAlmo; ?>
+                  </div>
+                  <div class="col-md-6 mb-4">
+                    <div class="text-muted small">Valor da Inscrição</div>
+                    <?php echo 'R$' . number_format($evenVlrInscri, 2, ',', '.'); ?>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <div class="text-muted small">Valor da Almoço</div>
+                    <?php echo 'R$' . number_format($evenVlrAlmoco, 2, ',', '.');?>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="text-muted small">Rua</div>
+                    <?php echo $eveRua; ?>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="text-muted small">Bairro</div>
+                    <?php echo $eveBairro; ?>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="text-muted small">Cidade</div>
+                    <?php echo $eveCidade; ?>
+                  </div>
+                  <div class="col-md-3 mb-3">
+                    <div class="text-muted small">Estado</div>
+                    <?php echo $eveEstado; ?>
+                  </div>
+                </div>
+              </div>
+              <hr class="m-0">
+              <!-- / Shipping -->
+
+              <!-- Items -->
+              <div class="card-body">
+                <h6 class="small font-weight-semibold">
+                  Localização Evento
+                </h6>
+                <!-- MAPS -->
+
+                <!-- final maps -->
+
+              </div>
+              <!-- / Items -->
+          </div>
+          <!-- / Content -->
+        <!-- DETALHES TERMINA AQUI -->
+      </div>
           <!-- Layout content -->
         </div>
         <!-- / Layout container -->

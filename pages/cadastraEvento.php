@@ -59,6 +59,29 @@
 
   <!-- Core scripts -->
   <script src="assets/vendor/js/pace.js"></script>
+  <script type="text/javascript">
+  
+    jQuery(function($){
+       $("#cep").change(function(){
+          var cep_code = $(this).val();
+          if( cep_code.length <= 0 ) return;
+          $.get("http://apps.widenet.com.br/busca-cep/api/cep.json", { code: cep_code },
+             function(result){
+                if( result.status!=1 ){
+                   //alert(result.message || "Houve um erro desconhecido");
+                   return;
+                }
+                $("input#cep").val( result.code );
+                $("input#estado").val( result.state );
+                $("input#cidade").val( result.city );
+                $("input#bairro").val( result.district );
+                $("input#rua").val( result.address );
+                $("input#estado").val( result.state );
+             });
+       });
+    });
+
+    </script>
 
   <script>
     window.themeSettings = new ThemeSettings({
@@ -714,21 +737,25 @@ function dinheiro(cur,len)
                     </div>
                   </div>                  
                     <div class="form-row">
+                         <div class="form-group col">
+                          <label class="form-label">CEP</label>
+                          <input id="cep" value="" name="cep" required="" type="text" class="form-control" placeholder="CEP">
+                        </div>
                         <div class="form-group col">
                           <label class="form-label">Rua</label>
-                          <input value="" name="rua" required="" type="text" class="form-control" placeholder="Rua">
+                          <input  id="rua" value="" name="rua" required="" type="text" class="form-control" placeholder="Rua">
                         </div>
                         <div class="form-group col">
                           <label class="form-label">Bairro</label>
-                          <input value="" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
+                          <input id="bairro" value="" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
                         </div>
                         <div class="form-group col">
                           <label class="form-label">Cidade</label>
-                          <input value="" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
+                          <input id="cidade" value="" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
                         </div>
                         <div class="form-group col">
                           <label class="form-label">Estado</label>
-                          <input value="" name="estado" required="" type="text" class="form-control" placeholder="Estado">
+                          <input id="estado" value="" name="estado" required="" type="text" class="form-control" placeholder="Estado">
                         </div>
                       </div>
                   <button type="submit" class="btn btn-primary">Salvar</button>

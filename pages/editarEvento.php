@@ -43,21 +43,20 @@
   $iteAde = $showIte['iteAdesivo'];
   $iteBeb = $showIte['iteBebida'];
   $iteAlmo = $showIte['iteAlmoco'];
-
 ?>
 <!DOCTYPE html>
 
 <html lang="pt-br" class="default-style">
 
 <head>
-  <title>Detalhes Evento</title>
+  <title>Editar Evento</title>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
- 
 
   <!-- Icon fonts -->
   <link rel="stylesheet" href="assets/vendor/fonts/fontawesome.css">
@@ -65,18 +64,16 @@
   <link rel="stylesheet" href="assets/vendor/fonts/linearicons.css">
   <link rel="stylesheet" href="assets/vendor/fonts/open-iconic.css">
   <link rel="stylesheet" href="assets/vendor/fonts/pe-icon-7-stroke.css">
-  <!-- Core stylesheets --> 
+
+  <!-- Core stylesheets -->
   <link rel="stylesheet" href="assets/vendor/css/rtl/bootstrap.css" class="theme-settings-bootstrap-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/appwork.css" class="theme-settings-appwork-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/theme-corporate.css" class="theme-settings-theme-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/colors.css" class="theme-settings-colors-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/uikit.css">
-  <link rel="stylesheet" href="assets/css/demo.css"> 
+  <link rel="stylesheet" href="assets/css/demo.css">
 
   <!-- Load polyfills -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="assets/vendor/libs/datatables/datatables.css">
-  <script src="assets/vendor/libs/datatables/datatables.js"></script>
   <script src="assets/vendor/js/polyfills.js"></script>
   <script>document['documentMode']===10&&document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=Intl.~locale.en"><\/script>')</script>
 
@@ -86,10 +83,6 @@
   <!-- Theme settings -->
   <!-- This file MUST be included after core stylesheets and layout-helpers.js in the <head> section -->
   <script src="assets/vendor/js/theme-settings.js"></script>
-
-  <!-- Core scripts -->
-  <script src="assets/vendor/js/pace.js"></script>
-
   <script>
     window.themeSettings = new ThemeSettings({
       cssPath: 'assets/vendor/css/rtl/',
@@ -97,7 +90,16 @@
     });
   </script>
 
-  <script type="text/javascript">
+  <!-- Core scripts -->
+  <script src="assets/vendor/js/pace.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Libs -->
+  <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.css">
+  <link rel="stylesheet" href="assets/vendor/libs/quill/typography.css">
+  <link rel="stylesheet" href="assets/vendor/libs/quill/editor.css">
+    <script type="text/javascript">
       setTimeout(function () {
       document.getElementById("erro").style.display = "none";
         }, 3000);
@@ -113,6 +115,101 @@
             document.getElementById("erro6").style.display = "none";
   }
   </script>
+
+  <script>
+function onlynumber(evt) {
+   var theEvent = evt || window.event;
+   var key = theEvent.keyCode || theEvent.which;
+   key = String.fromCharCode( key );
+   //var regex = /^[0-9.,]+$/;
+   var regex = /^[0-9.]+$/;
+   if( !regex.test(key) ) {
+      theEvent.returnValue = false;
+      if(theEvent.preventDefault) theEvent.preventDefault();
+   }
+}
+function dinheiro(cur,len)
+{
+   n='__0123456789';
+   d=cur.value;
+   l=d.length;
+   r='';
+   if (l > 0)
+   {
+    z=d.substr(0,l-1);
+    s='';
+    a=2;
+    for (i=0; i < l; i++)
+    {
+        c=d.charAt(i);
+        if (n.indexOf(c) > a)
+        {
+            a=1;
+            s+=c;
+        };
+    };
+    l=s.length;
+    t=len-1;
+    if (l > t)
+    {
+        l=t;
+        s=s.substr(0,t);
+    };
+    if (l > 2)
+    {
+        r=s.substr(0,l-2)+'.' +s.substr(l-2,2);
+    }
+    else
+    {
+        if (l == 2)
+        {
+           r='0,'+s;
+        }
+        else
+        {
+            if (l == 1)
+            {
+                r='0,0'+s;
+            };
+        };
+    };
+    if (r == '')
+    {
+        r='0,00';
+    }
+    else
+    {
+        l=r.length;
+        if (l > 6)
+        {
+            j=l%3;
+            w=r.substr(0,j);
+            wa=r.substr(j,l-j-6);
+            wb=r.substr(l-6,6);
+            if (j > 0)
+            {
+                w+='.';
+            };
+            k=(l-j)/3-2;
+            for (i=0; i < k; i++)
+            {
+                w+=wa.substr(i*3,3)+'.';
+            };
+            r=w+wb;
+        };
+    };
+   };
+   if (r.length <= len)
+   {
+    cur.value=r;
+   }
+   else
+   {
+    cur.value=z;
+   };
+   return 'ok';
+};
+</script>
  
 <!-- Libs -->
   <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
@@ -121,7 +218,6 @@
   <link rel="stylesheet" href="assets/vendor/libs/sweetalert2/sweetalert2.css">
   <link rel="stylesheet" href="assets/vendor/libs/dropzone/dropzone.css">
   <link rel="stylesheet" href="assets/vendor/libs/flatpickr/flatpickr.css">
-
 
 
 </head>
@@ -434,228 +530,298 @@
             </div>
           </nav>
           <!-- / Layout navbar -->
-          <!-- Layout content -->
-      <div class="layout-content">
-          <!-- Content -->
-        <div class="container-fluid flex-grow-1 container-p-y">
-
-          <!--painel de eventos-->
-          <?php 
-            error_reporting(0);
-            $errou = $_GET['error'];
-            switch ($errou) {
-              case 1:
-                echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
-                        <button type='button' class='close' onclick='hide()'>&times;</button>
-                        Evento criado com sucesso!
-                      </div>";
-                break;
-              case 2:
-                echo "<div id='erro' class='alert alert-dark-danger alert-dismissible fade show'>
-                      <button type='button' class='close' onclick='hide()'>&times;</button>
-                      Erro ao cadastrar evento!
-                    </div>";
-                break;
-              case 3:
-                echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
-                      <button type='button' class='close' onclick='hide()'>&times;</button>
-                      O evento não pode acontecer em uma data anterior a atual!
-                    </div>";
-                break;
-              case 4:
-                echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
-                      <button type='button' class='close' onclick='hide()'>&times;</button>
-                      Dados salvos com sucesso!
-                    </div>";
-                break;
-              case 5:
-                echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
-                      <button type='button' class='close' onclick='hide()'>&times;</button>
-                      Erro ao editar os dados!
-                    </div>";
-              break;
-              case 6:
-                echo "<a href='' data-toggle='modal' data-target='#myModalvlr'><div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
-                      <button type='button' class='close' onclick='hide()'>&times;</button>
-                      Valor da inscrição não pode ser alterado! Clique Aqui...
-                    </div></a>";
-              default:
-                # code...
-                break;
-            }
-        ?>
-
-        <!-- Detalhes Começa Aqui -->
-            <h4 class="font-weight-bold py-3 mb-4">
-              Evento <span class="text-muted">#<?php echo $idEventos; ?></span>
-            </h4>
-
-            <div class="card">
-
-              <!-- Status -->
+<!-- EDITAR COMEÇA AQUI -->
+            <div class="card mb-4">
+              <h6 class="card-header">
+                Cadastro de Evento
+              </h6>
               <div class="card-body">
-                <strong class="mr-2">Status:</strong>
-                <?php 
-                     $dtEntrega=date("Y-m-d",strtotime("$evenDataInicial")); 
-                     $today = date("Y-m-d"); 
-                     
-                     if($dtEntrega>=$today){ 
-                       echo "<span class='text-big'><span class='badge badge-success'>Aberto</span></span>";
-                
-                      }else{
-                
-                      echo "<span class='text-big'><span class='badge badge-danger'>Encerrado</span></span>";
-                
-                      } 
-                ?>                
-                <span class="text-muted small ml-1"><?php echo date('d/m/Y', strtotime($evenDataInicial)); ?></span>
-              </div>
-              <hr class="m-0">
-              <!-- / Status -->
-              <!-- Info -->
-              <div class="card-body pb-1">
-                <div class="row">
-                  <div class="col-md-4 mb-3">
-                    <div class="text-muted small">Data</div><?php echo date('d/m/Y', strtotime($evenDataInicial));?> das <?php echo date("H:i", strtotime($evenHoraInicial));?> até <?php echo date("H:i", strtotime($evenHoraFinal)); ?>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <div class="text-muted small">Tipo de Trilha</div>
-                  <?php
-                    if ($evenTipoTrilha == 'INTEIRA') {
-                      echo "<span class='text-big'><span class='badge badge-success'>Inteira</span></span>";
-                    }else{
-                      echo "<span class='text-big'><span class='badge badge-warning'>Meia Trilha</span></span>";
-                    }
-                    
-                  ?>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <div class="text-muted small"> Inscritos</div>
-                    50
-                  </div>
+                <!-- Inserir imagem -->
+                <div>
+                  <form action="/upload" class="dropzone needsclick" id="dropzone-demo">
+                    <div class="dz-message needsclick">
+                      Insira aqui a imagem do seu evento
+                      <span class="note needsclick"></span>
+                    </div>
+                    <div class="fallback">
+                      <input name="file" type="file" multiple>
+                    </div>
+                  </form>
                 </div>
-              </div>
-              <hr class="m-0">
-              <!-- / Info -->
+                <!-- Javascript -->
+                <script>
+                  $(function() {
+                    $('#dropzone-demo').dropzone({
+                      parallelUploads: 2,
+                      maxFilesize:     50000,
+                      filesizeBase:    1000,
+                      addRemoveLinks:  true,
+                    });
 
-              <!-- Billing -->
-              <div class="card-body">
-                <h6 class="small font-weight-semibold">
-                  Informações do Evento
-                </h6>
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <div class="text-muted small">Nome do Evento</div>
-                    <?php echo $evenNome; ?>
+                    // Mock the file upload progress (only for the demo)
+                    //
+                    Dropzone.prototype.uploadFiles = function(files) {
+                      var minSteps         = 6;
+                      var maxSteps         = 60;
+                      var timeBetweenSteps = 100;
+                      var bytesPerStep     = 100000;
+                      var isUploadSuccess  = Math.round(Math.random());
+
+                      var self = this;
+
+                      for (var i = 0; i < files.length; i++) {
+
+                        var file = files[i];
+                        var totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
+
+                        for (var step = 0; step < totalSteps; step++) {
+                          var duration = timeBetweenSteps * (step + 1);
+
+                          setTimeout(function(file, totalSteps, step) {
+                            return function() {
+                              file.upload = {
+                                progress: 100 * (step + 1) / totalSteps,
+                                total: file.size,
+                                bytesSent: (step + 1) * file.size / totalSteps
+                              };
+
+                              self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
+                              if (file.upload.progress == 100) {
+
+                                if (isUploadSuccess) {
+                                  file.status =  Dropzone.SUCCESS;
+                                  self.emit('success', file, 'success', null);
+                                } else {
+                                  file.status =  Dropzone.ERROR;
+                                  self.emit('error', file, 'Some upload error', null);
+                                }
+
+                                self.emit('complete', file);
+                                self.processQueue();
+                              }
+                            };
+                          }(file, totalSteps, step), duration);
+                        }
+                      }
+                    };
+                  });
+                </script>
+                <!-- / Javascript -->
+                <!-- Fim inserir imagem -->
+                <br>
+                <form method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEventos; ?>" autocomplete="on">
+                  <div class="form-group">
+                    <label class="form-label">Nome do Evento</label>
+                    <input value="<?php echo $evenNome; ?>" name="nomeEven" type="text" required="" class="form-control">
                   </div>
-                  <div class="col-12">
-                    <div class="text-muted small">Descrição do Evento</div>
-                    <?php echo $evenDescr; ?>
+                  <div class="form-group">
+                    <label class="form-label">Descrição do Evento</label>      
+                    <textarea value="" name="descEven" required="" id="autosize-demo" rows="3" class="form-control"><?php echo $evenDescr; ?></textarea> 
                   </div>
+                <div class="form-group">
+                  <label class="form-label">Tipo da Trilha</label>
+                    <div class="input-group">
+                        <select name="tipoTrilha" class="custom-select flex-grow-1"> 
+                          <option value="inteira" <?php if($evenTipoTrilha === 'INTEIRA'){ echo 'selected';}?> >Trilha Completa</option>
+                          <option value="meia"<?php if($evenTipoTrilha === 'MEIA'){ echo 'selected'; }?> >Meia Trilha</option>
+                        </select>
+                    </div>
                 </div>
-              </div>
-              
-              <!-- / Billing -->
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label">Adesivo</label>
+                            <div class="input-group">
+                      <input name="adeQtd" value="<?php echo $iteAde; ?>" onkeypress="return onlynumber();" type="text" class="form-control">
+                      </div>  
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label class="form-label">Almoço</label>
+                        <div class="input-group">
+                          <input name="almoQtd" value="<?php echo $iteAlmo; ?>" onkeypress="return onlynumber();" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label class="form-label">Bebida</label>
+                        <div class="input-group">
+                          <input name="bebiQtd" value="<?php echo $iteBeb; ?>"  onkeypress="return onlynumber();" type="text" class="form-control">
+                        </div> 
+                    </div>
+                  </div>
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Quantidade Camisa P</label>
+                        <input value="<?php echo $camP; ?>" name="camisaP" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Quantidade Camisa M</label>
+                        <input value="<?php echo $camM; ?>" name="camisaM" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Quantidade Camisa G</label>
+                        <input value="<?php echo $camG; ?>" name="camisaG" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Quantidade Camisa GG</label>
+                        <input value="<?php echo $camGG; ?>" name="camisaGG" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Quantidade Camisa EG</label>
+                        <input value="<?php echo $camEG; ?>" name="camisaEG" onkeypress="return onlynumber();" type="text" class="form-control" placeholder="Qtd...">
+                      </div>
+                    </div>
+                  <div class="form-group">
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Data do Evento</label>
+                        <input value="<?php echo $evenDataInicial; ?>" name="dataEvento" required="" type="text" class="form-control" id="flatpickr-full">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Horário de Inicio</label>
+                        <input value="<?php echo $evenHoraInicial; ?>" name="horaInicio" type="text" class="form-control" id="flatpickr-time">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Horário de Fim</label>
+                        <input value="<?php echo $evenHoraFinal; ?>" name="horaFim" required="" type="text" class="form-control" id="flatpickr-time2">
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label class="form-label">Valor da Trilha</label>
+                        <input value="<?php echo $evenVlrInscri; ?>" name="vlrTrilha" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
+                      </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-label">Valor do Almoço</label>
+                            <input value="<?php echo $evenVlrAlmoco; ?>" name="vlrAlmo" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
+                        </div>
+                    </div>
+                  </div>                  
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label class="form-label">Rua</label>
+                          <input value="<?php echo $eveRua; ?>" name="rua" required="" type="text" class="form-control" placeholder="Rua">
+                        </div>
+                        <div class="form-group col-md-6 2">
+                          <label class="form-label">Bairro</label>
+                          <input value="<?php echo $eveBairro; ?>" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
+                        </div>
+                        <div class="form-group col-md-6 3">
+                          <label class="form-label">Cidade</label>
+                          <input value="<?php echo $eveCidade; ?>" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
+                        </div>
+                        <div class="form-group col">
+                          <label class="form-label">Estado</label>
+                            <select name="estado" class="custom-select flex-grow-1">
+                              <option value="AC">Acre</option>
+                              <option value="AL">Alagoas</option>
+                              <option value="AP">Amapá</option>
+                              <option value="AM">Amazonas</option>
+                              <option value="BA">Bahia</option>
+                              <option value="CE">Ceará</option>
+                              <option value="DF">Distrito Federal</option>
+                              <option value="ES">Espírito Santo</option>
+                              <option value="GO">Goiás</option>
+                              <option value="MA">Maranhão</option>
+                              <option value="MT">Mato Grosso</option>
+                              <option value="MS">Mato Grosso do Sul</option>
+                              <option value="MG">Minas Gerais</option>
+                              <option value="PA">Pará</option>
+                              <option value="PB">Paraíba</option>
+                              <option value="PR">Paraná</option>
+                              <option value="PE">Pernambuco</option>
+                              <option value="PI">Piauí</option>
+                              <option value="RJ">Rio de Janeiro</option>
+                              <option value="RN">Rio Grande do Norte</option>
+                              <option value="RS">Rio Grande do Sul</option>
+                              <option value="RO">Rondônia</option>
+                              <option value="RR">Roraima</option>
+                              <option value="SC">Santa Catarina</option>
+                              <option value="SP">São Paulo</option>
+                              <option value="SE">Sergipe</option>
+                              <option value="TO">Tocantins</option>
+                            </select>
+                          <!-- <input value="" name="estado" required="" type="text" class="form-control" placeholder="Estado"> -->
+                        </div>
+                      </div>
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+                </form>
+          <!-- EDITAR TERMINA AQUI -->
+          <!-- Javascript dos inputs-->
+                  <script>
+                    $(function() {
+                      // Date
+                      $('#flatpickr-date').flatpickr({
+                        altInput: true
+                      });
 
-              <!-- Shipping -->
-              <div class="card-body">
-                
-                <div class="row">
-                  <div class="col-md-2 mb-3">
-                    <div class="text-muted small">Quantiade de Camisa P</div>
-                    <?php echo $camP; ?>
-                  </div>
-                  <div class="col-md-2 mb-3">
-                    <div class="text-muted small">Quantiade de Camisa M</div>
-                    <?php echo $camM; ?>
-                  </div>
-                  <div class="col-md-2 mb-3">
-                    <div class="text-muted small">Quantiade de Camisa G</div>
-                    <?php echo $camG; ?>
-                  </div>
-                  <div class="col-md-2 mb-3">
-                    <div class="text-muted small">Quantiade de Camisa GG</div>
-                    <?php echo $camGG; ?>
-                  </div>
-                  <div class="col-md-2 mb-3">
-                    <div class="text-muted small">Quantiade de Camisa EG</div>
-                    <?php echo $camEG; ?>
-                  </div>
-                  <div class="col-md-4 mb-4">
-                    <div class="text-muted small">Quantiade de Adesivos</div>
-                    <?php echo $iteAde; ?>
-                  </div>
-                  <div class="col-md-4 mb-3">
-                    <div class="text-muted small">Quantiade de Bebidas</div>
-                    <?php echo $iteBeb; ?>
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <div class="text-muted small">Quantiade de Almoço</div>
-                    <?php echo $iteAlmo; ?>
-                  </div>
-                  <div class="col-md-6 mb-4">
-                    <div class="text-muted small">Valor da Inscrição</div>
-                    <?php echo 'R$' . number_format($evenVlrInscri, 2, ',', '.'); ?>
-                  </div>
-                  <div class="col-md-6 mb-3">
-                    <div class="text-muted small">Valor da Almoço</div>
-                    <?php echo 'R$' . number_format($evenVlrAlmoco, 2, ',', '.');?>
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <div class="text-muted small">Rua</div>
-                    <?php echo $eveRua; ?>
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <div class="text-muted small">Bairro</div>
-                    <?php echo $eveBairro; ?>
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <div class="text-muted small">Cidade</div>
-                    <?php echo $eveCidade; ?>
-                  </div>
-                  <div class="col-md-3 mb-3">
-                    <div class="text-muted small">Estado</div>
-                    <?php echo $eveEstado; ?>
-                  </div>
-                </div>
-              </div>
-              <hr class="m-0">
-              <!-- / Shipping -->
+                      // Time
+                      $('#flatpickr-time').flatpickr({
+                        enableTime: true,
+                        noCalendar: true,
+                        altInput: true
+                      });
+                      // Time
+                      $('#flatpickr-time2').flatpickr({
+                        enableTime: true,
+                        noCalendar: true,
+                        altInput: true
+                      });
 
-              <!-- Items -->
-              <div class="card-body">
-                <h6 class="small font-weight-semibold">
-                  Localização Evento
-                </h6>
-                <!-- MAPS -->
+                      // Datetime
+                      $('#flatpickr-datetime').flatpickr({
+                        enableTime: true,
+                        altInput: true
+                      });
 
-                <!-- final maps -->
+                      // Full
+                      $('#flatpickr-full').flatpickr({
+                        weekNumbers: true,
+                        minDate: 'today',
+                        // dateFormat: 'd-m-y'
+                        altInput: true,
+                        altFormat: "F j, Y",
+                        dateFormat: "Y-m-d",
 
-              </div>
-              <!-- / Items -->
-          </div>
-          <!-- / Content -->
-        <!-- DETALHES TERMINA AQUI -->
-      </div>
-          <!-- Layout content -->
-        </div>
-        <!-- / Layout container -->
-      </div>
+                      });
+                        flatpickr ( " .flatpickr " , {
+                            locale :  ' pt '
+                        });
+
+                      // Range
+                      $('#flatpickr-range').flatpickr({
+                        mode: 'range',
+                        altInput: true
+                      });
+                      flatpickr(myElement, {
+                          "locale": "pt"  // locale for this instance only
+                      });
+
+                      // Inline
+                      $('#flatpickr-inline').flatpickr({
+                        inline: true,
+                        altInput: true,
+                        allowInput: false
+                      });
+                    });
+                  </script>
+                  <!-- / Javascript -->
+                  
       <!-- Overlay -->
       <div class="layout-overlay layout-sidenav-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
 
-    <!-- Core scripts -->
+  <!-- Core scripts -->
+  <script src="assets/vendor/libs/popper/popper.js"></script>
+  <script src="assets/vendor/js/bootstrap.js"></script>
+  <script src="assets/vendor/js/sidenav.js"></script>
 
-    
-    <script src="assets/vendor/libs/popper/popper.js"></script>
-    <script src="assets/vendor/js/bootstrap.js"></script>
-    <script src="assets/vendor/js/sidenav.js"></script>
-
-    
-   <!-- Libs -->
-    <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <!-- Libs -->
+  <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+  <script>
+  // Quill does not support IE 10 and below so don't load it to prevent console errors
+  if (typeof document.documentMode !== 'number' || document.documentMode > 10) {
+    document.write('\x3Cscript src="assets/vendor/libs/quill/quill.js">\x3C/script>');
+  }
+</script>
     <script src="assets/vendor/libs/moment/moment.js"></script>
     <script src="assets/vendor/libs/minicolors/minicolors.js"></script>
     <script src="assets/vendor/libs/growl/growl.js"></script>
@@ -665,11 +831,8 @@
     <script src="assets/vendor/libs/flatpickr/flatpickr.js"></script>
     <script src="https://unpkg.com/browse/flatpickr@4.6.2/dist/l10n/pt.js"></script>
 
-
-
-    <!-- Demo -->
-    <script src="assets/js/demo.js"></script>
-    <script src="assets/js/ui_notifications.js"></script>
-    <script src="assets/js/tables_datatables.js"></script>
+  <!-- Demo -->
+  <script src="assets/js/demo.js"></script>
+  <script src="assets/js/pages_articles_edit.js"></script>
   </body>
 </html>

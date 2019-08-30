@@ -70,7 +70,7 @@
 			$evenNome = htmlspecialchars(trim(strtoupper($_POST['nomeEven'])));
 			$evenDesc = htmlspecialchars(trim(strtoupper($_POST['descEven'])));
 			$evenTipoTrilha = htmlspecialchars(trim(strtoupper($_POST['tipoTrilha'])));
-			$evenData = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
+			$evenDataInicial = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
 			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
 			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
 			$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['vlrTrilha'])));
@@ -78,6 +78,15 @@
 			$evenBairro = htmlspecialchars(trim(strtoupper($_POST['bairro'])));
 			$evenCidade = htmlspecialchars(trim(strtoupper($_POST['cidade'])));
 			$evenEstado = htmlspecialchars(trim(strtoupper($_POST['estado'])));
+			$adeQtd = htmlspecialchars(trim(strtoupper($_POST['almoQtd'])));
+			$almoQtd = htmlspecialchars(trim(strtoupper($_POST['adeQtd'])));
+			$bebiQtd = htmlspecialchars(trim(strtoupper($_POST['bebiQtd'])));
+			$camP = htmlspecialchars(trim(strtoupper($_POST['camisaP'])));
+			$camM = htmlspecialchars(trim(strtoupper($_POST['camisaM'])));
+			$camG = htmlspecialchars(trim(strtoupper($_POST['camisaG'])));
+			$camGG = htmlspecialchars(trim(strtoupper($_POST['camisaGG'])));
+			$camEG = htmlspecialchars(trim(strtoupper($_POST['camisaEG'])));
+			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
 
 
 			//echo $processador."<br>".$memoriaram."<br>".$storage."<br>".$placamae."<br>".$fonte."<br>".$leitor."<br>".$finalidade."<br>".$so."<br>".$situacao."<br>".$obs;
@@ -85,24 +94,37 @@
 			$qr = mysqli_query($con,"UPDATE evento SET  evenNome = '$evenNome',
 															evenDescr = '$evenDesc',
 															evenTipoTrilha = '$evenTipoTrilha',
-															evenData ='$evenData',
+															evenDataInicial ='$evenDataInicial',
 															evenHoraInicial ='$evenHoraInicio',
-															evenHoraFinal = '$evenHoraFim' 
-																WHERE idEventos = $idEven ")or die(mysqli_error($con));	
-
-				if($qr){
+															evenHoraFinal = '$evenHoraFim' ,
+															evenVlrAlmoco = '$valorAlmo'
+														WHERE idEventos = $idEven ")or die(mysqli_error($con));
+		if ($qr) {		
+			$qr_camisa =  mysqli_query($con,"UPDATE camisa SET  camTamP = '$camP',
+																camTamM = '$camM',
+																camTamG = '$camG',
+																camTamGG = '$camGG',
+																camTamEG = '$camEG'
+																WHERE idCamisa = $idEven")or die(mysqli_error($con));
+		}
+		if($qr_camisa){
+			$qr_item = 	mysqli_query($con,"UPDATE item_trilha SET  iteAdesivo = '$adeQtd',
+																   iteBebida = '$bebiQtd',
+																   iteAlmoco = '$almoQtd'
+																WHERE idItem_Trilha = $idEven")or die(mysqli_error($con));
+		}
+		if($qr_item){
 					$qrcomp = mysqli_query($con,"UPDATE endereco SET eveRua = '$evenRua' ,
 																	 eveBairro = '$evenBairro',
 																	 eveCidade = '$evenCidade',
 																	 eveEstado = '$evenEstado'
 																 WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));				
-				}
+		}
 				$valorBD = mysqli_query($con,"SELECT evenVlrInscri from evento WHERE idEventos = '$idEven' ");
 				$vBD = mysqli_fetch_assoc($valorBD);
 				$vlrBD = $vBD['evenVlrInscri'];
 				if ($vlrBD != $evenVlrTrilha ) {
-
-				header("Location:../pages/eventos.php?error=6");
+					header("Location:../pages/eventos.php?error=6");
 				}else{
 					if(!mysqli_error()){
 						header("Location:../pages/eventos.php?error=4");
@@ -209,11 +231,11 @@
 			$camGG = htmlspecialchars(trim(strtoupper($_POST['camisaGG'])));
 			$camEG = htmlspecialchars(trim(strtoupper($_POST['camisaEG'])));
 			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
-			//$id = $_GET['id'];
-			$valorAlmoFor =  str_replace(",",".",$valorAlmo);
-			$valorTrilha =  str_replace(",",".",$evenVlrTrilha);
+			$id = $_GET['id'];
+			$valorAlmo = str_replace('.','',$valorAlmo);
+    		$evenVlrTrilha= str_replace('.','',$evenVlrTrilha);
 
-	
+			
 				//header("Location:../pages/cadastraEvento.php?error=3");				
 			$qr = mysqli_query($con,"INSERT INTO evento(evenNome,
 															evenDescr,
@@ -230,8 +252,8 @@
 															'$evenDataInicial',
 															'$evenHoraInicio',
 															'$evenHoraFim',
-															'$valorTrilha',
-															'$valorAlmoFor',
+															'$evenVlrTrilha',
+															'$valorAlmo',
 															'$id')")or die(mysqli_error($con));
 				$even = mysqli_query($con,"SELECT MAX(idEventos)as max from evento");
 			    $showEven = mysqli_fetch_assoc($even);

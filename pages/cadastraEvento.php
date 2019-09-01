@@ -12,6 +12,21 @@
   $even = mysqli_query($con,"SELECT idEventos, evenNome, evenDescr, evenHoraInicial, evenHoraFinal, evenTipoTrilha, evenVlrInscri, evenDataInicial from evento WHERE promoter_idUsuario = '$id';")or die(mysqli_error($con));
   $idEven1 = mysqli_fetch_assoc($even);
   $idEven = $idEven1['idEventos'];
+
+  if(isset($_FILES['arquivo'])){
+    $extensao = strtolower(substr($_FILES['arquivo']['name'], -4));//pega a extensao do arquivo
+    $novo_nome = md5(time()).$extensao;//define o nome do arquivo
+    $diretorio = "upload/";//define o diretorio para onde enviaremos o arquivo
+
+    move_uploaded_file($_FILES['arquivo']['tmp_name'], $diretorio.$novo_nome);//efetua o upload
+
+    $sql_code ="INSERT INTO evento_img(eveImgNome, eveImgData, Evento_idEventos)VALUES('$novo_nome', NOW())";
+    if($mysqli -> query($sql_code)){
+      echo "Aqruivo enviado com sucesso.";
+    }else{
+      echo "Falha ao enviar arquivo.";
+    }
+  }
   
 ?>
 <!DOCTYPE html>
@@ -35,6 +50,7 @@
   <link rel="stylesheet" href="assets/vendor/fonts/linearicons.css">
   <link rel="stylesheet" href="assets/vendor/fonts/open-iconic.css">
   <link rel="stylesheet" href="assets/vendor/fonts/pe-icon-7-stroke.css">
+
   <!-- Core stylesheets --> 
   <link rel="stylesheet" href="assets/vendor/css/rtl/bootstrap.css" class="theme-settings-bootstrap-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/appwork.css" class="theme-settings-appwork-css">
@@ -209,6 +225,9 @@ function dinheiro(cur,len)
   <link rel="stylesheet" href="assets/vendor/libs/sweetalert2/sweetalert2.css">
   <link rel="stylesheet" href="assets/vendor/libs/dropzone/dropzone.css">
   <link rel="stylesheet" href="assets/vendor/libs/flatpickr/flatpickr.css">
+  <!-- LIB DAS ETAPAS -->
+  <link rel="stylesheet" href="assets/vendor/libs/swiper/swiper.css">
+  <link rel="stylesheet" href="assets/vendor/libs/smartwizard/smartwizard.css">
 
 
 
@@ -573,85 +592,38 @@ function dinheiro(cur,len)
             }
         ?>
         <!--CADASTRO EVENTO-->
+            <div id="shop-checkout-wizard" class="container ui-bordered p-0 pb-4 my-5">
+              <!-- Steps -->
+              <ul class="px-4 px-lg-5 pt-4">
+                <li>
+                  <a href="#shop-checkout-wizard-1" class="mb-4">
+                    <span class="sw-done-icon ion ion-md-checkmark"></span>
+                    <span class="sw-icon ion ion-md-paper"></span>
+                    <div class="text-light small">ETAPA 1</div>
+                    Cadastrando Dados
+                  </a>
+                </li>
+                <li>
+                  <a href="#shop-checkout-wizard-2" class="mb-4">
+                    <span class="sw-done-icon ion ion-md-checkmark"></span>
+                    <span class="sw-icon ion ion-md-image"></span>
+                    <div class="text-light small">ETAPA 2</div>
+                    Cadastrando Imagem
+                  </a>
+                </li>
+              </ul>
+              <!-- / Steps -->
+            </div>
+          <div id="shop-checkout-wizard-1" class="animated fadeIn">  
             <div class="card mb-4">
               <h6 class="card-header">
                 Cadastro de Evento
               </h6>
-              <div class="card-body">
-                <!-- Inserir imagem -->
-                <div>
-                  <form action="/upload" class="dropzone needsclick" id="dropzone-demo">
-                    <div class="dz-message needsclick">
-                      Insira aqui a imagem do seu evento
-                      <span class="note needsclick"></span>
-                    </div>
-                    <div class="fallback">
-                      <input name="file" type="file" multiple>
-                    </div>
-                  </form>
-                </div>
-                <!-- Javascript -->
-                <script>
-                  $(function() {
-                    $('#dropzone-demo').dropzone({
-                      parallelUploads: 2,
-                      maxFilesize:     50000,
-                      filesizeBase:    1000,
-                      addRemoveLinks:  true,
-                    });
-
-                    // Mock the file upload progress (only for the demo)
-                    //
-                    Dropzone.prototype.uploadFiles = function(files) {
-                      var minSteps         = 6;
-                      var maxSteps         = 60;
-                      var timeBetweenSteps = 100;
-                      var bytesPerStep     = 100000;
-                      var isUploadSuccess  = Math.round(Math.random());
-
-                      var self = this;
-
-                      for (var i = 0; i < files.length; i++) {
-
-                        var file = files[i];
-                        var totalSteps = Math.round(Math.min(maxSteps, Math.max(minSteps, file.size / bytesPerStep)));
-
-                        for (var step = 0; step < totalSteps; step++) {
-                          var duration = timeBetweenSteps * (step + 1);
-
-                          setTimeout(function(file, totalSteps, step) {
-                            return function() {
-                              file.upload = {
-                                progress: 100 * (step + 1) / totalSteps,
-                                total: file.size,
-                                bytesSent: (step + 1) * file.size / totalSteps
-                              };
-
-                              self.emit('uploadprogress', file, file.upload.progress, file.upload.bytesSent);
-                              if (file.upload.progress == 100) {
-
-                                if (isUploadSuccess) {
-                                  file.status =  Dropzone.SUCCESS;
-                                  self.emit('success', file, 'success', null);
-                                } else {
-                                  file.status =  Dropzone.ERROR;
-                                  self.emit('error', file, 'Some upload error', null);
-                                }
-
-                                self.emit('complete', file);
-                                self.processQueue();
-                              }
-                            };
-                          }(file, totalSteps, step), duration);
-                        }
-                      }
-                    };
-                  });
-                </script>
-                <!-- / Javascript -->
-                <!-- Fim inserir imagem -->
-                <br>
+              <div class="card-body">           
                 <form method="post" action="../config/tratadados.php?opc=8&id=<?php echo $id ?>" autocomplete="on">
+                  <!-- inserir imagem -->
+
+                  <!-- fim inserir imagem -->
                   <div class="form-group">
                     <label class="form-label">Nome do Evento</label>
                     <input value="" name="nomeEven" type="text" required="" class="form-control" placeholder="Nome">
@@ -671,19 +643,19 @@ function dinheiro(cur,len)
                       </div>
                   </div>
                   <div class="form-row">
-                    <div class="form-group col">
+                    <div class="form-group col-md-6">
                         <label class="form-label">Adesivo</label>
                             <div class="input-group">
                       <input name="adeQtd" value="" placeholder="Qtd..." onkeypress="return onlynumber();" type="text" class="form-control">
                       </div>  
                     </div>
-                    <div class="form-group col">
+                    <div class="form-group col-md-6">
                       <label class="form-label">Almoço</label>
                         <div class="input-group">
                           <input name="almoQtd" value="" onkeypress="return onlynumber();" placeholder="Qtd..." type="text" class="form-control">
                         </div>
                     </div>
-                    <div class="form-group col">
+                    <div class="form-group col-md-6">
                       <label class="form-label">Bebida</label>
                         <div class="input-group">
                           <input name="bebiQtd" value=""  onkeypress="return onlynumber();" placeholder="Qtd..." type="text" class="form-control">
@@ -691,46 +663,46 @@ function dinheiro(cur,len)
                     </div>
                   </div>
                   <div class="form-row">
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Quantidade Camisa P</label>
                         <input value="" name="camisaP" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
                       </div>
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Quantidade Camisa M</label>
                         <input value="" name="camisaM" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
                       </div>
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Quantidade Camisa G</label>
                         <input value="" name="camisaG" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
                       </div>
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Quantidade Camisa GG</label>
                         <input value="" name="camisaGG" type="text" onkeypress="return onlynumber();" class="form-control" placeholder="Qtd...">
                       </div>
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Quantidade Camisa EG</label>
                         <input value="" name="camisaEG" onkeypress="return onlynumber();" type="text" class="form-control" placeholder="Qtd...">
                       </div>
                     </div>
                   <div class="form-group">
                     <div class="form-row">
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Data do Evento</label>
                         <input value="" name="dataEvento" required="" type="text" class="form-control" id="flatpickr-full">
                       </div>
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Horário de Inicio</label>
                         <input value="" name="horaInicio" type="text" class="form-control" id="flatpickr-time">
                       </div>
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Horário de Fim</label>
                         <input value="" name="horaFim" required="" type="text" class="form-control" id="flatpickr-time2">
                       </div>
-                      <div class="form-group col">
+                      <div class="form-group col-md-6">
                         <label class="form-label">Valor da Trilha</label>
                         <input value="" name="vlrTrilha" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
                       </div>
-                        <div class="form-group col">
+                        <div class="form-group col-md-6">
                             <label class="form-label">Valor do Almoço</label>
                             <input value="" name="vlrAlmo" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
                         </div>
@@ -741,15 +713,15 @@ function dinheiro(cur,len)
                           <label class="form-label">CEP</label>
                           <input id="cep" value="" name="cep" required="" type="text" class="form-control" placeholder="CEP">
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col-md-6">
                           <label class="form-label">Rua</label>
                           <input  id="rua" value="" name="rua" required="" type="text" class="form-control" placeholder="Rua">
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group col-md-6 2">
                           <label class="form-label">Bairro</label>
                           <input id="bairro" value="" name="bairro" required="" type="text" class="form-control" placeholder="Bairro">
                         </div>
-                        <div class="form-group col">
+                        <div class="form-group  col-md-6 3">
                           <label class="form-label">Cidade</label>
                           <input id="cidade" value="" name="cidade" required="" type="text" class="form-control" placeholder="Cidade">
                         </div>
@@ -758,7 +730,7 @@ function dinheiro(cur,len)
                           <input id="estado" value="" name="estado" required="" type="text" class="form-control" placeholder="Estado">
                         </div>
                       </div>
-                  <button type="submit" class="btn btn-primary">Salvar</button>
+                  <button type="submit" class="btn btn-primary">Continuar</button>
                 </form>
                 <!-- FINAL DO CADASTRO -->
                 <!-- Javascript dos inputs-->
@@ -822,6 +794,7 @@ function dinheiro(cur,len)
                   <!-- / Javascript -->
               </div>
             </div>
+          </div>
           <!-- Layout content -->
         </div>
         <!-- / Layout container -->
@@ -849,6 +822,10 @@ function dinheiro(cur,len)
     <script src="assets/vendor/libs/dropzone/dropzone.js"></script>
     <script src="assets/vendor/libs/flatpickr/flatpickr.js"></script>
     <script src="https://unpkg.com/browse/flatpickr@4.6.2/dist/l10n/pt.js"></script>
+    <!-- LIB DAS ETAPAS -->
+    <script src="assets/vendor/js/mega-dropdown.js"></script></body>
+    <script src="assets/vendor/libs/swiper/swiper.js"></script>
+    <script src="assets/vendor/libs/smartwizard/smartwizard.js"></script>
 
 
 
@@ -856,5 +833,6 @@ function dinheiro(cur,len)
     <script src="assets/js/demo.js"></script>
     <script src="assets/js/ui_notifications.js"></script>
     <script src="assets/js/tables_datatables.js"></script>
+    <script src="assets/js/shop.js"></script>
   </body>
 </html>

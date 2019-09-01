@@ -159,11 +159,10 @@ ENGINE = InnoDB;
 -- Table `offroadv1`.`Evento_img`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `offroadv1`.`Evento_img` (
-  `idEvento_img` INT(11) NOT NULL,
+  `idEvento_img` INT(11) NOT NULL AUTO_INCREMENT,
   `eveImgNome` VARCHAR(255) NULL,
-  `eveImgTipo` VARCHAR(255) NULL,
+  `eveImgData` DATE NULL,
   `Evento_idEventos` INT(11) NOT NULL,
-  `eveImgPrin` VARCHAR(255) NULL,
   PRIMARY KEY (`idEvento_img`, `Evento_idEventos`),
   INDEX `fk_Evento_img_Evento1_idx` (`Evento_idEventos` ASC) ,
   CONSTRAINT `fk_Evento_img_Evento1`

@@ -88,6 +88,18 @@
 			$camEG = htmlspecialchars(trim(strtoupper($_POST['camisaEG'])));
 			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
 
+			$vlrTrilha = $evenVlrTrilha;
+			$valorAlmo = str_replace('.','',$valorAlmo);
+    		$evenVlrTrilha= str_replace('.','',$evenVlrTrilha);
+    		$valorBD = mysqli_query($con,"SELECT evenVlrInscri from evento WHERE idEventos = '$idEven' ");
+				$vBD = mysqli_fetch_assoc($valorBD);
+				$vlrBD = $vBD['evenVlrInscri'];
+			if ($vlrBD != $vlrTrilha ){
+
+				header("Location:../pages/eventos.php?error=6");
+
+			}else{
+
 
 			//echo $processador."<br>".$memoriaram."<br>".$storage."<br>".$placamae."<br>".$fonte."<br>".$leitor."<br>".$finalidade."<br>".$so."<br>".$situacao."<br>".$obs;
 	
@@ -99,41 +111,37 @@
 															evenHoraFinal = '$evenHoraFim' ,
 															evenVlrAlmoco = '$valorAlmo'
 														WHERE idEventos = $idEven ")or die(mysqli_error($con));
-		if ($qr) {		
-			$qr_camisa =  mysqli_query($con,"UPDATE camisa SET  camTamP = '$camP',
-																camTamM = '$camM',
-																camTamG = '$camG',
-																camTamGG = '$camGG',
-																camTamEG = '$camEG'
-																WHERE idCamisa = $idEven")or die(mysqli_error($con));
-		}
-		if($qr_camisa){
-			$qr_item = 	mysqli_query($con,"UPDATE item_trilha SET  iteAdesivo = '$adeQtd',
-																   iteBebida = '$bebiQtd',
-																   iteAlmoco = '$almoQtd'
-																WHERE idItem_Trilha = $idEven")or die(mysqli_error($con));
-		}
-		if($qr_item){
-					$qrcomp = mysqli_query($con,"UPDATE endereco SET eveRua = '$evenRua' ,
-																	 eveBairro = '$evenBairro',
-																	 eveCidade = '$evenCidade',
-																	 eveEstado = '$evenEstado'
-																 WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));				
-		}
-				$valorBD = mysqli_query($con,"SELECT evenVlrInscri from evento WHERE idEventos = '$idEven' ");
-				$vBD = mysqli_fetch_assoc($valorBD);
-				$vlrBD = $vBD['evenVlrInscri'];
-				if ($vlrBD != $evenVlrTrilha ) {
-					header("Location:../pages/eventos.php?error=6");
-				}else{
-					if(!mysqli_error()){
+				if ($qr) {		
+					$qr_camisa =  mysqli_query($con,"UPDATE camisa SET  camTamP = '$camP',
+																		camTamM = '$camM',
+																		camTamG = '$camG',
+																		camTamGG = '$camGG',
+																		camTamEG = '$camEG'
+																		WHERE idCamisa = $idEven")or die(mysqli_error($con));
+				}
+				if($qr_camisa){
+					$qr_item = 	mysqli_query($con,"UPDATE item_trilha SET  iteAdesivo = '$adeQtd',
+																		   iteBebida = '$bebiQtd',
+																		   iteAlmoco = '$almoQtd'
+																		WHERE idItem_Trilha = $idEven")or die(mysqli_error($con));
+				}
+				if($qr_item){
+							$qrcomp = mysqli_query($con,"UPDATE endereco SET eveRua = '$evenRua' ,
+																			 eveBairro = '$evenBairro',
+																			 eveCidade = '$evenCidade',
+																			 eveEstado = '$evenEstado'
+																		 WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));				
+				}
+				if(!mysqli_error()){
 						header("Location:../pages/eventos.php?error=4");
 					}else{
 						header("Location:../pages/eventos.php?error=5");
 					}
+					
 				}
+				
 			break;
-		case 3://Deletar computador
+				case 3://Deletar computador
 					$idCP = $_GET['idCP'];
 					$res = mysqli_query($con,"Delete from computador WHERE comp_id = '$idCP' ")or die(mysqli_error($con));
 					if($res){
@@ -294,7 +302,8 @@
 				if (!$qr) {
 					header("Location:../pages/eventos.php?error=2");
 				}else{
-	                  header("Location:../pages/eventos.php?error=1");
+					header("Location:../pages/upload.php?idEvento=$idEven");	
+	                  //header("Location:../pages/eventos.php?error=1");
 				}
 			break;
 		case 9://Autoriza mudança de valor
@@ -304,6 +313,89 @@
 
 			break;
 		case 10://Cadastrar computador
+			  
+			$arquivo = $_FILES['arquivo']['name'];
+			
+			//Pasta onde o arquivo vai ser salvo
+			$_UP['pasta'] = '../pages/upload';
+			
+			//Tamanho máximo do arquivo em Bytes
+			$_UP['tamanho'] = 1024*1024*100; //5mb
+			
+			//Array com a extensões permitidas
+			$_UP['extensoes'] = array('png', 'jpg', 'jpeg', 'gif');
+			
+			//Renomeiar
+			$_UP['renomeia'] = false;
+			
+			//Array com os tipos de erros de upload do PHP
+			$_UP['erros'][0] = 'Não houve erro';
+			$_UP['erros'][1] = 'O arquivo no upload é maior que o limite do PHP';
+			$_UP['erros'][2] = 'O arquivo ultrapassa o limite de tamanho especificado no HTML';
+			$_UP['erros'][3] = 'O upload do arquivo foi feito parcialmente';
+			$_UP['erros'][4] = 'Não foi feito o upload do arquivo';
+			
+			//Verifica se houve algum erro com o upload. Sem sim, exibe a mensagem do erro
+			if($_FILES['arquivo']['error'] != 0){
+				die("Não foi possivel fazer o upload, erro: <br />". $_UP['erros'][$_FILES['arquivo']['error']]);
+				exit; //Para a execução do script
+			}
+			
+			//Faz a verificação da extensao do arquivo
+			$extensao = strtolower(end(explode('.', $_FILES['arquivo']['name'])));
+			if(array_search($extensao, $_UP['extensoes'])=== false){		
+				echo "
+					
+					<script type=\"text/javascript\">
+						alert(\"A imagem não foi cadastrada extesão inválida.\");
+					</script>
+				";
+			}
+			
+			//Faz a verificação do tamanho do arquivo
+			else if ($_UP['tamanho'] < $_FILES['arquivo']['size']){
+				echo "
+					
+					<script type=\"text/javascript\">
+						alert(\"Arquivo muito grande.\");
+					</script>
+				";
+			}
+			
+			//O arquivo passou em todas as verificações, hora de tentar move-lo para a pasta foto
+			else{
+				//Primeiro verifica se deve trocar o nome do arquivo
+				if($UP['renomeia'] == true){
+					//Cria um nome baseado no UNIX TIMESTAMP atual e com extensão .jpg
+					$nome_final = time().'.jpg';
+				}else{
+					//mantem o nome original do arquivo
+					$nome_final = $_FILES['arquivo']['name'];
+				}
+				//Verificar se é possivel mover o arquivo para a pasta escolhida
+				if(move_uploaded_file($_FILES['arquivo']['tmp_name'], $_UP['pasta']. $nome_final)){
+					//Upload efetuado com sucesso, exibe a mensagem
+					$query = mysqli_query($conn, "INSERT INTO usuarios (
+					nome_imagem) VALUES('$nome_final')");
+					echo "
+						
+						<script type=\"text/javascript\">
+							alert(\"Imagem cadastrada com Sucesso.\");
+						</script>
+					";	
+				}else{
+					//Upload não efetuado com sucesso, exibe a mensagem
+					echo "
+						
+						<script type=\"text/javascript\">
+							alert(\"Imagem não foi cadastrada com Sucesso.\");
+						</script>
+					";
+				}
+			}
+			  
+			break;
+		case 11://Cadastrar computador
 			# code...
 			break;
 		default:

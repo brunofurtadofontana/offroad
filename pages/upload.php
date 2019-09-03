@@ -535,8 +535,8 @@
               </h6>
               <!-- upload de imagem  -->
                 <div class="card-body">
-                  <form action="../config/tratadados.php?opc=10&idEvento=<?php echo $idEven ?>&id=<?php echo $id ?>" method="POST" enctype="multpart/form-data">               
-                     <input id="arquivo" name="arquivo" type="file">               
+                  <form action="../config/tratadados.php?opc=10&idEvento=<?php echo $idEven ?>&id=<?php echo $id ?>" method="POST" enctype="multipart/form-data">               
+                     <input type="file"  name="files[]" id="imageURL" multiple />            
                     <button type="submit" class="btn btn-primary">Salvar</button>
                   </form>
                 </div>

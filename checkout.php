@@ -322,7 +322,7 @@
             $mostrar = mysqli_fetch_assoc($res);
             $valor = $mostrar['evenVlrInscri'];
             $title = $mostrar['evenNome'];
-            $data = $mostrar['evenData'];
+            $data = $mostrar['evenDataInicial'];
             $data = str_replace("/", "-", $data);
             
            

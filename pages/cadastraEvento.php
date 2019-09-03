@@ -68,7 +68,7 @@
           $.get("http://apps.widenet.com.br/busca-cep/api/cep.json", { code: cep_code },
              function(result){
                 if( result.status!=1 ){
-                   //alert(result.message || "Houve um erro desconhecido");
+                   alert(result.message || "Houve um erro desconhecido");
                    return;
                 }
                 $("input#cep").val( result.code );

@@ -1,7 +1,5 @@
 {
   "name": "offroadspeed",
-  "integrations": {
-    "cordova": {}
-  },
+  "integrations": {},
   "type": "angular"
 }

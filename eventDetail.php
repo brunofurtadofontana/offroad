@@ -159,7 +159,7 @@ $idEvento = $_GET['id'];
             $title = $show['evenNome'];
             $valor = $show['evenVlrInscri'];
             $desc = $show['evenDescr'];
-            $data = $show['evenData'];
+            $data = $show['evenDataInicial'];
             $horaIn = $show['evenHoraInicial'];
             $tipo = $show['evenTipoTrilha'];
 

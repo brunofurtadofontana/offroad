@@ -89,15 +89,21 @@
 			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
 
 			$vlrTrilha = $evenVlrTrilha;
-			$valorAlmo = str_replace('.','',$valorAlmo);
+			$valorAlmo2 = str_replace('.','',$valorAlmo);
     		$evenVlrTrilha= str_replace('.','',$evenVlrTrilha);
-    		$valorBD = mysqli_query($con,"SELECT evenVlrInscri from evento WHERE idEventos = '$idEven' ");
+    		$valorBD = mysqli_query($con,"SELECT evenVlrInscri, evenVlrAlmoco from evento WHERE idEventos = '$idEven' ");
 				$vBD = mysqli_fetch_assoc($valorBD);
 				$vlrBD = $vBD['evenVlrInscri'];
+				$vlrBDalmo = $vBD['evenVlrAlmo'];
 			if ($vlrBD != $vlrTrilha ){
 
 				header("Location:../pages/eventos.php?error=6");
 
+			}
+			if ($vlrBDalmo == $valorAlmo) {
+
+				echo "mesmo valor";
+				
 			}else{
 
 
@@ -109,7 +115,7 @@
 															evenDataInicial ='$evenDataInicial',
 															evenHoraInicial ='$evenHoraInicio',
 															evenHoraFinal = '$evenHoraFim' ,
-															evenVlrAlmoco = '$valorAlmo'
+															evenVlrAlmoco = '$valorAlmo2'
 														WHERE idEventos = $idEven ")or die(mysqli_error($con));
 				if ($qr) {		
 					$qr_camisa =  mysqli_query($con,"UPDATE camisa SET  camTamP = '$camP',
@@ -133,7 +139,9 @@
 																		 WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));				
 				}
 				if(!mysqli_error()){
-						header("Location:../pages/eventos.php?error=4");
+						// header("Location:../pages/eventos.php?error=4");
+					header("Location:../pages/editaUp.php?idEvento=$idEven");
+
 					}else{
 						header("Location:../pages/eventos.php?error=5");
 					}
@@ -313,11 +321,13 @@
 
 			break;
 		case 10://Cadastrar computador
+		
+
 		if(isset($_FILES['files'])){
         $errors= array();
        
     	foreach($_FILES['files']['tmp_name'] as $key => $tmp_name ){
-    		$file_name = md5(rand(1,999)).$_FILES['files']['name'][$key];
+    		$file_name = md5($_FILES['files']['name'][$key]);
             $file_size =$_FILES['files']['size'][$key];
             $file_tmp =$_FILES['files']['tmp_name'][$key];
             $file_type=$_FILES['files']['type'][$key];
@@ -335,9 +345,15 @@
                     $new_dir="../pages/upload/".$file_name.time();
                      rename($file_tmp,$new_dir) ;				
                 }
+
                  
-                 
-               //insert vai aqui
+            $qrimg = mysqli_query($con,"INSERT INTO evento_img (eveImgNome,
+																eveImgData,
+																Evento_idEventos) 
+													VALUES ('$file_name',
+															 NOW(),
+															'$idEven')")or die(mysqli_error($con));
+               
 
             }else{
                     print_r($errors);
@@ -345,14 +361,51 @@
             
         }
     	if(empty($error)){
-    		echo "Success";
            
-           // header("Location:../pages/anuncio.php");
+           header("Location:../pages/eventos.php?error=1");
     	}
     }
 			break;
-		case 11://Cadastrar computador
-			# code...
+		case 11://EDITA IMAGEM
+			if(isset($_FILES['files'])){
+        $errors= array();
+       
+    	foreach($_FILES['files']['tmp_name'] as $key => $tmp_name ){
+    		$file_name = md5($_FILES['files']['name'][$key]);
+            $file_size =$_FILES['files']['size'][$key];
+            $file_tmp =$_FILES['files']['tmp_name'][$key];
+            $file_type=$_FILES['files']['type'][$key];
+            if($file_size > 3097152){
+    			$errors[]='File size must be less than 3 MB';
+            }		
+            $desired_dir="../pages/upload";
+            if(empty($errors)==true){
+                if(is_dir($desired_dir)==false){
+                    mkdir("$desired_dir", 0700);		// Create directory if it does not exist
+                }
+                if(is_dir("$desired_dir/".$file_name)==false){
+                    move_uploaded_file($file_tmp,"../pages/upload/".$file_name);
+                }else{									//rename the file if another one exist
+                    $new_dir="../pages/upload/".$file_name.time();
+                     rename($file_tmp,$new_dir) ;				
+                }
+
+                 
+            $qr = mysqli_query($con,"UPDATE evento_img SET  eveImgNome = '$file_name',
+															eveImgData = NOW()
+														WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));
+               
+
+            }else{
+                    print_r($errors);
+            }
+            
+        }
+    	if(empty($error)){
+           
+           header("Location:../pages/eventos.php?error=1");
+    	}
+    }
 			break;
 		default:
 			# code...

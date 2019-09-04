@@ -480,8 +480,13 @@
             </h4>        
             <div class="row">
               <?php
-                  $qr_even = mysqli_query($con,"SELECT * FROM evento ORDER BY idEventos DESC")or die(mysqli_error($con));
+                  $qr_even = mysqli_query($con,"SELECT * FROM evento JOIN evento_img WHERE Evento_idEventos = idEventos ORDER BY idEventos DESC")or die(mysqli_error($con));
+
                           while($showEven = mysqli_fetch_assoc($qr_even)):
+                  //$qr_img = mysqli_query($con,"SELECT * FROM evento_img WHERE idEvento_img = '$idEven'")or die(mysqli_error($con));
+                  // $eveImg = mysqli_fetch_assoc($qr_img);
+                  $img = $showEven['eveImgNome'];
+
                             $idEven = $showEven['idEventos'];
                             $evenNome = $showEven['evenNome'];
                             $eveAlmo = $showEven['evenVlrAlmoco'];
@@ -494,7 +499,7 @@
               <div class="col-sm-6 col-xl-4">
                 <div class="card mb-4">
                   <div class="w-100">
-                    <a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="card-img-top d-block ui-rect-60 ui-bg-cover" style="background-image: url('assets/img/bg/1.jpg');">
+                    <a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="card-img-top d-block ui-rect-60 ui-bg-cover" style="background-image: url('upload/<?php echo $img; ?>');">
                       <div class="d-flex justify-content-between align-items-end ui-rect-content p-3">
                         <div class="flex-shrink-1">
                           <?php 

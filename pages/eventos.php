@@ -462,6 +462,12 @@
                     Valor da inscrição não pode ser alterado! Clique Aqui...
                   </div></a>";
             break;
+            case 7:
+              echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Justificativa Enviada! Aguarde...
+                  </div>";
+            break;
             default:
               # code...
               break;
@@ -555,67 +561,33 @@
                 </div>
               </div>
               <!-- AQUI INICIA O MODAL DE EXCLUSÃO -->
-                              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
-                                <div class="modal-dialog modal-lg">
-                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">
-                                        Excluir Evento #<?php echo $idEven; ?>
-                                        <br>
-                                      <small class="text-muted"></small>
-                                      </h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="form-row">
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Justifique a exclusão do evento</label>      
-                                          <textarea placeholder="Digite o texto aqui..." name="descEven" id="autosize-demo" rows="10" class="form-control"></textarea> 
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
-                                    </div>
-                                  </form>
-                                  <!--FIM DO FORM-->
-                                </div>
-                              </div>
-                              <!-- FIM DO MODAL DE EXCLUIR -->
-                            <!-- MODAL EDITAR VALOR EVENTO -->
-                              <div class="modal" id="myModalvlr<?php if($idEven==$idEven)echo $idEven;?>">
-                                <div class="modal-dialog modal-lg">
-                                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=2&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">
-                                        Editar valor evento #<?php echo $idEven; ?>
-                                        <br>
-                                      <small class="text-muted"></small>
-                                      </h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="form-row">
-                                      </div>
-                                      <div class="form-row">
-                                        <div class="form-group col">
-                                          <label class="form-label">Justifique a exclusão do evento</label>      
-                                          <textarea placeholder="Digite o texto aqui..." name="descEven" id="autosize-demo" rows="10" class="form-control"></textarea> 
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                                      <button type="submit" class="btn btn-primary">Salvar</button>
-                                    </div>
-                                  </form>
-                                  <!--FIM DO FORM-->
-                                </div>
-                              </div>
-                            <!-- FIM EDITAR VALOR MODAL EVENTO -->
+              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
+                <div class="modal-dialog modal-lg">
+                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        Excluir Evento #<?php echo $idEven; ?>
+                        <br>
+                        <small class="text-muted"></small>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="form-row"></div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Justifique a exclusão do evento</label>      
+                              <textarea placeholder="Digite o texto aqui..." name="evenJustifica" id="autosize-demo" rows="10" class="form-control"></textarea> 
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                      <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                  </form><!--FIM DO FORM-->
+                </div>
+              </div><!-- FIM DO MODAL DE EXCLUIR -->
               <?php endwhile; ?>
             </div>
             <hr class="border-light mt-2 mb-4">

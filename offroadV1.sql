@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `offroadv1`.`usuario` (
   `usuSenha` VARCHAR(45) NULL,
   `usuPrivilegio` VARCHAR(255) NULL,
   `usuCheckin` VARCHAR(255) NULL,
+  `usuResSoli` VARCHAR(255) NULL,
   PRIMARY KEY (`idUsuario`),
   UNIQUE INDEX `idUsuario_UNIQUE` (`idUsuario` ASC) )
 ENGINE = InnoDB;
@@ -37,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `offroadv1`.`Evento` (
   `evenVlrAtualizadol` FLOAT NULL,
   `promoter_idUsuario` INT(11) NOT NULL,
   `evenJustifica` VARCHAR(255) NULL,
+  `evenDataSoli` DATETIME NULL,
   PRIMARY KEY (`idEventos`, `promoter_idUsuario`),
   UNIQUE INDEX `idEventos_UNIQUE` (`idEventos` ASC) ,
   INDEX `fk_Evento_promoter1_idx` (`promoter_idUsuario` ASC) ,

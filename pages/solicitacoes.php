@@ -7,13 +7,14 @@
   $showID = mysqli_fetch_assoc($res);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   $nome = $showID['usuNome'];
+
 ?>
 <!DOCTYPE html>
 
 <html lang="en" class="default-style">
 
 <head>
-  <title>Inicial</title>
+  <title>Solicitações</title>
 
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
@@ -53,6 +54,22 @@
       cssPath: 'assets/vendor/css/rtl/',
       themesPath: 'assets/vendor/css/rtl/'
     });
+  </script>
+    <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro").style.display = "none";
+        }, 3000);
+        function hide(){
+            document.getElementById("erro").style.display = "none";
+  }
+  </script>
+  <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro6").style.display = "none";
+        }, 10000);
+        function hide(){
+            document.getElementById("erro6").style.display = "none";
+  }
   </script>
 
   <!-- Core scripts -->
@@ -376,15 +393,76 @@
 
         <!-- Layout content -->
         <div class="layout-content">
-
           <!-- Content -->
+          <!-- DIV PRINCIPAL -->
           <div class="container-fluid flex-grow-1 container-p-y">
+        <?php
+          error_reporting(0);
+          $errou = $_GET['error'];
+          switch ($errou) {
+            case 1: 
+              echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
+                      <button type='button' class='close' onclick='hide()'>&times;</button>
+                      Solicitação Permitida!
+                    </div>";
+            break;
+            case 2: 
+              echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
+                      <button type='button' class='close' onclick='hide()'>&times;</button>
+                      Solicitação Negada
+                    </div>";
+              break;
+            default:
+              # code...
+              break;
+            }
+        ?>
+          
+            <?php
+                  $qr_just = mysqli_query($con,"SELECT evenJustifica, eveDataSoli, usuNome, idEventos FROM evento JOIN usuario WHERE 1  ORDER BY eveDataSoli DESC")or die(mysqli_error($con));
+                         
+                
 
-
-
-        </div>
+                          while($showJust = mysqli_fetch_assoc($qr_just)):
+              $just = $showJust['evenJustifica'];
+              $dataSoli = $showJust['eveDataSoli'];
+              $even = $showJust['idEventos'];
+              $usuNome =$showJust['usuNome'];
+              if ($just != NULL) {
+            ?>
+            <div class="bs4-toast toast show bg-danger">
+              <div class="toast-header">
+                <img src="assets/img/avatars/1.png" class="d-block ui-w-20 rounded mr-2" alt>
+                <div class="font-weight-bold mr-auto"><?php echo $usuNome; ?> (Evento#<?php echo $even; ?>)</div>
+                
+                <button type="button" class="close d-block mb-1 ml-2" data-dismiss="toast">×</button>
+              </div>
+              <div style="margin-left: 154px;" class="d-block small">
+                  Solicitado em: <?php echo date('d/m/Y H:i', strtotime($dataSoli));?>
+              </div>
+              <div class="toast-body">
+               <?php echo $just; ?>
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 20px; width: 90px; display: block; display: inline-block;">
+              <form method="POST" action="../config/tratadados.php?opc=12">
+                <input type="hidden" name="id" id="id" value="<?php echo $even;?>" />  
+                <input type="hidden" name="permite" id="permite" value="1" />   
+                <button  type="submit" class="btn btn-success">Permitir</button>
+              </form>
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 130px ; width: 50px; display: block; display: inline-block;">
+              <form method="POST" action="../config/tratadados.php?opc=12">
+                  <input type="hidden" name="id" id="id" value="<?php echo $even;?>" />  
+                  <input type="hidden" name="nega" id="nega" value="0" />   
+                  <button type="submit" class="btn btn-danger">Negar</button> 
+              </form>
+            </div>
+              
+            </div>
+            <?php }endwhile; ?>
+            <!-- FIM DIV PRINCIPAL -->
+          </div>
         <!-- Layout content -->
-
       </div>
       <!-- / Layout container -->
 

@@ -145,6 +145,14 @@
             </ul>
           </li>
           <!--Autorizações-->
+          <?php
+            $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
+                  $showUsu = mysqli_fetch_assoc($qr_tipoUser);
+                  $priv = $showUsu['usuPrivilegio'];
+                  $privBD = 'ADMIN';
+
+                if (strcasecmp($priv,$privBD)==0) {
+          ?>
           <li class="sidenav-item">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-done-all"></i>
               <div>Autorizações</div>
@@ -152,7 +160,7 @@
 
             <ul class="sidenav-menu">
               <li class="sidenav-item">
-                <a href="pages/editperfil.php" class="sidenav-link">Solicitações
+                <a href="solicitacoes.php" class="sidenav-link">Solicitações
                    <div class="pl-1 ml-auto">
                     <div class="badge badge-primary">59</div>
                 </div>
@@ -170,6 +178,9 @@
               </li> -->
             </ul>
           </li>
+          <?php
+            }
+          ?>
 
           <!-- Configurações -->
           <li class="sidenav-item">

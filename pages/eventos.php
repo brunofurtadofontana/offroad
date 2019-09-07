@@ -14,20 +14,6 @@
   $idEven = $idEven1['idEventos'];
   $qr_endereco = mysqli_query($con,"SELECT * FROM endereco WHERE idEndereco = '$idEven'")or die(mysqli_error($con)); 
   $ende = mysqli_fetch_assoc($qr_endereco);
-  $evenDataInicial = $idEven1['evenDataInicial']; 
-  $evenHoraInicial =$idEven1['evenHoraInicial'];
-  $evenHoraFinal =$idEven1['evenHoraFinal'];
-  $evenTipoTrilha =$idEven1['evenTipoTrilha'];
-  $evenNome =$idEven1['evenNome'];
-  $evenDescr =$idEven1['evenDescr'];
-  $evenVlrInscri =$idEven1['evenVlrInscri'];
-  $evenVlrAlmoco =$idEven1['evenVlrAlmoco'];
-  $eveRua = $ende['eveRua'];
-  $eveBairro = $ende['eveBairro'];
-  $eveCidade = $ende['eveCidade'];
-  $eveEstado = $ende['eveEstado'];
-  $eveLatitude = $ende['eveLatitude'];
-  $eveLongitude = $ende['eveLongitude'];
 ?>
 <!DOCTYPE html>
 
@@ -185,6 +171,14 @@
             </ul>
           </li>
           <!--Autorizações-->
+          <?php
+            $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
+                  $showUsu = mysqli_fetch_assoc($qr_tipoUser);
+                  $priv = $showUsu['usuPrivilegio'];
+                  $privBD = 'ADMIN';
+
+                if (strcasecmp($priv,$privBD)==0) {
+          ?>
           <li class="sidenav-item">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-done-all"></i>
               <div>Autorizações</div>
@@ -210,6 +204,9 @@
               </li> -->
             </ul>
           </li>
+          <?php
+            }
+          ?>
 
           <!-- Configurações -->
           <li class="sidenav-item">
@@ -457,10 +454,11 @@
                   </div>";
             break;
             case 6:
-              echo "<a href='' data-toggle='modal' data-target='#myModalvlr<?php echo $idEven; ?>'><div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
-                    <button type='button' class='close' onclick='hide()'>&times;</button>
-                    Valor da inscrição não pode ser alterado! Clique Aqui...
-                  </div></a>";
+              echo "<a href='' data-toggle='modal' data-target='#myModalvlr<?php echo $idEven; ?>'>
+                    <div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
+                      <button type='button' class='close' onclick='hide()'>&times;</button>
+                      Valor da inscrição não pode ser alterado! Clique Aqui...
+                    </div></a>";
             break;
             case 7:
               echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
@@ -486,21 +484,26 @@
             </h4>        
             <div class="row">
               <?php
-                  $qr_even = mysqli_query($con,"SELECT * FROM evento JOIN evento_img WHERE Evento_idEventos = idEventos ORDER BY idEventos DESC")or die(mysqli_error($con));
+                  $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
+                  $showUsu = mysqli_fetch_assoc($qr_tipoUser);
+                  $priv = $showUsu['usuPrivilegio'];
+                  $privBD = 'ADMIN';
 
-                          while($showEven = mysqli_fetch_assoc($qr_even)):
-                  //$qr_img = mysqli_query($con,"SELECT * FROM evento_img WHERE idEvento_img = '$idEven'")or die(mysqli_error($con));
+                if (strcasecmp($priv,$privBD)==0) {
+                  
+                  $qr_even = mysqli_query($con,"SELECT * FROM evento as A INNER JOIN evento_img as B on B.Evento_idEventos = A.idEventos ORDER BY idEventos DESC")or die(mysqli_error($con));
+                  while($showEven = mysqli_fetch_assoc($qr_even)):
+                  // $qr_img = mysqli_query($con,"SELECT * FROM evento_img WHERE Evento_idEventos = '$idEven'")or die(mysqli_error($con));
                   // $eveImg = mysqli_fetch_assoc($qr_img);
                   $img = $showEven['eveImgNome'];
-
-                            $idEven = $showEven['idEventos'];
-                            $evenNome = $showEven['evenNome'];
-                            $eveAlmo = $showEven['evenVlrAlmoco'];
-                            $data = $showEven['evenDataInicial'];
-                            $eveHoraIni = $showEven['evenHoraInicial'];
-                            $eveHoraFim = $showEven['evenHoraFinal'];
-                            $eveVlr = $showEven['evenVlrInscri'];
-                            $eveTipo = $showEven['evenTipoTrilha'];                       
+                  $idEven = $showEven['idEventos'];
+                  $evenNome = $showEven['evenNome'];
+                  $eveAlmo = $showEven['evenVlrAlmoco'];
+                  $data = $showEven['evenDataInicial'];
+                  $eveHoraIni = $showEven['evenHoraInicial'];
+                  $eveHoraFim = $showEven['evenHoraFinal'];
+                  $eveVlr = $showEven['evenVlrInscri'];
+                  $eveTipo = $showEven['evenTipoTrilha'];                       
               ?> 
               <div class="col-sm-6 col-xl-4">
                 <div class="card mb-4">
@@ -577,7 +580,7 @@
                         <div class="form-row">
                           <div class="form-group col">
                             <label class="form-label">Justifique a exclusão do evento</label>      
-                              <textarea placeholder="Digite o texto aqui..." name="evenJustifica" id="autosize-demo" rows="10" class="form-control"></textarea> 
+                              <textarea placeholder="Digite o texto aqui..." name="evenJustifica" required id="autosize-demo" rows="10" class="form-control" ></textarea> 
                           </div>
                         </div>
                     </div>
@@ -588,7 +591,168 @@
                   </form><!--FIM DO FORM-->
                 </div>
               </div><!-- FIM DO MODAL DE EXCLUIR -->
-              <?php endwhile; ?>
+              <!-- AQUI INICIA O MODAL DE MUDANÇA DE EVENTO -->
+              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
+                <div class="modal-dialog modal-lg">
+                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        Mudar Valor do Evento #<?php echo $idEven; ?>
+                        <br>
+                        <small class="text-muted"></small>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="form-row"></div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Justifique a mudança de valor do evento</label>      
+                              <textarea required="" placeholder="Digite o texto aqui..." name="evenJustifica" id="autosize-demo" rows="10" class="form-control"></textarea> 
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                      <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                  </form><!--FIM DO FORM-->
+                </div>
+              </div><!-- FIM DO MODAL DE MUDANÇA DE EVENTO -->
+              <?php endwhile; 
+
+              }else{
+                  
+                  $qr_even = mysqli_query($con,"SELECT * FROM evento as A INNER JOIN evento_img as B on B.Evento_idEventos = A.idEventos WHERE promoter_idUsuario = '$id' ORDER BY idEventos DESC")or die(mysqli_error($con));
+                  while($showEven = mysqli_fetch_assoc($qr_even)):
+                  // $qr_img = mysqli_query($con,"SELECT * FROM evento_img WHERE Evento_idEventos = '$idEven'")or die(mysqli_error($con));
+                  // $eveImg = mysqli_fetch_assoc($qr_img);
+                  $img = $showEven['eveImgNome'];
+                  $idEven = $showEven['idEventos'];
+                  $evenNome = $showEven['evenNome'];
+                  $eveAlmo = $showEven['evenVlrAlmoco'];
+                  $data = $showEven['evenDataInicial'];
+                  $eveHoraIni = $showEven['evenHoraInicial'];
+                  $eveHoraFim = $showEven['evenHoraFinal'];
+                  $eveVlr = $showEven['evenVlrInscri'];
+                  $eveTipo = $showEven['evenTipoTrilha'];                       
+              ?> 
+              <div class="col-sm-6 col-xl-4">
+                <div class="card mb-4">
+                  <div class="w-100">
+                    <a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="card-img-top d-block ui-rect-60 ui-bg-cover" style="background-image: url('upload/<?php echo $img; ?>');">
+                      <div class="d-flex justify-content-between align-items-end ui-rect-content p-3">
+                        <div class="flex-shrink-1">
+                          <?php 
+                               $dtEntrega=date("Y-m-d",strtotime("$data")); 
+                               $today = date("Y-m-d"); 
+                                                             
+                               if($dtEntrega>=$today){ 
+                                 echo "<span class='text-big'><span class='badge badge-success'>Aberta</span></span>";
+                          
+                                }else{
+                          
+                                echo "<span class='text-big'><span class='badge badge-danger'>Finalizada</span></span>";                         
+                                } 
+                          ?>
+                          <?php
+                            if ($eveTipo == 'INTEIRA') {
+                              echo "<span class='text-big'><span class='badge badge-success'>Trilha Inteira</span></span>";
+                            }else{
+                              echo "<span class='text-big'><span class='badge badge-warning'>Meia Trilha</span></span>";
+                            } 
+                          ?>
+                          
+                        </div>
+                        <div class="text-big">
+                          
+                          <div class="badge badge-dark font-weight-bold"><?php $soma = $eveVlr + $eveAlmo; echo 'R$' . number_format($soma, 2, ',', '.'); ?></div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="mb-3"><a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="text-body"><?php echo $evenNome; ?> #<?php echo $idEven; ?></a></h5>
+                    <!-- <p class="text-muted mb-3"><?php //echo $evenDescr; ?></p> -->
+                    
+                    <div class="media">
+                      <div class="media-body">
+                        <a href="../pages/editarEvento.php?id=<?php echo $idEven;  ?>" title="Editar">
+                              <i class="lnr lnr-pencil"> </i>
+                              </a>
+                              <a href="../config/tratadados.php?id=<?php echo $idEven;  ?>"  data-toggle="modal" data-target="#myModalDelete<?php echo $idEven; ?>" title="Excluir">
+                                <i class="lnr lnr-trash"> </i>
+                              </a>
+                              <a href="../pages/detalheEvento.php?id=<?php echo $idEven;  ?>"  title="Detalhes">
+                                <i class="lnr lnr-plus-circle"> </i>
+                              </a>
+                      </div>
+                      <div class="text-muted small">
+                        <i class="ion ion-md-time text-primary"></i>
+                        <span><?php echo date('d/m/Y', strtotime($data));?> das <?php echo date("H:i", strtotime($eveHoraIni));?> até <?php echo date("H:i", strtotime($eveHoraFim)); ?></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- AQUI INICIA O MODAL DE EXCLUSÃO -->
+              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
+                <div class="modal-dialog modal-lg">
+                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        Excluir Evento #<?php echo $idEven; ?>
+                        <br>
+                        <small class="text-muted"></small>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="form-row"></div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Justifique a exclusão do evento</label>      
+                              <textarea required="" placeholder="Digite o texto aqui..." name="evenJustifica" id="autosize-demo" rows="10" class="form-control"></textarea> 
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                      <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                  </form><!--FIM DO FORM-->
+                </div>
+              </div><!-- FIM DO MODAL DE EXCLUIR -->
+              <!-- AQUI INICIA O MODAL DE MUDANÇA DE EVENTO -->
+              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
+                <div class="modal-dialog modal-lg">
+                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        Mudar Valor do Evento #<?php echo $idEven; ?>
+                        <br>
+                        <small class="text-muted"></small>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="form-row"></div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Justifique a mudança de valor do evento</label>      
+                              <textarea placeholder="Digite o texto aqui..." name="evenJustifica" id="autosize-demo" rows="10" class="form-control"></textarea> 
+                          </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                      <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                  </form><!--FIM DO FORM-->
+                </div>
+              </div><!-- FIM DO MODAL DE MUDANÇA DE EVENTO -->
+              <?php endwhile; 
+            }?>
             </div>
             <hr class="border-light mt-2 mb-4">
 

@@ -310,31 +310,42 @@ function dinheiro(cur,len)
               </ul>
             </li>
             <!--Autorizações-->
-            <li class="sidenav-item">
-              <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-done-all"></i>
-                <div>Autorizações</div>
-              </a>
+             <?php
+            $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
+                  $showUsu = mysqli_fetch_assoc($qr_tipoUser);
+                  $priv = $showUsu['usuPrivilegio'];
+                  $privBD = 'ADMIN';
 
-              <ul class="sidenav-menu">
-                <li class="sidenav-item">
-                  <a href="solicitacoes.php" class="sidenav-link">Solicitações
-                     <div class="pl-1 ml-auto">
-                      <div class="badge badge-primary">59</div>
-                  </div>
-                  </a>
-                </li>
-                <!-- li class="sidenav-item">
-                  <a href="pages/ajuda.php" class="sidenav-link">
-                    <div> </div>
-                  </a>
-                </li>
-                <li class="sidenav-item">
-                  <a href="forms_custom-controls.html" class="sidenav-link">
-                    <div>Sair</div>
-                  </a>
-                </li> -->
-              </ul>
-            </li>
+                if (strcasecmp($priv,$privBD)==0) {
+          ?>
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-done-all"></i>
+              <div>Autorizações</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="solicitacoes.php" class="sidenav-link">Solicitações
+                   <div class="pl-1 ml-auto">
+                    <div class="badge badge-primary">59</div>
+                </div>
+                </a>
+              </li>
+              <!-- li class="sidenav-item">
+                <a href="pages/ajuda.php" class="sidenav-link">
+                  <div> </div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="forms_custom-controls.html" class="sidenav-link">
+                  <div>Sair</div>
+                </a>
+              </li> -->
+            </ul>
+          </li>
+          <?php
+            }
+          ?>
 
             <!-- Configurações -->
             <li class="sidenav-item">

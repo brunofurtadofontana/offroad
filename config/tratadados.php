@@ -3,6 +3,7 @@
 	$opc = $_GET['opc'];
 	$id = $_GET['id'];
 	$idEven = $_GET['idEvento'];
+	$contaJus  = '0';
 	
 
 	switch ($opc) {
@@ -103,7 +104,7 @@
 			$vlrBD = $vBD['evenVlrInscri'];
 			if ($vlrBD != $vlrTrilha ){
 
-				header("Location:../pages/eventos.php?error=6");
+				header("Location:../pages/eventos.php?error=6&idEven=$idEven");
 
 			}else{
 
@@ -250,8 +251,8 @@
 			$camEG = htmlspecialchars(trim(strtoupper($_POST['camisaEG'])));
 			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
 			$id = $_GET['id'];
-			$valorAlmo = str_replace('.','',$valorAlmo);
-    		$evenVlrTrilha= str_replace('.','',$evenVlrTrilha);
+			$valorAlmo = str_replace(',','.',$valorAlmo);
+    		$evenVlrTrilha= str_replace(',','.',$evenVlrTrilha);
 
 			
 				//header("Location:../pages/cadastraEvento.php?error=3");				
@@ -430,6 +431,11 @@
 				$just =  $exibe['evenJustifica'];
 				mysqli_query($con, "SET foreign_key_checks = 0;");
 				$qr_ok = mysqli_query($con,"DELETE from evento WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+				$qr_ok1 = mysqli_query($con,"DELETE from endereco WHERE Evento_idEventos = '$idevento'")or die(mysqli_error($con));
+				$qr_ok2 = mysqli_query($con,"DELETE from evento_img WHERE Evento_idEventos = '$idevento'")or die(mysqli_error($con));
+				$qr_ok3 = mysqli_query($con,"DELETE from item_trilha WHERE Evento_idEventos = '$idevento'")or die(mysqli_error($con));
+				$qr_ok4 = mysqli_query($con,"DELETE from camisa WHERE Evento_idEventos = '$idevento'")or die(mysqli_error($con));
+				$qr_ok5 = mysqli_query($con,"DELETE from refeicao WHERE Evento_idEventos = '$idevento'")or die(mysqli_error($con));
 				mysqli_query($con,"SET foreign_key_checks = 1;");
 
 				header("Location:../pages/solicitacoes.php?error=1");
@@ -438,6 +444,7 @@
 				
 				$qr_resposta = mysqli_query($con,"UPDATE evento SET  evenJustifica = ''
 														WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+
 			
 				header("Location:../pages/solicitacoes.php?error=2");
 			}

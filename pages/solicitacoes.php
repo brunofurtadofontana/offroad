@@ -7,6 +7,7 @@
   $showID = mysqli_fetch_assoc($res);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   $nome = $showID['usuNome'];
+  //$idEven = $_GET['idEven'];
 
 ?>
 <!DOCTYPE html>
@@ -417,13 +418,13 @@
               break;
             }
         ?>
-          
             <?php
-                  $qr_just = mysqli_query($con,"SELECT evenJustifica, eveDataSoli, usuNome, idEventos FROM evento JOIN usuario WHERE 1  ORDER BY eveDataSoli DESC")or die(mysqli_error($con));
+                  $qr_just = mysqli_query($con,"SELECT e.evenJustifica, e.eveDataSoli, u.usuNome, e.idEventos FROM evento as e INNER JOIN usuario as u on e.promoter_idUsuario = u.idUsuario ORDER BY eveDataSoli DESC")or die(mysqli_error($con));
                          
-                
+              $contJus = '0';
 
                           while($showJust = mysqli_fetch_assoc($qr_just)):
+                            
               $just = $showJust['evenJustifica'];
               $dataSoli = $showJust['eveDataSoli'];
               $even = $showJust['idEventos'];

@@ -3,7 +3,7 @@
 	$opc = $_GET['opc'];
 	$id = $_GET['id'];
 	$idEven = $_GET['idEvento'];
-	$contaJus  = '0';
+	
 	
 
 	switch ($opc) {
@@ -74,7 +74,6 @@
 			$evenDataInicial = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
 			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
 			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
-			$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['vlrTrilha'])));
 			$evenRua = htmlspecialchars(trim(strtoupper($_POST['rua'])));
 			$evenBairro = htmlspecialchars(trim(strtoupper($_POST['bairro'])));
 			$evenCidade = htmlspecialchars(trim(strtoupper($_POST['cidade'])));
@@ -89,36 +88,25 @@
 			$camEG = htmlspecialchars(trim(strtoupper($_POST['camisaEG'])));
 			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
 			
-			// echo $valorAlmo ;
-			// echo "<br>";
-			// echo $evenVlrTrilha;
-			// echo "<br>";
+			$qr_vlrBD = mysqli_query($con,"SELECT evenVlrAlmoco FROM evento WHERE idEventos = '$idEven'");
+			$exibe = mysqli_fetch_array($qr_vlrBD);
+			$vlrBD =  $exibe['evenVlrAlmoco'];
+			//$vlrBD1 = number_format($vlrBD, 2, ',' , '.');
 
-			$vlrTrilha = $evenVlrTrilha;
-			$valorAlmo = str_replace(',','.',$valorAlmo);
-    		$evenVlrTrilha= str_replace(',','.',$evenVlrTrilha);
-    		
-
-    		$valorBD = mysqli_query($con,"SELECT evenVlrInscri from evento WHERE idEventos = '$idEven'");
-			$vBD = mysqli_fetch_assoc($valorBD);
-			$vlrBD = $vBD['evenVlrInscri'];
-			if ($vlrBD != $vlrTrilha ){
-
-				header("Location:../pages/eventos.php?error=6&idEven=$idEven");
-
-			}else{
-
-			echo $valorAlmo;
-
-			//echo $processador."<br>".$memoriaram."<br>".$storage."<br>".$placamae."<br>".$fonte."<br>".$leitor."<br>".$finalidade."<br>".$so."<br>".$situacao."<br>".$obs;
-	
+    		if ($vlrBD != $valorAlmo) {
+    			# code...
+    			$valorAlmo1 = number_format(str_replace(",",".",str_replace(".","",$valorAlmo)), 2,'.', '');
+    			
+    		}else{
+    			$valorAlmo1 = $valorAlmo;	
+    		}
 			$qr = mysqli_query($con,"UPDATE evento SET  evenNome = '$evenNome',
 															evenDescr = '$evenDesc',
 															evenTipoTrilha = '$evenTipoTrilha',
 															evenDataInicial ='$evenDataInicial',
 															evenHoraInicial ='$evenHoraInicio',
 															evenHoraFinal = '$evenHoraFim' ,
-															evenVlrAlmoco = '$valorAlmo'
+															evenVlrAlmoco = '$valorAlmo1'
 														WHERE idEventos = $idEven ")or die(mysqli_error($con));
 				if ($qr) {		
 					$qr_camisa =  mysqli_query($con,"UPDATE camisa SET  camTamP = '$camP',
@@ -135,21 +123,19 @@
 																		WHERE idItem_Trilha = $idEven")or die(mysqli_error($con));
 				}
 				if($qr_item){
-							$qrcomp = mysqli_query($con,"UPDATE endereco SET eveRua = '$evenRua' ,
+					$qrcomp = mysqli_query($con,"UPDATE endereco SET eveRua = '$evenRua' ,
 																			 eveBairro = '$evenBairro',
 																			 eveCidade = '$evenCidade',
 																			 eveEstado = '$evenEstado'
 																		 WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));				
 				}
-				if(!mysqli_error()){
+				if(!mysqli_error($con)){
 						// header("Location:../pages/eventos.php?error=4");
-					header("Location:../pages/editaUp.php?idEvento=$idEven");
+						header("Location:../pages/editaUp.php?idEvento=$idEven");
 
 					}else{
 						header("Location:../pages/eventos.php?error=5");
 					}
-					
-				}
 				
 			break;
 				case 3://Deletar computador
@@ -251,8 +237,8 @@
 			$camEG = htmlspecialchars(trim(strtoupper($_POST['camisaEG'])));
 			$valorAlmo = htmlspecialchars(trim(strtoupper($_POST['vlrAlmo'])));
 			$id = $_GET['id'];
-			$valorAlmo = str_replace(',','.',$valorAlmo);
-    		$evenVlrTrilha= str_replace(',','.',$evenVlrTrilha);
+			$valorAlmo = number_format(str_replace(",",".",str_replace(".","",$valorAlmo)), 2, '.', '');
+    		$evenVlrTrilha= number_format(str_replace(",",".",str_replace(".","",$evenVlrTrilha)), 2, '.', '');
 
 			
 				//header("Location:../pages/cadastraEvento.php?error=3");				
@@ -319,17 +305,69 @@
 			break;
 		case 9://Autoriza mudança de valor e exclusão
 				
-				$evenJust = htmlspecialchars(trim(strtoupper($_POST['evenJustifica'])));
+			$evenJust = htmlspecialchars(trim(strtoupper($_POST['evenJustifica'])));
+			$evenVlrJus = htmlspecialchars(trim(strtoupper($_POST['evenVlrJust'])));
+			$evenNewVlr = htmlspecialchars(trim(strtoupper($_POST['newVlrTrilha'])));
 				//$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['evenVlrAtualizado1'])));
+			$vlrFormat = number_format(str_replace(",",".",str_replace(".","",$evenNewVlr)), 2, '.', '');
+			// echo "DADO NUMBER FORMATACAO";
+			// echo "'<br>'";
+			// echo $vlrFormat;
+			$qr_just = mysqli_query($con,"SELECT evenJustifica, evenJustVlr from evento WHERE idEventos = '$idEven'");
+			$exibe = mysqli_fetch_array($qr_just);
+			$just =  $exibe['evenJustifica'];
+			$justVlr =  $exibe['evenJustVlr'];
 
-				$qr_jus = mysqli_query($con,"UPDATE evento SET evenJustifica = '$evenJust',
+		if($just != ''){
+
+			header("Location:../pages/eventos.php?error=8");
+
+		}else{
+			if($evenNewVlr != ''){
+				
+					
+					$qr_jusVlr = mysqli_query($con,"UPDATE evento SET evenJustVlr = '$evenVlrJus',
+																   evenVlrAtualizado = '$vlrFormat',
+															   	   evenDataSoliVlr = NOW()
+														   WHERE idEventos = $idEven")or die(mysqli_error($con));
+					header("Location:../pages/editarEvento.php?id=$idEven&error=7");
+			}
+			if($evenJust != ''){
+					$qr_jus = mysqli_query($con,"UPDATE evento SET evenJustifica = '$evenJust',
 															   eveDataSoli = NOW()
 														   WHERE idEventos = $idEven")or die(mysqli_error($con));
-				if (!$qr_jus) {
-					header("Location:../pages/eventos.php");
-				}else{
 					header("Location:../pages/eventos.php?error=7");
-				}
+			}
+		}
+
+		if ($justVlr != ''){
+
+			header("Location:../pages/eventos.php?error=8");
+
+		}else{	
+			if($evenNewVlr != ''){
+				
+					
+					$qr_jusVlr = mysqli_query($con,"UPDATE evento SET evenJustVlr = '$evenVlrJus',
+																   evenVlrAtualizado = '$vlrFormat',
+															   	   evenDataSoliVlr = NOW()
+														   WHERE idEventos = $idEven")or die(mysqli_error($con));
+					header("Location:../pages/editarEvento.php?id=$idEven&error=7");
+			}
+			if($evenJust != ''){
+					$qr_jus = mysqli_query($con,"UPDATE evento SET evenJustifica = '$evenJust',
+															   eveDataSoli = NOW()
+														   WHERE idEventos = $idEven")or die(mysqli_error($con));
+					header("Location:../pages/eventos.php?error=7");
+			}
+			
+			// if(!$qr_jusVlr and !$qr_jus){
+			// 		header("Location:../pages/editarEvento.php");
+			// }else{
+			// 		header("Location:../pages/editarEvento.php?id=$idEven&error=7");
+			// 	}
+		}
+				
 			break;
 		case 10://Cadastrar computador
 		
@@ -437,19 +475,85 @@
 				$qr_ok4 = mysqli_query($con,"DELETE from camisa WHERE Evento_idEventos = '$idevento'")or die(mysqli_error($con));
 				$qr_ok5 = mysqli_query($con,"DELETE from refeicao WHERE Evento_idEventos = '$idevento'")or die(mysqli_error($con));
 				mysqli_query($con,"SET foreign_key_checks = 1;");
+				$qr_resposta = mysqli_query($con,"UPDATE evento SET  
+														 	  usuResExc = 'Solicitação Autorizada',
+														 	  evenDataResExc = NOW()
+														WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+
 
 				header("Location:../pages/solicitacoes.php?error=1");
 
-			}if($negado == '0'){
+			}
+			if($negado == '0'){
 				
 				$qr_resposta = mysqli_query($con,"UPDATE evento SET  evenJustifica = ''
+													WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+				$qr_resposta = mysqli_query($con,"UPDATE evento SET  
+														 	  usuResExc = 'Solicitação Negada',
+														 	  evenDataResExc = NOW()
+													WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+							
+				header("Location:../pages/solicitacoes.php?error=2");
+			}
+			if ($ok == '2') {
+				# permitir
+				$qr_busca = mysqli_query($con, "SELECT evenVlrAtualizado FROM evento WHERE idEventos = '$idevento'");
+				$exibe = mysqli_fetch_array($qr_busca);
+				$buscaVlr =  $exibe['evenVlrAtualizado'];
+
+				$qr_atualizaVlr = mysqli_query($con,"UPDATE evento SET  
+														evenVlrInscri = '$buscaVlr',
+														evenJustVlr = ''
+														WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+			
+				$qr_VLR = mysqli_query($con,"UPDATE evento SET  
+														evenVlrAtualizado = ''
 														WHERE idEventos = '$idevento'")or die(mysqli_error($con));
 
-			
+				$qr_resposta = mysqli_query($con,"UPDATE evento SET  
+														 	  usuResVlr = 'Solicitação Autorizada',
+														 	   evenDataResVlr = NOW()
+														WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+
+
+
+				header("Location:../pages/solicitacoes.php?error=1");
+			}
+			if ($negado == '3') {
+				# negar
+				$qr_resposta = mysqli_query($con,"UPDATE evento SET  evenJustVlr = ''
+													WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+				$qr_resposta = mysqli_query($con,"UPDATE evento SET  
+														 	  usuResVlr = 'Solicitação Negada',
+														 	  evenDataResVlr = NOW()
+														WHERE idEventos = '$idevento'")or die(mysqli_error($con));
 				header("Location:../pages/solicitacoes.php?error=2");
 			}
 
 			
+			break;
+			case 13:
+				$idevento = htmlspecialchars(trim(strtoupper($_POST['id'])));
+				$ok = htmlspecialchars(trim(strtoupper($_POST['finaliza'])));
+
+				if ($ok == '0') {
+					# excluir evento
+					$qr_VLR = mysqli_query($con,"UPDATE evento SET  
+														usuResExc = ''
+													WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+					header("Location:../pages/resposta.php?error=1");
+				}
+				if ($ok == '1') {
+					# muda valor
+					$qr_VLR = mysqli_query($con,"UPDATE evento SET  
+														usuResVlr = ''
+													WHERE idEventos = '$idevento'")or die(mysqli_error($con));
+					header("Location:../pages/resposta.php?error=1");
+				}
+
+				
+
+
 			break;
 		default:
 			# code...

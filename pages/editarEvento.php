@@ -251,59 +251,59 @@ function dinheiro(cur,len)
           <div class="sidenav-divider mt-0"></div>
 
           <!-- Links -->
-          <ul class="sidenav-inner py-1">
+        <ul class="sidenav-inner py-1">
 
-            <!-- Resumo -->
-            <li class="sidenav-item">
-              <a href="../homeAdmin.php" class="sidenav-link"><i class="sidenav-icon ion ion-md-speedometer"></i>
-                <div>Resumo</div>
-              </a>
-            </li>
+          <!-- Resumo -->
+          <li class="sidenav-item">
+            <a href="../homeAdmin.php" class="sidenav-link"><i class="sidenav-icon ion ion-md-speedometer"></i>
+              <div>Resumo</div>
+            </a>
+          </li>
 
-            <!-- Meus Eventos -->
-            <li class="sidenav-item open active">
-              <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-calendar"></i>
-                <div>Meus Eventos</div>
-              </a>
+          <!-- Meus Eventos -->
+          <li class="sidenav-item open active">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-calendar"></i>
+              <div>Meus Eventos</div>
+            </a>
 
-              <ul class="sidenav-menu">
-                <li class="sidenav-item open active">
-                  <a href="eventos.php" class="sidenav-link">
-                    <div>Eventos</div>
-                  </a>
-                </li>
-                <!-- <li class="sidenav-item">
-                  <a href="encerrados.php" class="sidenav-link">
-                    <div>Eventos Encerrados</div>
-                  </a>
-                </li> -->
-                <li class="sidenav-item">
-                  <a href="financeiro.php" class="sidenav-link">
-                    <div>Finaceiro</div>
-                  </a>
-                </li>
-                <li class="sidenav-item">
-                  <a href="checkin.php" class="sidenav-link">
-                    <div>Check-in</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <!-- Minhas Trilhas -->
-            <li class="sidenav-item">
-              <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
-                <div>Minhas Trilhas</div>
-              </a>
+            <ul class="sidenav-menu">
+              <li class="sidenav-item open active">
+                <a href="eventos.php" class="sidenav-link">
+                  <div>Eventos</div>
+                </a>
+              </li>
+              <!-- <li class="sidenav-item">
+                <a href="encerrados.php" class="sidenav-link">
+                  <div>Eventos Encerrados</div>
+                </a>
+              </li> -->
+              <li class="sidenav-item">
+                <a href="financeiro.php" class="sidenav-link">
+                  <div>Finaceiro</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="checkin.php" class="sidenav-link">
+                  <div>Check-in</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- Minhas Trilhas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
+              <div>Minhas Trilhas</div>
+            </a>
 
-              <ul class="sidenav-menu">
-                <li class="sidenav-item">
-                  <a href="minhascompras.php" class="sidenav-link">
-                    <div>Minhas Compras</div>
-                  </a>
-              </ul>
-            </li>
-            <!--Autorizações-->
-             <?php
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="minhascompras.php" class="sidenav-link">
+                  <div>Minhas Compras</div>
+                </a>
+            </ul>
+          </li>
+          <!--Autorizações-->
+          <?php
             $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
                   $showUsu = mysqli_fetch_assoc($qr_tipoUser);
                   $priv = $showUsu['usuPrivilegio'];
@@ -320,7 +320,6 @@ function dinheiro(cur,len)
               <li class="sidenav-item">
                 <a href="solicitacoes.php" class="sidenav-link">Solicitações
                    <div class="pl-1 ml-auto">
-                    <div class="badge badge-primary">59</div>
                 </div>
                 </a>
               </li>
@@ -339,34 +338,62 @@ function dinheiro(cur,len)
           <?php
             }
           ?>
+          <!-- Respostas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-chatbubbles"></i>
+              <div>Alterações</div>
+            </a>
 
-            <!-- Configurações -->
-            <li class="sidenav-item">
-              <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-settings"></i>
-                <div>Configurações</div>
-              </a>
-
-              <ul class="sidenav-menu">
-                <li class="sidenav-item">
-                  <a href="editperfil.php" class="sidenav-link">
-                    <div>Editar Perfil</div>
-                  </a>
-                </li>
-                <li class="sidenav-item">
-                  <a href="ajuda.php" class="sidenav-link">
-                    <div>Ajuda</div>
-                  </a>
-                </li>
-                <li class="sidenav-item">
-                  <a href="forms_custom-controls.html" class="sidenav-link">
-                    <div>Sair</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="resposta.php" class="sidenav-link">
+                  <div>Respostas</div>
+                </a>
+              </li>
             </ul>
-            </li>
+          </li>
+          <!-- fim resposta -->
+
+          <!-- Configurações -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-settings"></i>
+              <div>Configurações</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="editperfil.php" class="sidenav-link">
+                  <div>Editar Perfil</div>
+                </a>
+              </li>
+          <?php
+
+            if (strcasecmp($priv,$privBD)==0) {
+          ?>
+            <li class="sidenav-item">
+                <a href="#" class="sidenav-link">
+                  <div>Criar Usuario</div>
+                </a>
+              </li>
+          <?php
+          }
+          ?>
+              <li class="sidenav-item">
+                <a href="ajuda.php" class="sidenav-link">
+                  <div>Ajuda</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+
+                <a href="forms_custom-controls.html" class="sidenav-link">
+                  <div>Sair</div>
+                </a>
+              </li>
+            </ul>
+          </li>
           </ul>
+          </li>
+        </ul>
         </div>
         <!-- / Layout sidenav -->
 
@@ -545,13 +572,68 @@ function dinheiro(cur,len)
             </div>
           </nav>
           <!-- / Layout navbar -->
+
 <!-- EDITAR COMEÇA AQUI -->
         <div class="layout-content">
           <!-- Content -->
           <div class="container-fluid flex-grow-1 container-p-y">
+              <?php 
+                  error_reporting(0);
+                  $errou = $_GET['error'];
+                  switch ($errou) {
+                    case 1:
+                      echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
+                              <button type='button' class='close' onclick='hide()'>&times;</button>
+                              Evento criado com sucesso!
+                            </div>";
+                      break;
+                    case 2:
+                      echo "<div id='erro' class='alert alert-dark-danger alert-dismissible fade show'>
+                            <button type='button' class='close' onclick='hide()'>&times;</button>
+                            Erro ao cadastrar evento!
+                          </div>";
+                      break;
+                    case 3:
+                      echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                            <button type='button' class='close' onclick='hide()'>&times;</button>
+                            O evento não pode acontecer em uma data anterior a atual!
+                          </div>";
+                      break;
+                    case 4:
+                      echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
+                            <button type='button' class='close' onclick='hide()'>&times;</button>
+                            Dados salvos com sucesso!
+                          </div>";
+                      break;
+                    case 5:
+                      echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                            <button type='button' class='close' onclick='hide()'>&times;</button>
+                            Erro ao editar os dados!
+                          </div>";
+                    break;
+                    case 6:
+                      $idEven = $_GET['idEven'];
+                      echo "<a href='' data-toggle='modal' data-target='#myModalvlr $idEven'>
+                            <div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
+                              <button type='button' class='close' onclick='hide()'>&times;</button>
+                              Valor da inscrição não pode ser alterado! Clique Aqui...
+                            </div></a>";
+                    break;
+                    case 7:
+                      echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
+                            <button type='button' class='close' onclick='hide()'>&times;</button>
+                            Justificativa Enviada! Aguarde...
+                          </div>";
+                    break;
+                    default:
+                      # code...
+                      break;
+                  }
+              ?>
             <div id="shop-checkout-wizard" class="container ui-bordered p-0 pb-4 my-5">
               <!-- Steps -->
               <ul class="px-4 px-lg-5 pt-4">
+
                 <li>
                   <a href="#shop-checkout-wizard-1" class="mb-4">
                     <span class="sw-done-icon ion ion-md-checkmark"></span>
@@ -572,6 +654,7 @@ function dinheiro(cur,len)
               <!-- / Steps -->
             </div>
             <div class="card mb-4">
+
               <h6 class="card-header">
                 Editar Evento
               </h6>
@@ -653,7 +736,8 @@ function dinheiro(cur,len)
                       </div>
                       <div class="form-group col-md-6">
                         <label class="form-label">Valor da Trilha</label>
-                        <input value="<?php echo $evenVlrInscri; ?>" name="vlrTrilha" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
+                        <input value="<?php echo $evenVlrInscri; ?>" disabled name="vlrTrilha" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
+                        <a href=""  data-toggle="modal" data-target="#myModalvlr<?php echo $idEven; ?>" title="Excluir">Alterar valor da inscrição</a>
                       </div>
                         <div class="form-group col-md-6">
                             <label class="form-label">Valor do Almoço</label>
@@ -683,6 +767,40 @@ function dinheiro(cur,len)
                   <button type="button" onclick="form.action='eventos.php'; form.submit()" class="btn btn-danger">Cancelar</button>
                   <button type="submit" class="btn btn-primary">Continuar</button>
                 </form>
+            <!-- AQUI INICIA O MODAL DE MUDANÇA DE EVENTO -->
+              <div class="modal fade" id="myModalvlr<?php if($idEven==$idEven)echo $idEven;?>">
+                <div class="modal-dialog modal-md">
+                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        Mudar Valor do Evento #<?php echo $idEven; ?>
+                        <br>
+                        <small class="text-muted"></small>
+                      </h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="form-row"></div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Justifique a mudança de valor do evento</label>      
+                              <textarea placeholder="Digite o texto aqui..." name="evenVlrJust" id="autosize-demo" rows="8" required="" class="form-control"></textarea> 
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">Novo Valor</label>
+                            <input value="" name="newVlrTrilha" required="" onKeyUp="dinheiro(this,9)" type="text" class="form-control" placeholder="R$0,00">
+                          </div>
+                        </div>  
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                      <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                  </form><!--FIM DO FORM-->
+                </div>
+              </div><!-- FIM DO MODAL DE MUDANÇA DE EVENTO -->
           <!-- EDITAR TERMINA AQUI -->
           <!-- Javascript dos inputs-->
                   <script>

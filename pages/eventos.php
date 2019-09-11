@@ -188,7 +188,6 @@
               <li class="sidenav-item">
                 <a href="solicitacoes.php" class="sidenav-link">Solicitações
                    <div class="pl-1 ml-auto">
-                    <div class="badge badge-primary">59</div>
                 </div>
                 </a>
               </li>
@@ -207,6 +206,21 @@
           <?php
             }
           ?>
+          <!-- Respostas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-chatbubbles"></i>
+              <div>Alterações</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="resposta.php" class="sidenav-link">
+                  <div>Respostas</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- fim resposta -->
 
           <!-- Configurações -->
           <li class="sidenav-item">
@@ -220,12 +234,25 @@
                   <div>Editar Perfil</div>
                 </a>
               </li>
+          <?php
+
+            if (strcasecmp($priv,$privBD)==0) {
+          ?>
+            <li class="sidenav-item">
+                <a href="#" class="sidenav-link">
+                  <div>Criar Usuario</div>
+                </a>
+              </li>
+          <?php
+          }
+          ?>
               <li class="sidenav-item">
                 <a href="ajuda.php" class="sidenav-link">
                   <div>Ajuda</div>
                 </a>
               </li>
               <li class="sidenav-item">
+
                 <a href="forms_custom-controls.html" class="sidenav-link">
                   <div>Sair</div>
                 </a>
@@ -454,7 +481,8 @@
                   </div>";
             break;
             case 6:
-              echo "<a href='' data-toggle='modal' data-target='#myModalvlr<?php echo $idEven; ?>'>
+              $idEven = $_GET['idEven'];
+              echo "<a href='' data-toggle='modal' data-target='#myModalvlr $idEven'>
                     <div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
                       <button type='button' class='close' onclick='hide()'>&times;</button>
                       Valor da inscrição não pode ser alterado! Clique Aqui...
@@ -464,6 +492,12 @@
               echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
                     <button type='button' class='close' onclick='hide()'>&times;</button>
                     Justificativa Enviada! Aguarde...
+                  </div>";
+            break;
+            case 8:
+              echo "<div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    OPA!! Você ja realizou uma solicitação para este evento, AGUARDE APROVAÇÃO!
                   </div>";
             break;
             default:
@@ -564,8 +598,8 @@
                 </div>
               </div>
               <!-- AQUI INICIA O MODAL DE EXCLUSÃO -->
-              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
-                <div class="modal-dialog modal-lg">
+              <div class="modal fade" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
+                <div class="modal-dialog modal-md">
                   <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
                     <div class="modal-header">
                       <h5 class="modal-title">
@@ -580,7 +614,7 @@
                         <div class="form-row">
                           <div class="form-group col">
                             <label class="form-label">Justifique a exclusão do evento</label>      
-                              <textarea placeholder="Digite o texto aqui..." name="evenJustifica" required id="autosize-demo" rows="10" class="form-control" ></textarea> 
+                              <textarea placeholder="Digite o texto aqui..." name="evenJustifica" required id="autosize-demo" rows="5" class="form-control" ></textarea> 
                           </div>
                         </div>
                     </div>
@@ -591,34 +625,7 @@
                   </form><!--FIM DO FORM-->
                 </div>
               </div><!-- FIM DO MODAL DE EXCLUIR -->
-              <!-- AQUI INICIA O MODAL DE MUDANÇA DE EVENTO -->
-              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
-                <div class="modal-dialog modal-lg">
-                  <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
-                    <div class="modal-header">
-                      <h5 class="modal-title">
-                        Mudar Valor do Evento #<?php echo $idEven; ?>
-                        <br>
-                        <small class="text-muted"></small>
-                      </h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                    </div>
-                    <div class="modal-body">
-                      <div class="form-row"></div>
-                        <div class="form-row">
-                          <div class="form-group col">
-                            <label class="form-label">Justifique a mudança de valor do evento</label>      
-                              <textarea required="" placeholder="Digite o texto aqui..." name="evenJustifica" id="autosize-demo" rows="10" class="form-control"></textarea> 
-                          </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                      <button type="submit" class="btn btn-primary">Salvar</button>
-                    </div>
-                  </form><!--FIM DO FORM-->
-                </div>
-              </div><!-- FIM DO MODAL DE MUDANÇA DE EVENTO -->
+
               <?php endwhile; 
 
               }else{
@@ -724,7 +731,7 @@
                 </div>
               </div><!-- FIM DO MODAL DE EXCLUIR -->
               <!-- AQUI INICIA O MODAL DE MUDANÇA DE EVENTO -->
-              <div class="modal" id="myModalDelete<?php if($idEven==$idEven)echo $idEven;?>">
+              <div class="modal" id="myModalvlr<?php if($idEven==$idEven)echo $idEven;?>">
                 <div class="modal-dialog modal-lg">
                   <form class="modal-content" method="post" action="../config/tratadados.php?opc=9&idEvento=<?php echo $idEven ?>" autocomplete="on">
                     <div class="modal-header">

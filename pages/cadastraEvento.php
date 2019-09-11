@@ -258,59 +258,59 @@ function dinheiro(cur,len)
           <div class="sidenav-divider mt-0"></div>
 
           <!-- Links -->
-          <ul class="sidenav-inner py-1">
+        <ul class="sidenav-inner py-1">
 
-            <!-- Resumo -->
-            <li class="sidenav-item">
-              <a href="../homeAdmin.php" class="sidenav-link"><i class="sidenav-icon ion ion-md-speedometer"></i>
-                <div>Resumo</div>
-              </a>
-            </li>
+          <!-- Resumo -->
+          <li class="sidenav-item">
+            <a href="../homeAdmin.php" class="sidenav-link"><i class="sidenav-icon ion ion-md-speedometer"></i>
+              <div>Resumo</div>
+            </a>
+          </li>
 
-            <!-- Meus Eventos -->
-            <li class="sidenav-item open active">
-              <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-calendar"></i>
-                <div>Meus Eventos</div>
-              </a>
+          <!-- Meus Eventos -->
+          <li class="sidenav-item open active">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-calendar"></i>
+              <div>Meus Eventos</div>
+            </a>
 
-              <ul class="sidenav-menu">
-                <li class="sidenav-item open active">
-                  <a href="eventos.php" class="sidenav-link">
-                    <div>Eventos</div>
-                  </a>
-                </li>
-                <!-- <li class="sidenav-item">
-                  <a href="encerrados.php" class="sidenav-link">
-                    <div>Eventos Encerrados</div>
-                  </a>
-                </li> -->
-                <li class="sidenav-item">
-                  <a href="financeiro.php" class="sidenav-link">
-                    <div>Finaceiro</div>
-                  </a>
-                </li>
-                <li class="sidenav-item">
-                  <a href="checkin.php" class="sidenav-link">
-                    <div>Check-in</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <!-- Minhas Trilhas -->
-            <li class="sidenav-item">
-              <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
-                <div>Minhas Trilhas</div>
-              </a>
+            <ul class="sidenav-menu">
+              <li class="sidenav-item open active">
+                <a href="eventos.php" class="sidenav-link">
+                  <div>Eventos</div>
+                </a>
+              </li>
+              <!-- <li class="sidenav-item">
+                <a href="encerrados.php" class="sidenav-link">
+                  <div>Eventos Encerrados</div>
+                </a>
+              </li> -->
+              <li class="sidenav-item">
+                <a href="financeiro.php" class="sidenav-link">
+                  <div>Finaceiro</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+                <a href="checkin.php" class="sidenav-link">
+                  <div>Check-in</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- Minhas Trilhas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
+              <div>Minhas Trilhas</div>
+            </a>
 
-              <ul class="sidenav-menu">
-                <li class="sidenav-item">
-                  <a href="minhascompras.php" class="sidenav-link">
-                    <div>Minhas Compras</div>
-                  </a>
-              </ul>
-            </li>
-            <!--Autorizações-->
-             <?php
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="minhascompras.php" class="sidenav-link">
+                  <div>Minhas Compras</div>
+                </a>
+            </ul>
+          </li>
+          <!--Autorizações-->
+          <?php
             $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
                   $showUsu = mysqli_fetch_assoc($qr_tipoUser);
                   $priv = $showUsu['usuPrivilegio'];
@@ -327,7 +327,6 @@ function dinheiro(cur,len)
               <li class="sidenav-item">
                 <a href="solicitacoes.php" class="sidenav-link">Solicitações
                    <div class="pl-1 ml-auto">
-                    <div class="badge badge-primary">59</div>
                 </div>
                 </a>
               </li>
@@ -346,34 +345,62 @@ function dinheiro(cur,len)
           <?php
             }
           ?>
+          <!-- Respostas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-chatbubbles"></i>
+              <div>Alterações</div>
+            </a>
 
-            <!-- Configurações -->
-            <li class="sidenav-item">
-              <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-settings"></i>
-                <div>Configurações</div>
-              </a>
-
-              <ul class="sidenav-menu">
-                <li class="sidenav-item">
-                  <a href="editperfil.php" class="sidenav-link">
-                    <div>Editar Perfil</div>
-                  </a>
-                </li>
-                <li class="sidenav-item">
-                  <a href="ajuda.php" class="sidenav-link">
-                    <div>Ajuda</div>
-                  </a>
-                </li>
-                <li class="sidenav-item">
-                  <a href="forms_custom-controls.html" class="sidenav-link">
-                    <div>Sair</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="resposta.php" class="sidenav-link">
+                  <div>Respostas</div>
+                </a>
+              </li>
             </ul>
-            </li>
+          </li>
+          <!-- fim resposta -->
+
+          <!-- Configurações -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-settings"></i>
+              <div>Configurações</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="editperfil.php" class="sidenav-link">
+                  <div>Editar Perfil</div>
+                </a>
+              </li>
+          <?php
+
+            if (strcasecmp($priv,$privBD)==0) {
+          ?>
+            <li class="sidenav-item">
+                <a href="#" class="sidenav-link">
+                  <div>Criar Usuario</div>
+                </a>
+              </li>
+          <?php
+          }
+          ?>
+              <li class="sidenav-item">
+                <a href="ajuda.php" class="sidenav-link">
+                  <div>Ajuda</div>
+                </a>
+              </li>
+              <li class="sidenav-item">
+
+                <a href="forms_custom-controls.html" class="sidenav-link">
+                  <div>Sair</div>
+                </a>
+              </li>
+            </ul>
+          </li>
           </ul>
+          </li>
+        </ul>
         </div>
         <!-- / Layout sidenav -->
 
@@ -603,7 +630,7 @@ function dinheiro(cur,len)
             }
         ?>
         <!--CADASTRO EVENTO-->
-            <div id="shop-checkout-wizard" class="container ui-bordered p-0 pb-4 my-5">
+            <div id="shop-checkout-wizard" class="container ui-bordered p-0 pb-2 my-3">
               <!-- Steps -->
               <ul class="px-4 px-lg-5 pt-4">
                 <li>

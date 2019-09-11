@@ -108,11 +108,11 @@
                   <div>Eventos</div>
                 </a>
               </li>
-              <li class="sidenav-item">
+              <!-- <li class="sidenav-item">
                 <a href="encerrados.php" class="sidenav-link">
                   <div>Eventos Encerrados</div>
                 </a>
-              </li>
+              </li> -->
               <li class="sidenav-item open active">
                 <a href="financeiro.php" class="sidenav-link">
                   <div>Finaceiro</div>
@@ -125,9 +125,6 @@
               </li>
             </ul>
           </li>
-       
-          
-
           <!-- Minhas Trilhas -->
           <li class="sidenav-item">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
@@ -142,7 +139,7 @@
             </ul>
           </li>
           <!--Autorizações-->
-           <?php
+          <?php
             $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
                   $showUsu = mysqli_fetch_assoc($qr_tipoUser);
                   $priv = $showUsu['usuPrivilegio'];
@@ -159,7 +156,6 @@
               <li class="sidenav-item">
                 <a href="solicitacoes.php" class="sidenav-link">Solicitações
                    <div class="pl-1 ml-auto">
-                    <div class="badge badge-primary">59</div>
                 </div>
                 </a>
               </li>
@@ -178,6 +174,21 @@
           <?php
             }
           ?>
+          <!-- Respostas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-chatbubbles"></i>
+              <div>Alterações</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="resposta.php" class="sidenav-link">
+                  <div>Respostas</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- fim resposta -->
 
           <!-- Configurações -->
           <li class="sidenav-item">
@@ -191,12 +202,25 @@
                   <div>Editar Perfil</div>
                 </a>
               </li>
+          <?php
+
+            if (strcasecmp($priv,$privBD)==0) {
+          ?>
+            <li class="sidenav-item">
+                <a href="#" class="sidenav-link">
+                  <div>Criar Usuario</div>
+                </a>
+              </li>
+          <?php
+          }
+          ?>
               <li class="sidenav-item">
                 <a href="ajuda.php" class="sidenav-link">
                   <div>Ajuda</div>
                 </a>
               </li>
               <li class="sidenav-item">
+
                 <a href="forms_custom-controls.html" class="sidenav-link">
                   <div>Sair</div>
                 </a>

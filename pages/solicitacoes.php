@@ -105,6 +105,7 @@
         <div class="sidenav-divider mt-0"></div>
 
         <!-- Links -->
+        <!-- Links -->
         <ul class="sidenav-inner py-1">
 
           <!-- Resumo -->
@@ -126,11 +127,11 @@
                   <div>Eventos</div>
                 </a>
               </li>
-              <li class="sidenav-item">
+              <!-- <li class="sidenav-item">
                 <a href="encerrados.php" class="sidenav-link">
                   <div>Eventos Encerrados</div>
                 </a>
-              </li>
+              </li> -->
               <li class="sidenav-item">
                 <a href="financeiro.php" class="sidenav-link">
                   <div>Finaceiro</div>
@@ -143,9 +144,6 @@
               </li>
             </ul>
           </li>
-       
-          
-
           <!-- Minhas Trilhas -->
           <li class="sidenav-item">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
@@ -160,16 +158,23 @@
             </ul>
           </li>
           <!--Autorizações-->
-          <li class="sidenav-item open active">
+          <?php
+            $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
+                  $showUsu = mysqli_fetch_assoc($qr_tipoUser);
+                  $priv = $showUsu['usuPrivilegio'];
+                  $privBD = 'ADMIN';
+
+                if (strcasecmp($priv,$privBD)==0) {
+          ?>
+          <li class="sidenav-item  open active">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-done-all"></i>
               <div>Autorizações</div>
             </a>
 
             <ul class="sidenav-menu">
-              <li class="sidenav-item open active">
+              <li class="sidenav-item  open active">
                 <a href="solicitacoes.php" class="sidenav-link">Solicitações
                    <div class="pl-1 ml-auto">
-                    <div class="badge badge-primary">59</div>
                 </div>
                 </a>
               </li>
@@ -185,6 +190,24 @@
               </li> -->
             </ul>
           </li>
+          <?php
+            }
+          ?>
+          <!-- Respostas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-chatbubbles"></i>
+              <div>Alterações</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="resposta.php" class="sidenav-link">
+                  <div>Respostas</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- fim resposta -->
 
           <!-- Configurações -->
           <li class="sidenav-item">
@@ -198,12 +221,25 @@
                   <div>Editar Perfil</div>
                 </a>
               </li>
+          <?php
+
+            if (strcasecmp($priv,$privBD)==0) {
+          ?>
+            <li class="sidenav-item">
+                <a href="#" class="sidenav-link">
+                  <div>Criar Usuario</div>
+                </a>
+              </li>
+          <?php
+          }
+          ?>
               <li class="sidenav-item">
                 <a href="ajuda.php" class="sidenav-link">
                   <div>Ajuda</div>
                 </a>
               </li>
               <li class="sidenav-item">
+
                 <a href="forms_custom-controls.html" class="sidenav-link">
                   <div>Sair</div>
                 </a>
@@ -408,7 +444,7 @@
                     </div>";
             break;
             case 2: 
-              echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
+              echo "<div id='erro' class='alert alert-dark-danger alert-dismissible fade show'>
                       <button type='button' class='close' onclick='hide()'>&times;</button>
                       Solicitação Negada
                     </div>";
@@ -419,17 +455,24 @@
             }
         ?>
             <?php
-                  $qr_just = mysqli_query($con,"SELECT e.evenJustifica, e.eveDataSoli, u.usuNome, e.idEventos FROM evento as e INNER JOIN usuario as u on e.promoter_idUsuario = u.idUsuario ORDER BY eveDataSoli DESC")or die(mysqli_error($con));
+                  $qr_just = mysqli_query($con,"SELECT e.evenVlrInscri, e.evenJustVlr,e.evenVlrAtualizado, e.evenDataSoliVlr, e.evenJustifica, e.eveDataSoli, u.usuNome, e.idEventos FROM evento as e INNER JOIN usuario as u on e.promoter_idUsuario = u.idUsuario ORDER BY e.eveDataSoli, e.evenDataSoliVlr DESC")or die(mysqli_error($con));
                          
               $contJus = '0';
 
-                          while($showJust = mysqli_fetch_assoc($qr_just)):
-                            
+            while($showJust = mysqli_fetch_assoc($qr_just)):
+
               $just = $showJust['evenJustifica'];
               $dataSoli = $showJust['eveDataSoli'];
               $even = $showJust['idEventos'];
               $usuNome =$showJust['usuNome'];
-              if ($just != NULL) {
+              $justVlr =$showJust['evenJustVlr'];
+              $dataSoliVlr =$showJust['evenDataSoliVlr'];
+              $newVlr =$showJust['evenVlrAtualizado'];
+              $atualVlr =$showJust['evenVlrInscri'];
+              $atualVlr1 = number_format($atualVlr, 2, ',', '.');
+              $newVlr1 = number_format($newVlr, 2, ',', '.');
+
+            if ($just != NULL) {
             ?>
             <div class="bs4-toast toast show bg-danger">
               <div class="toast-header">
@@ -442,6 +485,7 @@
                   Solicitado em: <?php echo date('d/m/Y H:i', strtotime($dataSoli));?>
               </div>
               <div class="toast-body">
+               <i><label class="form-label">Justificativa:</label></i><br>
                <?php echo $just; ?>
               </div>
               <div style="margin-bottom: 10px ; margin-left: 20px; width: 90px; display: block; display: inline-block;">
@@ -457,10 +501,44 @@
                   <input type="hidden" name="nega" id="nega" value="0" />   
                   <button type="submit" class="btn btn-danger">Negar</button> 
               </form>
+            </div>              
             </div>
-              
+            <?php 
+
+          }if($justVlr != NULL){?>
+            <div class="bs4-toast toast show bg-success">
+              <div class="toast-header">
+                <div class="font-weight-bold mr-auto"><?php echo $usuNome; ?> (Evento#<?php echo $even; ?>)</div>
+                
+                <button type="button" class="close d-block mb-1 ml-2" data-dismiss="toast">×</button>
+              </div>
+              <div style="margin-left: 154px;" class="d-block small">
+                  Solicitado em: <?php echo date('d/m/Y H:i', strtotime($dataSoliVlr));?>
+              </div>
+              <div class="toast-body">
+               <i><label class="form-label">Justificativa:</label></i><br>
+               <?php echo $justVlr; ?>
+              </div>
+              <div class="toast-body">
+                <i><label class="form-label">Informações de Valores:</label></i><br>
+                  Valor atual: R$ <?php echo $atualVlr1; ?><br> Novo valor: R$ <?php echo $newVlr1; ?>
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 20px; width: 90px; display: block; display: inline-block;">
+              <form method="POST" action="../config/tratadados.php?opc=12">
+                <input type="hidden" name="id" id="id" value="<?php echo $even;?>" />  
+                <input type="hidden" name="permite" id="permite" value="2" />   
+                <button  type="submit" class="btn btn-success">Permitir</button>
+              </form>
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 130px ; width: 50px; display: block; display: inline-block;">
+                <form method="POST" action="../config/tratadados.php?opc=12">
+                    <input type="hidden" name="id" id="id" value="<?php echo $even;?>" />  
+                    <input type="hidden" name="nega" id="nega" value="3" />   
+                    <button type="submit" class="btn btn-danger">Negar</button> 
+                </form>
+              </div>              
             </div>
-            <?php }endwhile; ?>
+         <?php } endwhile; ?>
             <!-- FIM DIV PRINCIPAL -->
           </div>
         <!-- Layout content -->

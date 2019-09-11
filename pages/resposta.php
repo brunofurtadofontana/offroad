@@ -7,13 +7,15 @@
   $showID = mysqli_fetch_assoc($res);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   $nome = $showID['usuNome'];
+  //$idEven = $_GET['idEven'];
+
 ?>
 <!DOCTYPE html>
 
 <html lang="en" class="default-style">
 
 <head>
-  <title>Inicial</title>
+  <title>Solicitações</title>
 
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
@@ -53,6 +55,22 @@
       cssPath: 'assets/vendor/css/rtl/',
       themesPath: 'assets/vendor/css/rtl/'
     });
+  </script>
+    <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro").style.display = "none";
+        }, 3000);
+        function hide(){
+            document.getElementById("erro").style.display = "none";
+  }
+  </script>
+  <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro6").style.display = "none";
+        }, 10000);
+        function hide(){
+            document.getElementById("erro6").style.display = "none";
+  }
   </script>
 
   <!-- Core scripts -->
@@ -175,13 +193,13 @@
             }
           ?>
           <!-- Respostas -->
-          <li class="sidenav-item">
+          <li class="sidenav-item  open active">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-chatbubbles"></i>
               <div>Alterações</div>
             </a>
 
             <ul class="sidenav-menu">
-              <li class="sidenav-item">
+              <li class="sidenav-item  open active">
                 <a href="resposta.php" class="sidenav-link">
                   <div>Respostas</div>
                 </a>
@@ -191,13 +209,13 @@
           <!-- fim resposta -->
 
           <!-- Configurações -->
-          <li class="sidenav-item  open active">
+          <li class="sidenav-item">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-md-settings"></i>
               <div>Configurações</div>
             </a>
 
             <ul class="sidenav-menu">
-              <li class="sidenav-item  open active">
+              <li class="sidenav-item">
                 <a href="editperfil.php" class="sidenav-link">
                   <div>Editar Perfil</div>
                 </a>
@@ -411,15 +429,94 @@
 
         <!-- Layout content -->
         <div class="layout-content">
-
           <!-- Content -->
+          <!-- DIV PRINCIPAL -->
           <div class="container-fluid flex-grow-1 container-p-y">
+        <?php
+          error_reporting(0);
+          $errou = $_GET['error'];
+          switch ($errou) {
+            case 1: 
+              echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
+                      <button type='button' class='close' onclick='hide()'>&times;</button>
+                      Solicitação Finalizada!
+                    </div>";
+            break;
+            default:
+              # code...
+              break;
+            }
+        ?>
+            <?php
+                  $qr_just = mysqli_query($con,"SELECT * FROM evento WHERE promoter_idUsuario = '$id'")or die(mysqli_error($con));
+                         
+    
 
+            while($showJust = mysqli_fetch_assoc($qr_just)):
 
+              
+              $even = $showJust['idEventos'];
+              $usuNome =$showJust['usuNome'];
+              $dataVlr =$showJust['evenDataResVlr'];
+              $dataExc =$showJust['evenDataResExc'];
+              $Vlr = $showJust['usuResVlr'];
+              $Excluir = $showJust['usuResExc'];
 
-        </div>
+            if ($Excluir != NULL) {
+            ?>
+            <div class="bs4-toast toast show bg-danger">
+              <div class="toast-header">
+                <div class="font-weight-bold mr-auto">Exclusão do Evento #<?php echo $even; ?></div>
+                
+                <button type="button" class="close d-block mb-1 ml-2" data-dismiss="toast">×</button>
+              </div>
+              <div style="margin-left: 154px;" class="d-block small">
+                  Respondido: <?php echo date('d/m/Y H:i', strtotime($dataExc));?>
+              </div>
+              <div class="toast-body">
+               <i><label class="form-label">Decisão:</label></i><br>
+               <?php echo $Excluir; ?>
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 20px; width: 90px; display: block; display: inline-block;">
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 130px ; width: 50px; display: block; display: inline-block;">
+              <form method="POST" action="../config/tratadados.php?opc=13">
+                  <input type="hidden" name="id" id="id" value="<?php echo $even;?>" />  
+                  <input type="hidden" name="finaliza" id="finaliza" value="0" />   
+                  <button type="submit" class="btn btn-danger">Finalizar</button> 
+              </form>
+            </div>              
+            </div>
+            <?php 
+
+          }if($Vlr != NULL){?>
+            <div class="bs4-toast toast show bg-success">
+              <div class="toast-header">
+                <div class="font-weight-bold mr-auto">Alteração de Valor de Inscrição do Evento #<?php echo $even; ?></div>
+                
+                <button type="button" class="close d-block mb-1 ml-2" data-dismiss="toast">×</button>
+              </div>
+              <div style="margin-left: 154px;" class="d-block small">
+                  Respondido: <?php echo date('d/m/Y H:i', strtotime($dataVlr));?>
+              </div>
+              <div class="toast-body">
+               <i><label class="form-label">Decisão:</label></i><br>
+               <?php echo $Vlr; ?>
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 20px; width: 90px; display: block; display: inline-block;">
+              </div>
+              <div style="margin-bottom: 10px ; margin-left: 130px ; width: 50px; display: block; display: inline-block;">
+                <form method="POST" action="../config/tratadados.php?opc=13">
+                    <input type="hidden" name="id" id="id" value="<?php echo $even;?>" />  
+                    <input type="hidden" name="finaliza" id="finaliza" value="1" />   
+                    <button type="submit" class="btn btn-danger">Finalizar</button> 
+                </form>
+              </div>              
+            </div>
+          <?php } endwhile; ?>
+            <!-- FIM DIV PRINCIPAL -->
+          </div>
         <!-- Layout content -->
-
       </div>
       <!-- / Layout container -->
 

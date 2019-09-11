@@ -94,7 +94,7 @@
 
           <!-- Resumo -->
           <li class="sidenav-item open active">
-            <a href="javascript:void(0)" class="sidenav-link"><i class="sidenav-icon ion ion-md-speedometer"></i>
+            <a href="../homeAdmin.php" class="sidenav-link"><i class="sidenav-icon ion ion-md-speedometer"></i>
               <div>Resumo</div>
             </a>
           </li>
@@ -106,16 +106,16 @@
             </a>
 
             <ul class="sidenav-menu">
-              <li class="sidenav-item">
+              <li class="sidenav-item open active">
                 <a href="pages/eventos.php" class="sidenav-link">
                   <div>Eventos</div>
                 </a>
               </li>
-              <li class="sidenav-item">
-                <a href="pages/encerrados" class="sidenav-link">
+              <!-- <li class="sidenav-item">
+                <a href="encerrados.php" class="sidenav-link">
                   <div>Eventos Encerrados</div>
                 </a>
-              </li>
+              </li> -->
               <li class="sidenav-item">
                 <a href="pages/financeiro.php" class="sidenav-link">
                   <div>Finaceiro</div>
@@ -128,9 +128,6 @@
               </li>
             </ul>
           </li>
-       
-          
-
           <!-- Minhas Trilhas -->
           <li class="sidenav-item">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
@@ -160,9 +157,8 @@
 
             <ul class="sidenav-menu">
               <li class="sidenav-item">
-                <a href="solicitacoes.php" class="sidenav-link">Solicitações
+                <a href="pages/solicitacoes.php" class="sidenav-link">Solicitações
                    <div class="pl-1 ml-auto">
-                    <div class="badge badge-primary">59</div>
                 </div>
                 </a>
               </li>
@@ -181,6 +177,21 @@
           <?php
             }
           ?>
+          <!-- Respostas -->
+          <li class="sidenav-item">
+            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-chatbubbles"></i>
+              <div>Alterações</div>
+            </a>
+
+            <ul class="sidenav-menu">
+              <li class="sidenav-item">
+                <a href="pages/resposta.php" class="sidenav-link">
+                  <div>Respostas</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <!-- fim resposta -->
 
           <!-- Configurações -->
           <li class="sidenav-item">
@@ -194,12 +205,25 @@
                   <div>Editar Perfil</div>
                 </a>
               </li>
+          <?php
+
+            if (strcasecmp($priv,$privBD)==0) {
+          ?>
+            <li class="sidenav-item">
+                <a href="#" class="sidenav-link">
+                  <div>Criar Usuario</div>
+                </a>
+              </li>
+          <?php
+          }
+          ?>
               <li class="sidenav-item">
                 <a href="pages/ajuda.php" class="sidenav-link">
                   <div>Ajuda</div>
                 </a>
               </li>
               <li class="sidenav-item">
+
                 <a href="forms_custom-controls.html" class="sidenav-link">
                   <div>Sair</div>
                 </a>
@@ -208,405 +232,6 @@
           </li>
           </ul>
           </li>
-
-          <!-- Pages -->
-          <li class="sidenav-item">
-            <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-              <i class="sidenav-icon ion ion-md-document"></i>
-              <div>Pages</div>
-              <div class="pl-1 ml-auto">
-                <div class="badge badge-primary">59</div>
-              </div>
-            </a>
-            <ul class="sidenav-menu">
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Articles</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_articles_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_articles_edit.html" class="sidenav-link">
-                      <div>Edit</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Authentication</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_login-v1.html" class="sidenav-link">
-                      <div>Login v1</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_register-v1.html" class="sidenav-link">
-                      <div>Register v1</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_login-v2.html" class="sidenav-link">
-                      <div>Login v2</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_register-v2.html" class="sidenav-link">
-                      <div>Register v2</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_login-v3.html" class="sidenav-link">
-                      <div>Login v3</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_register-v3.html" class="sidenav-link">
-                      <div>Register v3</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_login-and-register.html" class="sidenav-link">
-                      <div>Login + Register</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_lock-screen-v1.html" class="sidenav-link">
-                      <div>Lock screen v1</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_lock-screen-v2.html" class="sidenav-link">
-                      <div>Lock screen v2</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_password-reset.html" class="sidenav-link">
-                      <div>Password reset</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_authentication_email-confirm.html" class="sidenav-link">
-                      <div>Email confirm</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Education</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_education_courses-v1.html" class="sidenav-link">
-                      <div>Courses v1</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_education_courses-v2.html" class="sidenav-link">
-                      <div>Courses v2</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>E-commerce</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_e-commerce_product-list.html" class="sidenav-link">
-                      <div>Product list</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_e-commerce_product-item.html" class="sidenav-link">
-                      <div>Product item</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_e-commerce_product-edit.html" class="sidenav-link">
-                      <div>Product edit</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_e-commerce_order-list.html" class="sidenav-link">
-                      <div>Order list</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_e-commerce_order-detail.html" class="sidenav-link">
-                      <div>Order detail</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Forums</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_forums_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_forums_threads.html" class="sidenav-link">
-                      <div>Threads</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_forums_discussion.html" class="sidenav-link">
-                      <div>Discussion</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Messages v1</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v1_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v1_item.html" class="sidenav-link">
-                      <div>Item</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v1_compose.html" class="sidenav-link">
-                      <div>Compose</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Messages v2</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v2_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v2_item.html" class="sidenav-link">
-                      <div>Item</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v2_compose.html" class="sidenav-link">
-                      <div>Compose</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Messages v3</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v3_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v3_item.html" class="sidenav-link">
-                      <div>Item</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_messages_v3_compose.html" class="sidenav-link">
-                      <div>Compose</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Projects</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_projects_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_projects_item.html" class="sidenav-link">
-                      <div>Item</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Tickets</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_tickets_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_tickets_edit.html" class="sidenav-link">
-                      <div>Edit</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="javascript:void(0)" class="sidenav-link sidenav-toggle">
-                  <div>Users</div>
-                </a>
-
-                <ul class="sidenav-menu">
-                  <li class="sidenav-item">
-                    <a href="pages_users_list.html" class="sidenav-link">
-                      <div>List</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_users_view.html" class="sidenav-link">
-                      <div>View</div>
-                    </a>
-                  </li>
-                  <li class="sidenav-item">
-                    <a href="pages_users_edit.html" class="sidenav-link">
-                      <div>Edit</div>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li class="sidenav-item">
-                <a href="pages_account-settings.html" class="sidenav-link">
-                  <div>Account settings</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_chat.html" class="sidenav-link">
-                  <div>Chat</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_clients.html" class="sidenav-link">
-                  <div>Clients</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_contacts.html" class="sidenav-link">
-                  <div>Contacts</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_faq.html" class="sidenav-link">
-                  <div>FAQ</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_file-manager.html" class="sidenav-link">
-                  <div>File manager</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_gallery.html" class="sidenav-link">
-                  <div>Gallery</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_help-center.html" class="sidenav-link">
-                  <div>Help center</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_invoice.html" class="sidenav-link">
-                  <div>Invoice</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_kanban-board.html" class="sidenav-link">
-                  <div>Kanban board</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_pricing.html" class="sidenav-link">
-                  <div>Pricing</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_profile-v1.html" class="sidenav-link">
-                  <div>Profile v1</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_profile-v2.html" class="sidenav-link">
-                  <div>Profile v2</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_search-results.html" class="sidenav-link">
-                  <div>Search results</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_task-list.html" class="sidenav-link">
-                  <div>Task list</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_teams.html" class="sidenav-link">
-                  <div>Teams</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_vacancies.html" class="sidenav-link">
-                  <div>Vacancies</div>
-                </a>
-              </li>
-              <li class="sidenav-item">
-                <a href="pages_voting.html" class="sidenav-link">
-                  <div>Voting</div>
-                </a>
-              </li>
-            </ul>
-          </li>
-
         </ul>
       </div>
       <!-- / Layout sidenav -->

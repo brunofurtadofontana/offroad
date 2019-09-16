@@ -500,6 +500,12 @@
                     OPA!! Você ja realizou uma solicitação para este evento, AGUARDE APROVAÇÃO!
                   </div>";
             break;
+             case 9:
+              echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Erro ao inserir imagem!
+                  </div>";
+            break;
             default:
               # code...
               break;

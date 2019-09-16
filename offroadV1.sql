@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS `offroadv1`.`usuario` (
   `usuSenha` VARCHAR(45) NULL,
   `usuPrivilegio` VARCHAR(255) NULL,
   `usuCheckin` VARCHAR(255) NULL,
+  `usutoken` VARCHAR(255) NULL,
+  `usuDataSenha` DATETIME NULL,
+  `usuDataExp` DATETIME NULL,
   PRIMARY KEY (`idUsuario`),
   UNIQUE INDEX `idUsuario_UNIQUE` (`idUsuario` ASC) )
 ENGINE = InnoDB;

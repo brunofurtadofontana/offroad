@@ -87,6 +87,9 @@
             case 4:
               echo "<div class='alert alert-warning'  role='alert'><span >Você foi desconectado!</span></div>";
               break;
+            case 5:
+              echo "<div class='alert alert-success'  role='alert'><span >Senha alterada com sucesso</span></div>";
+              break;
             default:
               # code...
               break;

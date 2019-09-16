@@ -369,7 +369,7 @@
 		}
 				
 			break;
-		case 10://Cadastrar computador
+		case 10://upload de imagem
 		
 
 		if(isset($_FILES['files'])){
@@ -382,9 +382,16 @@
             $file_type=$_FILES['files']['type'][$key];
             if($file_size > 3097152){
     			$errors[]='File size must be less than 3 MB';
+            }
+            if (strstr( '.jpg;.jpeg;.gif;.png', $file_tmp )) {
+                echo "estensao OK";
+                //$errors[]='Tipo do Arquivo não é permitido';	
+            }else{
+            	echo "estensao errada";
             }		
             $desired_dir="../pages/upload";
             if(empty($errors)==true){
+            	
                 if(is_dir($desired_dir)==false){
                     mkdir("$desired_dir", 0700);		// Create directory if it does not exist
                 }
@@ -394,6 +401,7 @@
                     $new_dir="../pages/upload/".$file_name.time();
                      rename($file_tmp,$new_dir) ;				
                 }
+
 
                  
             $qrimg = mysqli_query($con,"INSERT INTO evento_img (eveImgNome,
@@ -414,10 +422,10 @@
            header("Location:../pages/eventos.php?error=1");
     	}
     }
-			break;
+		break;
 		case 11://EDITA IMAGEM
 			if(isset($_FILES['files'])){
-        $errors= array();
+        	$errors= array();
        
     	foreach($_FILES['files']['tmp_name'] as $key => $tmp_name ){
     		$file_name = md5($_FILES['files']['name'][$key]);
@@ -426,35 +434,43 @@
             $file_type=$_FILES['files']['type'][$key];
             if($file_size > 3097152){
     			$errors[]='File size must be less than 3 MB';
-            }		
-            $desired_dir="../pages/upload";
-            if(empty($errors)==true){
-                if(is_dir($desired_dir)==false){
-                    mkdir("$desired_dir", 0700);		// Create directory if it does not exist
-                }
-                if(is_dir("$desired_dir/".$file_name)==false){
-                    move_uploaded_file($file_tmp,"../pages/upload/".$file_name);
-                }else{									//rename the file if another one exist
-                    $new_dir="../pages/upload/".$file_name.time();
-                     rename($file_tmp,$new_dir) ;				
-                }
-
-                 
-            $qr = mysqli_query($con,"UPDATE evento_img SET  eveImgNome = '$file_name',
-															eveImgData = NOW()
-														WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));
-               
-
-            }else{
-                    print_r($errors);
             }
+            if (strstr( '.jpg;.jpeg;.gif;.png', $file_tmp )) {
+                
+	            $errors[]='Tipo do Arquivo não é permitido';
+	        }				
+	        $desired_dir="../pages/upload";
+	        if(empty($errors)==true){
+	            if(is_dir($desired_dir)==false){
+	                    mkdir("$desired_dir", 0700);		// Create directory if it does not exist
+	                }
+	                if(is_dir("$desired_dir/".$file_name)==false){
+	                    move_uploaded_file($file_tmp,"../pages/upload/".$file_name);
+	                }else{									//rename the file if another one exist
+	                    $new_dir="../pages/upload/".$file_name.time();
+	                     rename($file_tmp,$new_dir);				
+	                }
+
+	                 
+	            $qr = mysqli_query($con,"UPDATE evento_img SET  eveImgNome = '$file_name',
+																eveImgData = NOW()
+															WHERE Evento_idEventos = $idEven")or die(mysqli_error($con));
+	               
+
+	            }else{
+	                    print_r($errors);
+	            }
             
-        }
-    	if(empty($error)){
+        	
+            	    
+    	if(empty($errors)){
+           		header("Location:../pages/eventos.php?error=1");
            
-           header("Location:../pages/eventos.php?error=1");
+    		}else{
+    			header("Location:../pages/eventos.php?error=9");
+    		}
     	}
-    }
+	}
 			break;
 		case 12://autorizações
 			$idevento = htmlspecialchars(trim(strtoupper($_POST['id'])));
@@ -552,6 +568,35 @@
 				}
 
 				
+			break;
+			case 14:
+				$senha1 = htmlspecialchars(trim(strtoupper($_POST['senha1'])));
+				$senha2 = htmlspecialchars(trim(strtoupper($_POST['senha2'])));
+				$token = htmlspecialchars(trim(strtoupper($_POST['token'])));
+
+				// echo $senha1;
+				// echo "<br>";
+				// echo $senha2;
+				$qr_busca = mysqli_query($con, "SELECT idUsuario FROM usuario WHERE usuToken = '$token'");
+				$exibe = mysqli_fetch_array($qr_busca);
+				$buscaId =  $exibe['idUsuario'];
+
+				if ($senha1 == $senha2) {
+						$qr_senha = mysqli_query($con,"UPDATE usuario SET  
+														usuSenha = '$senha1'
+													WHERE idUsuario = '$buscaId'")or die(mysqli_error($con));
+						$qr_senha = mysqli_query($con,"UPDATE usuario SET  
+														usuToken = NULL,
+														usuDataSenha = NULL,
+														usuDataExp = NULL
+													WHERE idUsuario = '$buscaId'")or die(mysqli_error($con));
+						header("Location:../logme.php?error=5");
+					
+					
+				}else{
+					header("Location:../novaSenha.php?error=1&recupera=$token");
+				}
+
 
 
 			break;

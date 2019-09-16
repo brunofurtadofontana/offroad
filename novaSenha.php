@@ -1,3 +1,8 @@
+<?php
+
+ 	$recupera = $_GET['recupera'];
+ 	
+?>
 <!DOCTYPE html>
 
 <html lang="en" class="default-style">
@@ -50,6 +55,20 @@
             document.getElementById("erro6").style.display = "none";
   }
   </script>
+  <script type="text/javascript">
+	var password = document.getElementById("password")
+	  , confirm_password = document.getElementById("confirm_password");
+
+	function validatePassword(){
+	  if(password.value != confirm_password.value) {
+	    confirm_password.setCustomValidity("Senhas diferentes!");
+	  } else {
+	    confirm_password.setCustomValidity('');
+	  }
+	}
+	password.onchange = validatePassword;
+	confirm_password.onkeyup = validatePassword;
+  </script>
 
   <!-- Theme settings -->
   <!-- This file MUST be included after core stylesheets and layout-helpers.js in the <head> section -->
@@ -80,7 +99,7 @@
 
   <div class="authentication-wrapper authentication-2 px-4">
     <div class="authentication-inner py-5">
-      <?php 
+    	<?php 
             error_reporting(0);
             $errou = $_GET['error'];
             $hora = $_GET['hora'];
@@ -88,7 +107,7 @@
               case 1:
                 echo "<div id='erro' class='alert alert-dark-danger alert-dismissible fade show'>
                         <button type='button' class='close' onclick='hide()'>&times;</button>
-                        Senha já foi solicitada!
+                       	Senhas não são iguais!
                       </div>";
                 break;
               case 2:
@@ -125,9 +144,8 @@
                 break;
             }
         ?>
-
       <!-- Form -->
-      <form class="card" method="POST" action="recuperaSenha.php?opc=1">
+      <form class="card" method="POST" action="config/tratadados.php?opc=14">
         <div class="p-4 p-sm-5">
 
           <!-- Logo -->
@@ -139,17 +157,15 @@
             </div>
           </div>
           <!-- / Logo -->
-
           <h5 class="text-center text-muted font-weight-normal mb-4">Resetar a senha</h5>
           <hr class="mt-0 mb-4">
-          <p>
-            Digite um email para proceder com a recuperação de senha
-          </p>
-            <div class="form-group">
-              <input type="text" class="form-control" name="emailUser" placeholder="Endereço de email" required>
-            </div>
+	       
+		        <input class="form-control" type="password" name="senha1" placeholder="Nova Senha" id="password" required>
+		        <br>
+		        <input class="form-control" type="password" name="senha2" placeholder="Confirme Nova Senha" id="confirm_password" required>
+		        <input class="form-control" type="hidden" value="<?php echo $recupera ?>" name="token" required>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Enviar para email</button>
+        <button type="submit" class="btn btn-primary btn-block">Salvar</button>
       </form>
       <!-- / Form -->
 

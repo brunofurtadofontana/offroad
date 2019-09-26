@@ -5,6 +5,7 @@ include("Config.php");
 $TokenCard=$_POST['TokenCard'];
 $HashCard=$_POST['HashCard'];
 $Valor=$_POST['Valor'];
+
 //$Valor=filter_input(INPUT_POST,'Valor',FILTER_SANITIZE_SPECIAL_CHARS);
 $QtdParcelas=filter_input(INPUT_POST,'QtdParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
 $ValorParcelas=filter_input(INPUT_POST,'ValorParcelas',FILTER_SANITIZE_SPECIAL_CHARS);
@@ -14,7 +15,8 @@ $CPFComprador=filter_input(INPUT_POST,'CPFComprador',FILTER_SANITIZE_SPECIAL_CHA
 //$DDDComprador=filter_input(INPUT_POST,'DDDComprador',FILTER_SANITIZE_SPECIAL_CHARS);
 //$TelefoneComprador=filter_input(INPUT_POST,'TelefoneComprador',FILTER_SANITIZE_SPECIAL_CHARS);
 $NomeCartao=filter_input(INPUT_POST,'NomeCartao',FILTER_SANITIZE_SPECIAL_CHARS);
-
+$nomeSend = filter_input(INPUT_POST,'nome',FILTER_SANITIZE_SPECIAL_CHARS);
+$meial = filter_input(INPUT_POST,'email',FILTER_SANITIZE_SPECIAL_CHARS);
 
 
 
@@ -79,7 +81,11 @@ $Retorno=curl_exec($Curl);
 curl_close($Curl);
 
 $Xml=simplexml_load_string($Retorno);
-echo json_encode($Xml);
+$json = json_encode($Xml);
+echo $json;
+// if($json->status == 1){
+// 	header("Location: ../homeUser.php");
+// }
 //var_dump($Xml);
 
  ?>

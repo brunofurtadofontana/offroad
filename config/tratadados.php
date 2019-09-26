@@ -570,9 +570,9 @@
 				
 			break;
 			case 14:
-				$senha1 = htmlspecialchars(trim(strtoupper($_POST['senha1'])));
-				$senha2 = htmlspecialchars(trim(strtoupper($_POST['senha2'])));
-				$token = htmlspecialchars(trim(strtoupper($_POST['token'])));
+				$senha1 = htmlspecialchars(trim($_POST['senha1']));
+				$senha2 = htmlspecialchars(trim($_POST['senha2']));
+				$token = htmlspecialchars(trim($_POST['token']));
 
 				// echo $senha1;
 				// echo "<br>";

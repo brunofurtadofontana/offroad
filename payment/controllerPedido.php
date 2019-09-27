@@ -81,11 +81,18 @@ $Retorno=curl_exec($Curl);
 curl_close($Curl);
 
 $Xml=simplexml_load_string($Retorno);
-$json = json_encode($Xml);
-echo $json;
-// if($json->status == 1){
-// 	header("Location: ../homeUser.php");
+//$json = json_encode($Xml);
+echo $Xml;
+//$status = $Xml->status;
+
+// if ($status == 1 ) {
+// 	$res = mysqli_query($con,"INSERT INTO pagamento VALUES('')");
+// 	header("Location: ../pages/minhascompras.php?pg=0");
+// }else{
+// 	header("Location: ../pages/minhascompras.php?pg=1");
 // }
+//echo $json;
+
 //var_dump($Xml);
 
  ?>

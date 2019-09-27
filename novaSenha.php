@@ -1,7 +1,7 @@
 <?php
 
  	$recupera = $_GET['recupera'];
- 	
+ 		
 ?>
 <!DOCTYPE html>
 

@@ -3,25 +3,32 @@
   include("../config/verifica.php"); //Verifica a sessão esta ativa
   include("../config/conn.php"); //Importa conexão com banco de dados
   $name = $_SESSION['LOGIN_USUARIO'];
+
   $res = mysqli_query($con,"SELECT idUsuario, usuNome from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
   $showID = mysqli_fetch_assoc($res);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
+  
   $nome = $showID['usuNome'];
+  $even = mysqli_query($con,"SELECT * FROM evento ORDER BY promoter_idUsuario = '$id' DESC")or die(mysqli_error($con));
+  $idEven1 = mysqli_fetch_assoc($even);
+  $idEven = $idEven1['idEventos'];
+  $qr_endereco = mysqli_query($con,"SELECT * FROM endereco WHERE idEndereco = '$idEven'")or die(mysqli_error($con)); 
+  $ende = mysqli_fetch_assoc($qr_endereco);
 ?>
 <!DOCTYPE html>
 
-<html lang="en" class="default-style">
+<html lang="pt-br" class="default-style">
 
 <head>
-  <title>Inicial</title>
+  <title>Minhas Compras</title>
 
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge,chrome=1">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900" rel="stylesheet">
+ 
 
   <!-- Icon fonts -->
   <link rel="stylesheet" href="assets/vendor/fonts/fontawesome.css">
@@ -29,16 +36,18 @@
   <link rel="stylesheet" href="assets/vendor/fonts/linearicons.css">
   <link rel="stylesheet" href="assets/vendor/fonts/open-iconic.css">
   <link rel="stylesheet" href="assets/vendor/fonts/pe-icon-7-stroke.css">
-
-  <!-- Core stylesheets -->
+  <!-- Core stylesheets --> 
   <link rel="stylesheet" href="assets/vendor/css/rtl/bootstrap.css" class="theme-settings-bootstrap-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/appwork.css" class="theme-settings-appwork-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/theme-corporate.css" class="theme-settings-theme-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/colors.css" class="theme-settings-colors-css">
   <link rel="stylesheet" href="assets/vendor/css/rtl/uikit.css">
-  <link rel="stylesheet" href="assets/css/demo.css">
+  <link rel="stylesheet" href="assets/css/demo.css"> 
 
   <!-- Load polyfills -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="assets/vendor/libs/datatables/datatables.css">
+  <script src="assets/vendor/libs/datatables/datatables.js"></script>
   <script src="assets/vendor/js/polyfills.js"></script>
   <script>document['documentMode']===10&&document.write('<script src="https://polyfill.io/v3/polyfill.min.js?features=Intl.~locale.en"><\/script>')</script>
 
@@ -48,6 +57,10 @@
   <!-- Theme settings -->
   <!-- This file MUST be included after core stylesheets and layout-helpers.js in the <head> section -->
   <script src="assets/vendor/js/theme-settings.js"></script>
+
+  <!-- Core scripts -->
+  <script src="assets/vendor/js/pace.js"></script>
+
   <script>
     window.themeSettings = new ThemeSettings({
       cssPath: 'assets/vendor/css/rtl/',
@@ -55,12 +68,29 @@
     });
   </script>
 
-  <!-- Core scripts -->
-  <script src="assets/vendor/js/pace.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-  <!-- Libs -->
+  <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro").style.display = "none";
+        }, 3000);
+        function hide(){
+            document.getElementById("erro").style.display = "none";
+  }
+  </script>
+  <script type="text/javascript">
+      setTimeout(function () {
+      document.getElementById("erro6").style.display = "none";
+        }, 10000);
+        function hide(){
+            document.getElementById("erro6").style.display = "none";
+  }
+  </script>
+ 
+<!-- Libs -->
   <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css">
+  <link rel="stylesheet" href="assets/vendor/libs/minicolors/minicolors.css">
+  <link rel="stylesheet" href="assets/vendor/libs/toastr/toastr.css">
+  <link rel="stylesheet" href="assets/vendor/libs/sweetalert2/sweetalert2.css">
+
 
 </head>
 
@@ -77,8 +107,10 @@
 
         <!-- Brand demo (see assets/css/demo/demo.css) -->
         <div class="app-brand demo">
-
-          <a href="index.html" class="app-brand-text demo sidenav-text font-weight-normal ml-2">OffRoad Admin</a>
+          <span class="app-brand-logo demo bg-primary">
+            <svg viewBox="0 0 148 80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient id="a" x1="46.49" x2="62.46" y1="53.39" y2="48.2" gradientUnits="userSpaceOnUse"><stop stop-opacity=".25" offset="0"></stop><stop stop-opacity=".1" offset=".3"></stop><stop stop-opacity="0" offset=".9"></stop></linearGradient><linearGradient id="e" x1="76.9" x2="92.64" y1="26.38" y2="31.49" xlink:href="#a"></linearGradient><linearGradient id="d" x1="107.12" x2="122.74" y1="53.41" y2="48.33" xlink:href="#a"></linearGradient></defs><path style="fill: #fff;" transform="translate(-.1)" d="M121.36,0,104.42,45.08,88.71,3.28A5.09,5.09,0,0,0,83.93,0H64.27A5.09,5.09,0,0,0,59.5,3.28L43.79,45.08,26.85,0H.1L29.43,76.74A5.09,5.09,0,0,0,34.19,80H53.39a5.09,5.09,0,0,0,4.77-3.26L74.1,35l16,41.74A5.09,5.09,0,0,0,94.82,80h18.95a5.09,5.09,0,0,0,4.76-3.24L148.1,0Z"></path><path transform="translate(-.1)" d="M52.19,22.73l-8.4,22.35L56.51,78.94a5,5,0,0,0,1.64-2.19l7.34-19.2Z" fill="url(#a)"></path><path transform="translate(-.1)" d="M95.73,22l-7-18.69a5,5,0,0,0-1.64-2.21L74.1,35l8.33,21.79Z" fill="url(#e)"></path><path transform="translate(-.1)" d="M112.73,23l-8.31,22.12,12.66,33.7a5,5,0,0,0,1.45-2l7.3-18.93Z" fill="url(#d)"></path></svg>
+          </span>
+          <a href="index.html" class="app-brand-text demo sidenav-text font-weight-normal ml-2">APP Trilha</a>
           <a href="javascript:void(0)" class="layout-sidenav-toggle sidenav-link text-large ml-auto">
             <i class="ion ion-md-menu align-middle"></i>
           </a>
@@ -103,7 +135,7 @@
             </a>
 
             <ul class="sidenav-menu">
-              <li class="sidenav-item open active">
+              <li class="sidenav-item">
                 <a href="eventos.php" class="sidenav-link">
                   <div>Eventos</div>
                 </a>
@@ -126,13 +158,13 @@
             </ul>
           </li>
           <!-- Minhas Trilhas -->
-          <li class="sidenav-item  open active">
+          <li class="sidenav-item open active">
             <a href="javascript:void(0)" class="sidenav-link sidenav-toggle"><i class="sidenav-icon ion ion-ios-speedometer"></i>
               <div>Minhas Trilhas</div>
             </a>
 
-            <ul class="sidenav-menu">
-              <li class="sidenav-item  open active">
+            <ul class="sidenav-menu ">
+              <li class="sidenav-item open active">
                 <a href="minhascompras.php" class="sidenav-link">
                   <div>Minhas Compras</div>
                 </a>
@@ -408,40 +440,333 @@
           </div>
         </nav>
         <!-- / Layout navbar -->
-
         <!-- Layout content -->
+    <div class="layout-content">
+        <!-- Content -->
+      <div class="container-fluid flex-grow-1 container-p-y">
+
+        <!--painel de eventos-->
+        <?php 
+          error_reporting(0);
+          $errou = $_GET['error'];
+          switch ($errou) {
+            case 1:
+              echo "<div id='erro' class='alert alert-dark-success alert-dismissible fade show'>
+                      <button type='button' class='close' onclick='hide()'>&times;</button>
+                      Evento criado com sucesso!
+                    </div>";
+              break;
+            case 2:
+              echo "<div id='erro' class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Erro ao cadastrar evento!
+                  </div>";
+              break;
+            case 3:
+              echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    O evento não pode acontecer em uma data anterior a atual!
+                  </div>";
+              break;
+            case 4:
+              echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Dados salvos com sucesso!
+                  </div>";
+              break;
+            case 5:
+              echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Erro ao editar os dados!
+                  </div>";
+            break;
+            case 6:
+              $idEven = $_GET['idEven'];
+              echo "<a href='' data-toggle='modal' data-target='#myModalvlr $idEven'>
+                    <div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
+                      <button type='button' class='close' onclick='hide()'>&times;</button>
+                      Valor da inscrição não pode ser alterado! Clique Aqui...
+                    </div></a>";
+            break;
+            case 7:
+              echo "<div id='erro'class='alert alert-dark-success alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Justificativa Enviada! Aguarde...
+                  </div>";
+            break;
+            case 8:
+              echo "<div id='erro6'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    OPA!! Você ja realizou uma solicitação para este evento, AGUARDE APROVAÇÃO!
+                  </div>";
+            break;
+             case 9:
+              echo "<div id='erro'class='alert alert-dark-danger alert-dismissible fade show'>
+                    <button type='button' class='close' onclick='hide()'>&times;</button>
+                    Erro ao inserir imagem!
+                  </div>";
+            break;
+            default:
+              # code...
+              break;
+          }
+      ?>
+      <!-- Layout content -->
         <div class="layout-content">
-
           <!-- Content -->
-          <div class="container-fluid flex-grow-1 container-p-y">
+            <h4 class="d-flex flex-wrap justify-content-between align-items-center w-100 font-weight-bold pt-2 mb-4">               
+              <div class="col-12 col-md-3 px-0 pb-2">
+                <input type="text" class="form-control" placeholder="Search...">
+              </div>
+            </h4>        
+            <div class="row">
+              <?php
+                  $qr_tipoUser = mysqli_query($con,"SELECT usuPrivilegio FROM usuario WHERE idUsuario = '$id'")or die(mysqli_error($con));
+                  $showUsu = mysqli_fetch_assoc($qr_tipoUser);
+                  $priv = $showUsu['usuPrivilegio'];
+                  $privBD = 'ADMIN';
 
+                if (strcasecmp($priv,$privBD)==0) {
+                  
+                  $qr_even = mysqli_query($con,"SELECT * FROM evento as A 
+                                                         INNER JOIN evento_img as B 
+                                                          on B.Evento_idEventos = A.idEventos
+                                                         INNER JOIN pagamento as C 
+                                                          on C.Evento_idEventos = A.idEventos 
+                                                         ORDER BY idEventos DESC")or die(mysqli_error($con));
+                  
+                  while($showEven = mysqli_fetch_assoc($qr_even)):
+                  // $qr_img = mysqli_query($con,"SELECT * FROM evento_img WHERE Evento_idEventos = '$idEven'")or die(mysqli_error($con));
+                  // $eveImg = mysqli_fetch_assoc($qr_img);
+                  $img = $showEven['eveImgNome'];
+                  $idEven = $showEven['idEventos'];
+                  $evenNome = $showEven['evenNome'];
+                  $eveAlmo = $showEven['evenVlrAlmoco'];
+                  $data = $showEven['evenDataInicial'];
+                  $eveHoraIni = $showEven['evenHoraInicial'];
+                  $eveHoraFim = $showEven['evenHoraFinal'];
+                  $eveVlr = $showEven['evenVlrInscri'];
+                  $eveTipo = $showEven['evenTipoTrilha'];
+                  $statusPag = $showEven['pagStatus'];                       
+              ?> 
+              <div class="col-sm-6 col-xl-4">
+                <div class="card mb-4">
+                  <div class="w-100">
+                    <a href="../pages/detalhecompras.php?id=<?php echo $idEven;?>" class="card-img-top d-block ui-rect-60 ui-bg-cover" style="background-image: url('upload/<?php echo $img; ?>');">
+                      <div class="d-flex justify-content-between align-items-end ui-rect-content p-3">
+                        <div class="flex-shrink-1">
+                          <?php
+                            if ($statusPag == '1') {
+                          ?>
+                            <div class="flex-shrink-1" style="position: absolute; float: right; right: 0px; margin-top: -150px;">
+                              <span class='text-big'><span class='badge badge-success'>Pagamento<br> Aprovado</span></span>
+                            </div>
+                          <?php
+                            }else{
+                          ?>
+                            <div class="flex-shrink-1" style="position: absolute; float: right; right: 0px; margin-top: -150px;">
+                              <span class='text-big'><span class='badge badge-danger'>Pagamento<br> Pendente</span></span>
+                            </div>
+                          <?php
+                            }
+                          ?>
+                            <?php 
+                                 $dtEntrega=date("Y-m-d",strtotime("$data")); 
+                                 $today = date("Y-m-d"); 
+                                                               
+                                 if($dtEntrega>=$today){ 
+                                   echo "<span class='text-big'><span class='badge badge-success'>Aberta</span></span>";
+                            
+                                  }else{
+                            
+                                  echo "<span class='text-big'><span class='badge badge-danger'>Finalizada</span></span>";                         
+                                  } 
+                            ?>
+                            <?php
+                              if ($eveTipo == 'INTEIRA') {
+                                echo "<span class='text-big'><span class='badge badge-success'>Trilha Inteira</span></span>";
+                              }else{
+                                echo "<span class='text-big'><span class='badge badge-warning'>Meia Trilha</span></span>";
+                              } 
+                            ?>
+                            
+                          </div>
+                        
+                        <div class="text-big">
+                          
+                          <div class="badge badge-dark font-weight-bold"><?php $soma = $eveVlr + $eveAlmo; echo 'R$' . number_format($soma, 2, ',', '.'); ?></div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="mb-3"><a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="text-body"><?php echo $evenNome; ?> #<?php echo $idEven; ?></a></h5>
+                    <!-- <p class="text-muted mb-3"><?php //echo $evenDescr; ?></p> -->
+                    
+                    <div class="media">
+                      <div class="text-muted small">
+                        <i class="ion ion-md-time text-primary"></i>
+                        <span><?php echo date('d/m/Y', strtotime($data));?> das <?php echo date("H:i", strtotime($eveHoraIni));?> até <?php echo date("H:i", strtotime($eveHoraFim)); ?></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
+              <?php 
+              endwhile; 
+              // aqui termina os admins
+              }else{
+                // aqui começa o user
+                $qr_even = mysqli_query($con,"SELECT * FROM evento as A 
+                                                         INNER JOIN evento_img as B 
+                                                          on B.Evento_idEventos = A.idEventos
+                                                         INNER JOIN pagamento as C 
+                                                          on C.Evento_idEventos = A.idEventos
+                                                         WHERE promoter_idUsuario = '$id'
+                                                         ORDER BY idEventos DESC")or die(mysqli_error($con));
+                  
+                  while($showEven = mysqli_fetch_assoc($qr_even)):
+                  // $qr_img = mysqli_query($con,"SELECT * FROM evento_img WHERE Evento_idEventos = '$idEven'")or die(mysqli_error($con));
+                  // $eveImg = mysqli_fetch_assoc($qr_img);
+                  $img = $showEven['eveImgNome'];
+                  $idEven = $showEven['idEventos'];
+                  $evenNome = $showEven['evenNome'];
+                  $eveAlmo = $showEven['evenVlrAlmoco'];
+                  $data = $showEven['evenDataInicial'];
+                  $eveHoraIni = $showEven['evenHoraInicial'];
+                  $eveHoraFim = $showEven['evenHoraFinal'];
+                  $eveVlr = $showEven['evenVlrInscri'];
+                  $eveTipo = $showEven['evenTipoTrilha'];
+                  $statusPag = $showEven['pagStatus'];                       
+              ?> 
+              <div class="col-sm-6 col-xl-4">
+                <div class="card mb-4">
+                  <div class="w-100">
+                    <a href="../pages/detalhecompras.php?id=<?php echo $idEven;?>" class="card-img-top d-block ui-rect-60 ui-bg-cover" style="background-image: url('upload/<?php echo $img; ?>');">
+                      <div class="d-flex justify-content-between align-items-end ui-rect-content p-3">
+                        <div class="flex-shrink-1">
+                          <?php
+                            if ($statusPag == '1') {
+                          ?>
+                            <div class="flex-shrink-1" style="position: absolute; float: right; right: 0px; margin-top: -150px;">
+                              <span class='text-big'><span class='badge badge-success'>Pagamento<br> Aprovado</span></span>
+                            </div>
+                          <?php
+                            }else{
+                          ?>
+                            <div class="flex-shrink-1" style="position: absolute; float: right; right: 0px; margin-top: -150px;">
+                              <span class='text-big'><span class='badge badge-danger'>Pagamento<br> Pendente</span></span>
+                            </div>
+                          <?php
+                            }
+                          ?>
+                            <?php 
+                                 $dtEntrega=date("Y-m-d",strtotime("$data")); 
+                                 $today = date("Y-m-d"); 
+                                                               
+                                 if($dtEntrega>=$today){ 
+                                   echo "<span class='text-big'><span class='badge badge-success'>Aberta</span></span>";
+                            
+                                  }else{
+                            
+                                  echo "<span class='text-big'><span class='badge badge-danger'>Finalizada</span></span>";                         
+                                  } 
+                            ?>
+                            <?php
+                              if ($eveTipo == 'INTEIRA') {
+                                echo "<span class='text-big'><span class='badge badge-success'>Trilha Inteira</span></span>";
+                              }else{
+                                echo "<span class='text-big'><span class='badge badge-warning'>Meia Trilha</span></span>";
+                              } 
+                            ?>
+                            
+                          </div>
+                        
+                        <div class="text-big">
+                          
+                          <div class="badge badge-dark font-weight-bold"><?php $soma = $eveVlr + $eveAlmo; echo 'R$' . number_format($soma, 2, ',', '.'); ?></div>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="card-body">
+                    <h5 class="mb-3"><a href="../pages/detalheEvento.php?id=<?php echo $idEven;?>" class="text-body"><?php echo $evenNome; ?> #<?php echo $idEven; ?></a></h5>
+                    <!-- <p class="text-muted mb-3"><?php //echo $evenDescr; ?></p> -->
+                    
+                    <div class="media">
+                      <div class="text-muted small">
+                        <i class="ion ion-md-time text-primary"></i>
+                        <span><?php echo date('d/m/Y', strtotime($data));?> das <?php echo date("H:i", strtotime($eveHoraIni));?> até <?php echo date("H:i", strtotime($eveHoraFim)); ?></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-        </div>
-        <!-- Layout content -->
+              <?php 
+              endwhile; 
+            }?>
+            </div>
+            <hr class="border-light mt-2 mb-4">
 
-      </div>
-      <!-- / Layout container -->
+            <nav>
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="javascript:void(0)">«</a>
+                </li>
+                <li class="page-item active">
+                  <a class="page-link" href="javascript:void(0)">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">2</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">3</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">4</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">5</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="javascript:void(0)">»</a>
+                </li>
+              </ul>
+            </nav>
 
-    </div>
-
+          </div>
+          <!-- / Content -->
+        
     <!-- Overlay -->
     <div class="layout-overlay layout-sidenav-toggle"></div>
   </div>
   <!-- / Layout wrapper -->
 
   <!-- Core scripts -->
+
+  
   <script src="assets/vendor/libs/popper/popper.js"></script>
   <script src="assets/vendor/js/bootstrap.js"></script>
   <script src="assets/vendor/js/sidenav.js"></script>
 
-  <!-- Libs -->
+  
+ <!-- Libs -->
   <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-  <script src="assets/vendor/libs/chartjs/chartjs.js"></script>
+  <script src="assets/vendor/libs/moment/moment.js"></script>
+  <script src="assets/vendor/libs/minicolors/minicolors.js"></script>
+  <script src="assets/vendor/libs/growl/growl.js"></script>
+  <script src="assets/js/tables_datatables.js"></script>
+  <script src="assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+
 
   <!-- Demo -->
   <script src="assets/js/demo.js"></script>
-  <script src="assets/js/dashboards_dashboard-1.js"></script>
+  <script src="assets/js/ui_notifications.js"></script>
+  <script src="assets/js/tables_datatables.js"></script>
+
+
 </body>
 
 </html>

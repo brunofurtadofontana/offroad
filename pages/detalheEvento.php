@@ -543,7 +543,6 @@
                       }else{
                 
                       echo "<span class='text-big'><span class='badge badge-danger'>Encerrado</span></span>";
-                
                       } 
                 ?>                
                 <span class="text-muted small ml-1"><?php echo date('d/m/Y', strtotime($evenDataInicial)); ?></span>
@@ -658,8 +657,7 @@
                 </div>
               </div>
               <hr class="m-0">
-              <!-- / Shipping -->
-
+              <!-- pagamento -->
               <!-- Items -->
               <div class="card-body">
                 <h6 class="small font-weight-semibold">
@@ -668,7 +666,6 @@
                 <!-- MAPS -->
 
                 <!-- final maps -->
-
               </div>
               <!-- / Items -->
           </div>

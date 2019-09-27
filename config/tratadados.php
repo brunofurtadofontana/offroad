@@ -8,76 +8,19 @@
 
 	switch ($opc) {
 		case 1://Cadastrar computador
-			$processador = htmlspecialchars(trim(strtoupper($_POST['processador'])));
-			$memoriaram = htmlspecialchars(trim(strtoupper($_POST['memram'])));
-			$storage = htmlspecialchars(trim(strtoupper($_POST['storage'])));
-			$placamae = htmlspecialchars(trim(strtoupper($_POST['placamae'])));
-			$fonte = htmlspecialchars(trim(strtoupper($_POST['fonte'])));
-			$leitor = htmlspecialchars(trim(strtoupper($_POST['leitor'])));
-			$finalidade = htmlspecialchars(trim(strtoupper($_POST['finalidade'])));
-			$value = strtoupper(implode(',',$_POST['componentes']));
-			$so = htmlspecialchars(trim(strtoupper($_POST['so'])));
-			$situacao = htmlspecialchars(trim(strtoupper($_POST['situacao'])));
-			$obs = htmlspecialchars(trim(strtoupper($_POST['obs'])));
-
-
-			//echo $processador."<br>".$memoriaram."<br>".$storage."<br>".$placamae."<br>".$fonte."<br>".$leitor."<br>".$finalidade."<br>".$so."<br>".$situacao."<br>".$obs;
 			
-				$qr = mysqli_query($con,"INSERT INTO computador(comp_proc,
-														comp_mem,
-														comp_hd,
-														comp_mobo,
-														comp_fonte,
-														comp_leitor,
-														comp_finalidade,
-														users_users_id,
-														comp_so,
-														comp_situacao,
-														comp_obs) 
-												VALUES ('$processador',
-														'$memoriaram',
-														'$storage',
-														'$placamae',
-														'$fonte',
-														'$leitor',
-														'$finalidade',
-														'$id',
-														'$so',
-														'$situacao',
-														'$obs')")or die(mysqli_error($con));	
-
-				//if($qr){
-					//$consulta = mysqli_query($con,"SELECT MAX(comp_id) FROM computador");
-					//$exibe = mysqli_fetch_array($consulta);
-					//$ultimoId =  $exibe[0];
-					//$qrcomp = mysqli_query($con,"INSERT INTO componentes(cp_comp_id,
-					//											  cp_nome) 
-					//											  VALUES ('$ultimoId','$value')")or die(mysql_error());
-				
-				//}
-				if($qr){
-					$consulta = mysqli_query($con,"SELECT MAX(comp_id) FROM computador");
-					$exibe = mysqli_fetch_array($consulta);
-					$ultimoId =  $exibe[0];
-					$qrcomp = mysqli_query($con,"INSERT INTO componentes(computador_comp_id,
-																  cp_nome) 
-																  VALUES ('$ultimoId','$value')")or die(mysql_error());
-					header("Location:../home.php?error=0");
-				}else{
-					header("Location:../home.php?error=1");
-				}
 			break;
 		case 2://Editar Evento
-			$evenNome = htmlspecialchars(trim(strtoupper($_POST['nomeEven'])));
-			$evenDesc = htmlspecialchars(trim(strtoupper($_POST['descEven'])));
-			$evenTipoTrilha = htmlspecialchars(trim(strtoupper($_POST['tipoTrilha'])));
-			$evenDataInicial = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
-			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
-			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
-			$evenRua = htmlspecialchars(trim(strtoupper($_POST['rua'])));
-			$evenBairro = htmlspecialchars(trim(strtoupper($_POST['bairro'])));
-			$evenCidade = htmlspecialchars(trim(strtoupper($_POST['cidade'])));
-			$evenEstado = htmlspecialchars(trim(strtoupper($_POST['estado'])));
+			$evenNome = htmlspecialchars(trim($_POST['nomeEven']));
+			$evenDesc = htmlspecialchars(trim($_POST['descEven']));
+			$evenTipoTrilha = htmlspecialchars(trim($_POST['tipoTrilha']));
+			$evenDataInicial = htmlspecialchars(trim($_POST['dataEvento']));
+			$evenHoraInicio = htmlspecialchars(trim($_POST['horaInicio']));
+			$evenHoraFim = htmlspecialchars(trim($_POST['horaFim']));
+			$evenRua = htmlspecialchars(trim($_POST['rua']));
+			$evenBairro = htmlspecialchars(trim($_POST['bairro']));
+			$evenCidade = htmlspecialchars(trim($_POST['cidade']));
+			$evenEstado = htmlspecialchars(trim($_POST['estado']));
 			$adeQtd = htmlspecialchars(trim(strtoupper($_POST['almoQtd'])));
 			$almoQtd = htmlspecialchars(trim(strtoupper($_POST['adeQtd'])));
 			$bebiQtd = htmlspecialchars(trim(strtoupper($_POST['bebiQtd'])));
@@ -166,9 +109,9 @@
 			}
 			break;
 		case 5://Editar usuario
-			$nome = htmlspecialchars(trim(strtoupper($_POST['nome'])));
-			$email = htmlspecialchars(trim(strtoupper($_POST['email'])));
-			$senha = htmlspecialchars(trim(strtoupper($_POST['pass'])));
+			$nome = htmlspecialchars(trim($_POST['nome']));
+			$email = htmlspecialchars(trim($_POST['email']));
+			$senha = htmlspecialchars(trim($_POST['pass']));
 			$qr = mysqli_query($con,"UPDATE users SET users_nome = '$nome',
 														users_email = '$email',
 														users_pass = '$senha'")or die(mysqli_error($con));
@@ -216,17 +159,17 @@
 			break;
 		case 8://Cadastrar evento
 			# code...
-			$evenNome = htmlspecialchars(trim(strtoupper($_POST['nomeEven'])));
-			$evenDesc = htmlspecialchars(trim(strtoupper($_POST['descEven'])));
-			$evenTipoTrilha = htmlspecialchars(trim(strtoupper($_POST['tipoTrilha'])));
-			$evenDataInicial = htmlspecialchars(trim(strtoupper($_POST['dataEvento'])));
-			$evenHoraInicio = htmlspecialchars(trim(strtoupper($_POST['horaInicio'])));
-			$evenHoraFim = htmlspecialchars(trim(strtoupper($_POST['horaFim'])));
-			$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['vlrTrilha'])));
-			$evenRua = htmlspecialchars(trim(strtoupper($_POST['rua'])));
-			$evenBairro = htmlspecialchars(trim(strtoupper($_POST['bairro'])));
-			$evenCidade = htmlspecialchars(trim(strtoupper($_POST['cidade'])));
-			$evenEstado = htmlspecialchars(trim(strtoupper($_POST['estado'])));
+			$evenNome = htmlspecialchars(trim($_POST['nomeEven']));
+			$evenDesc = htmlspecialchars(trim($_POST['descEven']));
+			$evenTipoTrilha = htmlspecialchars(trim($_POST['tipoTrilha']));
+			$evenDataInicial = htmlspecialchars(trim($_POST['dataEvento']));
+			$evenHoraInicio = htmlspecialchars(trim($_POST['horaInicio']));
+			$evenHoraFim = htmlspecialchars(trim($_POST['horaFim']));
+			$evenVlrTrilha = htmlspecialchars(trim($_POST['vlrTrilha']));
+			$evenRua = htmlspecialchars(trim($_POST['rua']));
+			$evenBairro = htmlspecialchars(trim($_POST['bairro']));
+			$evenCidade = htmlspecialchars(trim($_POST['cidade']));
+			$evenEstado = htmlspecialchars(trim($_POST['estado']));
 			$adeQtd = htmlspecialchars(trim(strtoupper($_POST['almoQtd'])));
 			$almoQtd = htmlspecialchars(trim(strtoupper($_POST['adeQtd'])));
 			$bebiQtd = htmlspecialchars(trim(strtoupper($_POST['bebiQtd'])));
@@ -305,9 +248,9 @@
 			break;
 		case 9://Autoriza mudança de valor e exclusão
 				
-			$evenJust = htmlspecialchars(trim(strtoupper($_POST['evenJustifica'])));
-			$evenVlrJus = htmlspecialchars(trim(strtoupper($_POST['evenVlrJust'])));
-			$evenNewVlr = htmlspecialchars(trim(strtoupper($_POST['newVlrTrilha'])));
+			$evenJust = htmlspecialchars(trim($_POST['evenJustifica']));
+			$evenVlrJus = htmlspecialchars(trim($_POST['evenVlrJust']));
+			$evenNewVlr = htmlspecialchars(trim($_POST['newVlrTrilha']));
 				//$evenVlrTrilha = htmlspecialchars(trim(strtoupper($_POST['evenVlrAtualizado1'])));
 			$vlrFormat = number_format(str_replace(",",".",str_replace(".","",$evenNewVlr)), 2, '.', '');
 			// echo "DADO NUMBER FORMATACAO";
@@ -570,9 +513,9 @@
 				
 			break;
 			case 14:
-				$senha1 = htmlspecialchars(trim(strtoupper($_POST['senha1'])));
-				$senha2 = htmlspecialchars(trim(strtoupper($_POST['senha2'])));
-				$token = htmlspecialchars(trim(strtoupper($_POST['token'])));
+				$senha1 = htmlspecialchars(trim($_POST['senha1']));
+				$senha2 = htmlspecialchars(trim($_POST['senha2']));
+				$token = htmlspecialchars(trim($_POST['token']));
 
 				// echo $senha1;
 				// echo "<br>";

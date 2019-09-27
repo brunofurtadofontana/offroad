@@ -5,7 +5,7 @@
 
 	switch ($opc) {		
 		case 1:
-			$email = htmlspecialchars(trim(strtoupper($_POST['emailUser'])));
+			$email = htmlspecialchars(trim($_POST['emailUser']));
 			$qr_email = mysqli_query($con, "SELECT usuEmail, usuToken FROM usuario WHERE usuEmail='$email'")or die(mysqli_error());
 			$exibe = mysqli_fetch_array($qr_email);
 			$buscaEmail =  $exibe['usuEmail'];

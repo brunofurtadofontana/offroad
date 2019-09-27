@@ -4,10 +4,11 @@
   include("config/verifica.php"); //Verifica a sessão esta ativa
   include("config/conn.php"); //Importa conexão com banco de dados
   $name = $_SESSION['LOGIN_USUARIO'];
-  $res = mysqli_query($con,"SELECT idUsuario, usuNome from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
+  $res = mysqli_query($con,"SELECT idUsuario, usuNome, usuEmail from usuario WHERE usuEmail = '$name' "); //Consulta se o email da SESSION é o mesmo do usuario que esta logado
   $showID = mysqli_fetch_assoc($res);
   $id = $showID['idUsuario']; //Pega o id do usuario logado
   $nome = $showID['usuNome'];
+  $email = $showID["usuEmail"];
 
 ?>
 <!DOCTYPE html>
@@ -294,25 +295,7 @@
           <label class="form-label">Email</label>
           <input type="text" class="form-control" name="email" placeholder="exemplo@gmail.com" required>
         </div>
-        <div class="form-group" required>
-          <label class="form-label">Tipo de trilha</label>
-          <select class="form-control">
-            <option>Escolha uma opção</option>
-            <option>Meia trilha</option>
-            <option>Trilha inteira</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Almoços</label>
-          <select class="form-control">
-            <option value="0">Escolha uma opção</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </div>
+       
       
         <hr class="mx-n4 mx-lg-n5 my-4">
         <?php 
@@ -367,7 +350,24 @@
           <div class="tab-content">
             <div class="tab-pane fade show ui-bordered p-4 active" id="payment-methods-cc">
               <form  name="Form1" id="Form1" method="post" action="payment/controllerPedido.php">
-
+              <h3>Dados Pessoais</h3>
+              <hr>
+              <div id="shop-checkout-wizard-1" class="animated fadeIn">
+                <div class="form-group">
+                  <label class="form-label">Nome</label>
+                  <input type="text" class="form-control" name="nome" value="<?php echo $nome; ?>" disabled placeholder="Nome completo" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email</label>
+                  <input type="text" class="form-control" name="email" value="<?php echo $email; ?>" disabled placeholder="exemplo@gmail.com" required>
+               </div> 
+               <div class="form-group">
+                  <label class="form-label">CPF</label>
+                  <input type="text" class="form-control" name="email" placeholder="exemplo@gmail.com" required>
+               </div> 
+               <hr>
+               <h3>Dados de Compra</h3>
+               <hr>
               <div class="form-group">
                 <label class="d-flex justify-content-between align-items-end">
                   <span class="form-label mb-0">Número do cartão</span>
@@ -377,11 +377,12 @@
                 <input type="text" id="NumeroCartao" name="NumeroCartao"  class="form-control" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="16">
                 <input type="hidden" id="TokenCard" name="TokenCard">
                 <input type="hidden" id="HashCard" name="HashCard">
+                <input type="hidden" id="BandeiraCartao" name="BandeiraCartao">
                 <input type="hidden" id="ValorParcelas" name="ValorParcelas">
                 <script type="text/javascript">
                   var valor = <?php echo $valor; ?>;
                 </script>
-                <input type="hidden" id="Valor" name="Valor"  value="<?php echo $valor; ?>.00">
+                <input type="hidden" id="Valor" name="Valor"  value="<?php echo $valor; ?>">
               </div>
               <div class="form-group">
                 <select class="form-control" name="QtdParcelas" id="QtdParcelas">
@@ -409,7 +410,8 @@
                   <input type="text" class="form-control" id="CVV" name="CVV" placeholder="XXX" maxlength="3" required>
                 </div>
               </div>
-              <input type="submit" class="form-control" name="Comprar" value="Comprar" id="BotaoComprar">
+              <br>
+              <input type="submit" class="form-control btn btn-primary" name="Comprar" value="Comprar" id="BotaoComprar">
             </form>
             </div>
               
@@ -418,7 +420,7 @@
                   <small class="btn-warning">OBS: Pagamento em boleto pode sofrer alteração no valor.</small>
                   <input type="hidden" id="TokenCard" name="TokenCard">
                   <input type="hidden" id="HashCard" name="HashCard">
-                  <input type="hidden" id="Valor" name="Valor"  value="<?php echo $valor; ?>.00">
+                  <input type="hidden" id="Valor" name="Valor"  value="<?php echo $valor; ?>">
                   <input type="submit" class="btn btn-lg btn-primary btn-block" value="Gerar Boleto">
                   
                 </form>

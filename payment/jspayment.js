@@ -12,7 +12,7 @@ var Amount = valor;
 function iniciarSessao(){
 
 	$.ajax({
-		url: Root+"offroad/offroad/payment/controllerId.php",
+		url: Root+"/offroad/offroad/payment/controllerId.php",
 		type:'POST',
 		dataType: 'json',
 		success:function(data){
@@ -70,7 +70,7 @@ $('#NumeroCartao').on('keyup',function(){
     }
 });
 
-//Obter o token do cartão de crédito
+// //aObter o token do cartão de crédito
 // function getTokenCard()
 // {
 //     PagSeguroDirectPayment.createCardToken({
@@ -97,9 +97,11 @@ function getTokenCard()
         success: function(response)
         {
            $('#TokenCard').val(response.card.token);
+
         }
     });
 }
+
 
 //Exibe a quantidade e valores das parcelas
 function getParcelas(Bandeira){

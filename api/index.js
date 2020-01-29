@@ -1,5 +1,7 @@
+
 const restify = require('restify');
 const errors = require('restify-errors');
+var cors = require('cors');
 
 
 const server = restify.createServer({
@@ -10,12 +12,14 @@ const server = restify.createServer({
 var knex = require('knex')({
     client: 'mysql',
     connection: {
-      host : '127.0.0.1',
-      user : 'root',
-      password : '',
-      database : 'offroadv1'
+      host : '186.202.152.74',
+      user : 'offroadbd',
+      password : 'Br7896569',
+      database : 'offroadbd'
     }
   });
+
+server.use(cors());
 
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser());
@@ -30,21 +34,21 @@ server.listen(8080, function () {
 
 //Rotas REST
 
-server.get('/api/users',  (req, res, next) => { // Retorna os promoters, eventos e seus endereços
-    //knex('promoter').then((dados ) => {
-     //       res.send(dados);
-     //   }, next)
-    knex('usuario')
-    //.join('enderecousuario','enderecousuario.promoter_idUsuario','=','idUsuario')
-    //.join('evento','evento.promoter_idUsuario','=','idUsuario')
-    .select()
-    .then((dados ) => {
-      if(!dados)return res.send(new errors.BadRequestError('Nada foi encontrado!!'))
-            res.send(dados);
-    }, next)
+// server.get('/api/users',  (req, res, next) => { // Retorna os promoters, eventos e seus endereços
+//     //knex('promoter').then((dados ) => {
+//      //       res.send(dados);
+//      //   }, next)
+//     knex('usuario')
+//     //.join('enderecousuario','enderecousuario.promoter_idUsuario','=','idUsuario')
+//     //.join('evento','evento.promoter_idUsuario','=','idUsuario')
+//     .select()
+//     .then((dados ) => {
+//       if(!dados)return res.send(new errors.BadRequestError('Nada foi encontrado!!'))
+//             res.send(dados);
+//     }, next)
     
     
-  });
+//   });
   server.get('/api/evento/:id',  (req, res, next) => {
     
     const {id} = req.params;
